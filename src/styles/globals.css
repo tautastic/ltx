@@ -1,0 +1,72 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  .scrollbar-hide {
+    /* IE and Edge */
+    -ms-overflow-style: none;
+    /* Firefox */
+    scrollbar-width: none;
+  }
+
+  .scrollbar-hide::-webkit-scrollbar {
+    /* Safari and Chrome */
+    display: none;
+  }
+
+  @font-face {
+    font-family: "Inter var";
+    font-style: normal;
+    font-weight: 100 900;
+    font-display: swap;
+    src: url("/fonts/inter-roman.var.woff2") format("woff2");
+    font-named-instance: "Regular";
+  }
+
+  @font-face {
+    font-family: "Inter var";
+    font-style: italic;
+    font-weight: 100 900;
+    font-display: swap;
+    src: url("/fonts/inter-italic.var.woff2") format("woff2");
+    font-named-instance: "Italic";
+  }
+
+  body {
+    @apply scrollbar-hide bg-white text-base subpixel-antialiased dark:bg-black;
+  }
+
+  a {
+    @apply focus-visible-ring break-words;
+  }
+
+  b,
+  strong {
+    @apply font-semibold;
+  }
+}
+
+@layer components {
+  .text-fill-transparent {
+    -webkit-text-fill-color: transparent;
+  }
+
+  .text-gradient {
+    @apply text-fill-transparent absolute top-0 left-0 w-full bg-gradient-to-b from-[rgba(0,0,0,0.75)] to-black bg-clip-text text-center content-[attr(data-text)] dark:from-white dark:to-[hsla(0,0%,100%,0.6)];
+  }
+
+  .hero-text-bg {
+    @apply before:text-gradient relative w-full grow select-none;
+  }
+}
+
+@layer utilities {
+  .focus-ring {
+    @apply focus:border-blue-500 focus:shadow-none focus:outline-none focus:ring-2 focus:ring-blue-200 focus:ring-offset-0 dark:focus:ring-blue-800;
+  }
+
+  .focus-visible-ring {
+    @apply focus-visible:border-blue-500 focus-visible:shadow-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-200 focus-visible:ring-offset-0 dark:focus-visible:ring-blue-800;
+  }
+}
