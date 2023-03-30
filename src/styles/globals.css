@@ -1,0 +1,72 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  .text-fill-transparent {
+    -webkit-text-fill-color: transparent;
+  }
+
+  .scrollbar-hide {
+    /* IE and Edge */
+    -ms-overflow-style: none;
+    /* Firefox */
+    scrollbar-width: none;
+  }
+
+  .scrollbar-hide::-webkit-scrollbar {
+    /* Safari and Chrome */
+    display: none;
+  }
+
+  ::selection {
+    @apply bg-selection text-black dark:bg-selection-dark dark:text-white;
+  }
+
+  @font-face {
+    font-family: "Inter var";
+    font-style: normal;
+    font-weight: 100 900;
+    font-display: swap;
+    src: url("/fonts/inter-roman.var.woff2") format("woff2");
+    font-named-instance: "Regular";
+  }
+
+  @font-face {
+    font-family: "Inter var";
+    font-style: italic;
+    font-weight: 100 900;
+    font-display: swap;
+    src: url("/fonts/inter-italic.var.woff2") format("woff2");
+    font-named-instance: "Italic";
+  }
+
+  body {
+    @apply scrollbar-hide bg-white text-base subpixel-antialiased dark:bg-black;
+  }
+
+  a {
+    @apply focus-visible-ring break-words;
+  }
+
+  b,
+  strong {
+    @apply font-semibold;
+  }
+}
+
+@layer components {
+  .hero-text-bg {
+    @apply before:text-fill-transparent relative w-full w-full grow select-none before:absolute before:left-0 before:top-0 before:bg-gradient-to-b before:from-black/75 before:to-black before:bg-clip-text before:text-center before:content-[attr(data-text)] before:dark:from-white before:dark:to-white/60;
+  }
+}
+
+@layer utilities {
+  .focus-ring {
+    @apply focus:border-blue-500 focus:shadow-none focus:outline-none focus:ring-2 focus:ring-blue-200 focus:ring-offset-0 dark:focus:ring-blue-800;
+  }
+
+  .focus-visible-ring {
+    @apply focus-visible:border-blue-500 focus-visible:shadow-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-200 focus-visible:ring-offset-0 dark:focus-visible:ring-blue-800;
+  }
+}
