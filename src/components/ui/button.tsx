@@ -5,7 +5,7 @@ import { Loader } from "lucide-react";
 import twcx from "~/utils/twcx";
 
 const buttonVariants = cva(
-  "inline-flex items-center justify-center rounded border px-4 py-2 text-sm font-medium focus:outline-none disabled:border-gray-300 disabled:bg-gray-100 disabled:text-gray-500 dark:focus:ring-offset-black dark:disabled:border-gray-800 dark:disabled:bg-gray-800/40 dark:disabled:text-gray-600",
+  "inline-flex items-center gap-x-2 justify-center rounded border px-4 py-2 text-sm font-medium focus:outline-none disabled:border-gray-300 disabled:bg-gray-100 disabled:text-gray-500 dark:focus:ring-offset-black dark:disabled:border-gray-800 dark:disabled:bg-gray-800/40 dark:disabled:text-gray-600",
   {
     variants: {
       Loading: {
@@ -20,7 +20,7 @@ const buttonVariants = cva(
       Type: {
         primary: "border-black bg-black text-white dark:border-white dark:bg-white dark:text-black",
         secondary:
-          "bg-transparent text-gray-700 hover:text-black dark:border-gray-700 dark:text-gray-400 dark:hover:text-white",
+          "bg-transparent text-gray-800 hover:text-black dark:border-gray-800 dark:text-gray-300 dark:hover:text-white",
         danger: "bg-red-600 border-red-600 text-white",
         warning: "bg-yellow-400 border-yellow-400 text-white",
       },
@@ -88,12 +88,14 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>(
         {Loading ? (
           <Loader className="h-4 w-4 animate-spin" />
         ) : (
-          Prefix && <span className="mr-2 flex">{Prefix}</span>
+          Prefix && <span className="flex">{Prefix}</span>
         )}
-        <span className="inline-block overflow-hidden text-ellipsis whitespace-nowrap">
-          {children}
-        </span>
-        {!Loading && Suffix && <span className="ml-2 flex flex-shrink">{Suffix}</span>}
+        {children && (
+          <span className="inline-block overflow-hidden text-ellipsis whitespace-nowrap">
+            {children}
+          </span>
+        )}
+        {!Loading && Suffix && <span className="flex flex-shrink">{Suffix}</span>}
       </button>
     );
   }

@@ -17,43 +17,74 @@ const Signin: NextPageWithAuthAndLayout = () => {
     twitch: false,
   });
 
-  const handleSignin = async (provider: AvailableProviders) => {
+  const handleSignin = (provider: AvailableProviders) => {
     setLoading((prev) => ({ ...prev, [provider]: true }));
-    // Wait 1 second to show the loading state
-    // await new Promise((resolve) => setTimeout(resolve, 1000));
-    try {
-      await signIn(provider, {
-        callbackUrl: "/",
+    signIn(provider, {
+      callbackUrl: "/",
+    })
+      .then((res) => {
+        if (res?.ok) {
+          setLoading((prev) => ({ ...prev, [provider]: false }));
+        }
+      })
+      .catch((error) => {
+        console.log(error);
       });
-    } catch (error) {
-      // console.log(error);
-    } finally {
-      setLoading((prev) => ({ ...prev, [provider]: false }));
-    }
   };
+
   return (
     <div className="m-auto w-full min-w-[345px] max-w-md px-4 pb-28 lg:max-w-lg">
-      <div className="w-full overflow-hidden rounded-xl border border-gray-100 bg-gray-50 px-8 py-10 dark:border-gray-800 dark:bg-gray-950 dark:text-gray-300 lg:p-12">
-        <h1 className="text-2xl font-semibold text-gray-900 subpixel-antialiased dark:text-white lg:text-3xl">
+      <div className="w-full overflow-hidden rounded-xl border border-gray-100 bg-gray-50 px-8 py-10 dark:border-gray-800 dark:bg-gray-950 lg:p-12">
+        <h1 className="text-3xl font-semibold text-gray-900 subpixel-antialiased dark:text-white lg:text-3xl">
           Sign in
         </h1>
-        <p className="mb-8 text-gray-900 subpixel-antialiased dark:text-white">
+        <p className="mb-8 mt-1 text-gray-800 subpixel-antialiased dark:text-gray-200">
           with one of the following providers
         </p>
         <div className="flex select-none flex-col gap-6 bg-gray-50 dark:bg-gray-950">
-          <Button Loading={loading.discord} onClick={(e) => handleSignin} Prefix={<Discord />}>
+          <Button
+            Type="secondary"
+            className="border-gray-400 bg-white py-5 text-black dark:bg-black dark:text-white"
+            Loading={loading.discord}
+            onClick={() => handleSignin("discord")}
+            Prefix={<Discord />}
+          >
             Continue with Discord
           </Button>
-          <Button Loading={loading.github} onClick={(e) => handleSignin} Prefix={<Github />}>
+          <Button
+            Type="secondary"
+            className="border-gray-400 bg-white py-5 text-black dark:bg-black dark:text-white"
+            Loading={loading.github}
+            onClick={() => handleSignin("github")}
+            Prefix={<Github />}
+          >
             Continue with Github
           </Button>
-          <Button Loading={loading.google} onClick={(e) => handleSignin} Prefix={<Google />}>
+          <Button
+            Type="secondary"
+            className="border-gray-400 bg-white py-5 text-black dark:bg-black dark:text-white"
+            Loading={loading.google}
+            onClick={() => handleSignin("google")}
+            Prefix={<Google />}
+          >
             Continue with Google
           </Button>
-          <Button Loading={loading.spotify} onClick={(e) => handleSignin} Prefix={<Spotify />}>
+          <Button
+            Type="secondary"
+            className="border-gray-400 bg-white py-5 text-black dark:bg-black dark:text-white"
+            Loading={loading.spotify}
+            onClick={() => handleSignin("spotify")}
+            Prefix={<Spotify />}
+          >
             Continue with Spotify
           </Button>
-          <Button Loading={loading.twitch} onClick={(e) => handleSignin} Prefix={<Twitch />}>
+          <Button
+            Type="secondary"
+            className="border-gray-400 bg-white py-5 text-black dark:bg-black dark:text-white"
+            Loading={loading.twitch}
+            onClick={() => handleSignin("twitch")}
+            Prefix={<Twitch />}
+          >
             Continue with Twitch
           </Button>
         </div>

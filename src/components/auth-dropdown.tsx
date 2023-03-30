@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { signOut, useSession } from "next-auth/react";
-import { ChevronDown, Edit, ExternalLink, Info, User } from "lucide-react";
+import { ChevronDown, Edit, ExternalLink, Info, LogOut, User } from "lucide-react";
 import { ThemeSelect } from "~/components/theme-select";
 import { Avatar, AvatarFallback, AvatarImage } from "~/components/ui/avatar";
 import { Button } from "~/components/ui/button";
@@ -17,15 +17,13 @@ import {
 const AuthDropdown = () => {
   const { data: session, status } = useSession();
 
-  const handleLogout = async () => {
+  const handleLogout = () => {
     if (status === "authenticated") {
-      try {
-        await signOut({
-          callbackUrl: "/",
-        });
-      } catch (error) {
+      signOut({
+        callbackUrl: "/",
+      }).catch((error) => {
         console.log(error);
-      }
+      });
     }
   };
 
@@ -37,7 +35,7 @@ const AuthDropdown = () => {
           Type="secondary"
           aria-label="Open Menu"
           Prefix={
-            <Avatar className="-mr-1 h-6 w-6">
+            <Avatar className="h-6 w-6">
               <AvatarImage src={session?.user?.image || undefined} alt={"User Image"} />
               <AvatarFallback>
                 <User className="h-4 w-4" />
@@ -50,31 +48,40 @@ const AuthDropdown = () => {
       {status !== "loading" && (
         <DropdownMenuContent className="w-56 select-none">
           {session?.user?.name && (
-            <Link href={`/u/${session?.user?.username}`}>
-              <DropdownMenuLabel>
-                <span>
-                  Signed in as <b>{session.user.name}</b>
-                </span>
-              </DropdownMenuLabel>
-            </Link>
+            <DropdownMenuGroup>
+              <Link href={`/u/${session?.user?.username}`}>
+                <DropdownMenuLabel className="bg-gray-50 text-center dark:bg-gray-950">
+                  <span>
+                    Signed in as <b>{session.user.name}</b>
+                  </span>
+                </DropdownMenuLabel>
+              </Link>
+              <DropdownMenuSeparator />
+            </DropdownMenuGroup>
           )}
-          <DropdownMenuGroup>
-            {session?.user?.username ? (
+          {session?.user?.username ? (
+            <DropdownMenuGroup>
               <Link href={`/u/${session?.user?.username}`}>
                 <DropdownMenuItem>
                   <User className="mr-2 h-4 w-4" />
                   <span>Profile</span>
                 </DropdownMenuItem>
               </Link>
-            ) : (
+              <DropdownMenuItem onClick={handleLogout}>
+                <LogOut className="mr-2 h-4 w-4" />
+                <span>Sign out</span>
+              </DropdownMenuItem>
+            </DropdownMenuGroup>
+          ) : (
+            <DropdownMenuGroup>
               <Link href="/auth/signin">
                 <DropdownMenuItem>
                   <User className="mr-2 h-4 w-4" />
                   <span>Sign in</span>
                 </DropdownMenuItem>
               </Link>
-            )}
-          </DropdownMenuGroup>
+            </DropdownMenuGroup>
+          )}
           <DropdownMenuSeparator />
           <DropdownMenuGroup>
             <Link href="/about/privacy">

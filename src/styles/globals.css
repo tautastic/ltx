@@ -57,7 +57,7 @@
 
 @layer components {
   .hero-text-bg {
-    @apply before:text-fill-transparent relative w-full w-full grow select-none before:absolute before:left-0 before:top-0 before:bg-gradient-to-b before:from-black/75 before:to-black before:bg-clip-text before:text-center before:content-[attr(data-text)] before:dark:from-white before:dark:to-white/60;
+    @apply before:text-fill-transparent relative w-full grow select-none before:absolute before:left-0 before:top-0 before:w-full before:bg-gradient-to-b before:from-black/75 before:to-black before:bg-clip-text before:text-center before:content-[attr(data-text)] before:dark:from-white before:dark:to-white/60;
   }
 }
 
