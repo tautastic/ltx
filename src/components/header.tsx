@@ -1,26 +1,11 @@
-import { type ReactNode, useState, useEffect } from "react";
+import { type ReactNode } from "react";
 import Link from "next/link";
 import { Ltx } from "~/components/ui/brand-icons";
 import twcx from "~/utils/twcx";
+import useScroll from "~/lib/hooks/use-scroll";
 
 const Header = (props: { children?: ReactNode }) => {
-  const [scrolled, setScrolled] = useState(false);
-
-  const handleScroll = () => {
-    const offset = window.scrollY;
-    if (offset > 10) {
-      setScrolled(true);
-    } else {
-      setScrolled(false);
-    }
-  };
-
-  useEffect(() => {
-    window.addEventListener("scroll", handleScroll);
-    return () => {
-      window.removeEventListener("scroll", handleScroll);
-    };
-  }, []);
+  const scrolled = useScroll(10);
 
   return (
     <header
