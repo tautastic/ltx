@@ -1,13 +1,30 @@
+import { MilkdownProvider } from "@milkdown/react";
+import { ProsemirrorAdapterProvider } from "@prosemirror-adapter/react";
 import { Box, Star } from "lucide-react";
+import dynamic from "next/dynamic";
 import AuthDropdown from "~/components/auth-dropdown";
 import Footer from "~/components/footer";
 import Header from "~/components/header";
 import { Button } from "~/components/ui/button";
 import { type NextPageWithAuthAndLayout } from "~/lib/types";
+import compose from "~/utils/compose";
+
+const LTXEditor = dynamic(
+  () =>
+    import("~/components/editor").then((mod) => ({
+      default: mod.LTXEditor,
+    })),
+  {
+    ssr: false,
+    loading: () => <div>Loading...</div>,
+  }
+);
+
+const Provider = compose(MilkdownProvider, ProsemirrorAdapterProvider);
 
 const Home: NextPageWithAuthAndLayout = () => {
   return (
-    <div className="-mt-28 flex h-[500px] flex-col items-center justify-between px-6 text-center md:-mt-48 xl:h-[400px]">
+    <div className="flex flex-col items-center justify-between gap-16 px-6 text-center">
       <h1 className="-mb-2 flex flex-wrap items-center justify-center overflow-hidden text-5.5xl font-extrabold tracking-[-0.04em] subpixel-antialiased xs:text-7xl md:text-7.5xl xl:flex-nowrap xl:gap-x-3 xl:text-8xl">
         <span
           data-text="Quadratisch."
@@ -62,13 +79,18 @@ const Home: NextPageWithAuthAndLayout = () => {
 Home.auth = false;
 Home.getLayout = (page) => {
   return (
-    <div>
+    <>
       <Header>
         <AuthDropdown />
       </Header>
-      <main className="flex min-h-screen items-center justify-center">{page}</main>
+      <main className="flex min-h-screen flex-col items-center justify-start gap-y-14 py-32">
+        {page}
+        <Provider>
+          <LTXEditor readOnly={true} />
+        </Provider>
+      </main>
       <Footer />
-    </div>
+    </>
   );
 };
 
