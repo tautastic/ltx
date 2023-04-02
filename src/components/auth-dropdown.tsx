@@ -67,6 +67,12 @@ const AuthDropdown = () => {
                   <span>Profile</span>
                 </DropdownMenuItem>
               </Link>
+              <Link href="/create">
+                <DropdownMenuItem>
+                  <Edit className="mr-2 h-4 w-4" />
+                  <span>New Document</span>
+                </DropdownMenuItem>
+              </Link>
               <DropdownMenuItem onClick={handleLogout}>
                 <LogOut className="mr-2 h-4 w-4" />
                 <span>Sign out</span>
