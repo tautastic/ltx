@@ -5,6 +5,7 @@ import dynamic from "next/dynamic";
 import AuthDropdown from "~/components/auth-dropdown";
 import Footer from "~/components/footer";
 import Header from "~/components/header";
+import Background from "~/components/background";
 import { Button } from "~/components/ui/button";
 import { type NextPageWithAuthAndLayout } from "~/lib/types";
 import compose from "~/utils/compose";
@@ -83,7 +84,8 @@ Home.getLayout = (page) => {
       <Header>
         <AuthDropdown />
       </Header>
-      <main className="flex min-h-screen flex-col items-center justify-start gap-y-16 px-6 py-24 md:gap-y-14 md:py-32">
+      <Background />
+      <main className="flex min-h-screen flex-col items-center justify-start gap-y-16 px-6 py-24 invert-0 md:gap-y-14 md:py-32">
         {page}
         <Provider>
           <LTXEditor readOnly={true} />
