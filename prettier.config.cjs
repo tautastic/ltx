@@ -15,6 +15,14 @@ const config = {
   bracketSameLine: false,
   singleAttributePerLine: false,
   plugins: [require.resolve("prettier-plugin-tailwindcss")],
+  overrides: [
+    {
+      files: "*.css",
+      options: {
+        printWidth: 9999,
+      },
+    },
+  ],
 };
 
 module.exports = config;

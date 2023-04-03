@@ -42,7 +42,6 @@ export const MathBlock: FC = () => {
   return (
     <Tabs.Root
       contentEditable={false}
-      className="-my-2"
       value={value}
       onValueChange={(value) => {
         setValue(value);

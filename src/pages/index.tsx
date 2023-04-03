@@ -24,7 +24,7 @@ const Provider = compose(MilkdownProvider, ProsemirrorAdapterProvider);
 
 const Home: NextPageWithAuthAndLayout = () => {
   return (
-    <div className="flex flex-col items-center justify-between gap-16 px-6 text-center">
+    <div className="flex flex-col items-center justify-between gap-y-8 text-center md:gap-y-16">
       <h1 className="-mb-2 flex flex-wrap items-center justify-center overflow-hidden text-5.5xl font-extrabold tracking-[-0.04em] subpixel-antialiased xs:text-7xl md:text-7.5xl xl:flex-nowrap xl:gap-x-3 xl:text-8xl">
         <span
           data-text="Quadratisch."
@@ -83,7 +83,7 @@ Home.getLayout = (page) => {
       <Header>
         <AuthDropdown />
       </Header>
-      <main className="flex min-h-screen flex-col items-center justify-start gap-y-14 py-32">
+      <main className="flex min-h-screen flex-col items-center justify-start gap-y-16 px-6 py-24 md:gap-y-14 md:py-32">
         {page}
         <Provider>
           <LTXEditor readOnly={true} />

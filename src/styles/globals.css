@@ -59,6 +59,67 @@
   .hero-text-bg {
     @apply before:text-fill-transparent relative w-full grow select-none before:absolute before:left-0 before:top-0 before:w-full before:bg-gradient-to-b before:from-black/75 before:to-black before:bg-clip-text before:text-center before:content-[attr(data-text)] before:dark:from-white before:dark:to-white/60;
   }
+
+  .milkdown-theme-ltx blockquote {
+    @apply border-l-4 pl-4 font-serif not-italic;
+  }
+
+  .milkdown-theme-ltx code {
+    @apply font-mono font-normal;
+  }
+
+  .milkdown-theme-ltx pre code {
+    @apply text-[inherit];
+  }
+
+  .milkdown-theme-ltx img {
+    @apply my-0 inline-block max-w-full;
+  }
+
+  .milkdown-theme-ltx.prose :where(blockquote):not(:where([class~="not-prose"] *)) {
+    @apply font-normal;
+  }
+
+  .milkdown-theme-ltx.prose :where(blockquote p:first-of-type):not(:where([class~="not-prose"] *))::before,
+  .milkdown-theme-ltx.prose :where(blockquote p:first-of-type):not(:where([class~="not-prose"] *))::after {
+    content: "";
+  }
+
+  .milkdown-theme-ltx.prose :where(code):not(:where([class~="not-prose"] *))::before,
+  .milkdown-theme-ltx.prose :where(code):not(:where([class~="not-prose"] *))::after {
+    content: "";
+  }
+
+  .milkdown-theme-ltx.prose .tableWrapper {
+    @apply relative mb-2 overflow-x-auto;
+  }
+
+  .milkdown-theme-ltx.prose table {
+    @apply m-4 overflow-visible text-sm shadow-md sm:rounded-lg;
+  }
+
+  .milkdown-theme-ltx.prose td,
+  th {
+    @apply px-6 py-3;
+  }
+
+  .milkdown-theme-ltx.prose tr {
+    @apply border-b border-gray-200 dark:border-gray-600;
+  }
+
+  .milkdown-theme-ltx.prose :where(td, th) p {
+    @apply m-0;
+  }
+
+  .milkdown-theme-ltx.prose :where(td, th):nth-child(odd) {
+    @apply bg-gray-50 dark:bg-gray-900;
+  }
+
+  /* A little workaround to turn the element into a space */
+  .milkdown-theme-ltx.prose br[data-is-inline="true"],
+  .milkdown-theme-ltx.prose br[data-is-inline="true"]::after {
+    content: " ";
+  }
 }
 
 @layer utilities {

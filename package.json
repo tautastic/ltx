@@ -7,8 +7,8 @@
   "license": "MIT",
   "scripts": {
     "lint": "next lint",
-    "format": "prettier \"./**/*.{css,js,jsx,cjs,mjs,ts,tsx,md,mdx,json}\"",
-    "format:write": "prettier --write \"./**/*.{css,js,jsx,cjs,mjs,ts,tsx,md,mdx,json}\"",
+    "format": "prettier \"./**/*.{css,js,jsx,cjs,mjs,ts,tsx,json}\"",
+    "format:write": "prettier --write \"./**/*.{css,js,jsx,cjs,mjs,ts,tsx,json}\"",
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
