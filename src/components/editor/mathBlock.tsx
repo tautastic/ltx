@@ -19,13 +19,10 @@ export const MathBlock: FC = () => {
   const codeInput = useRef<HTMLTextAreaElement>(null);
   const [value, setValue] = useState("output");
   const [loading, getEditor] = useInstance();
-  const tabs: Tab[] = useMemo(
-    () => [
-      { label: "Output", value: "output" },
-      { label: "Source", value: "source" },
-    ],
-    []
-  );
+  const tabs: Tab[] = [
+    { label: "Output", value: "output" },
+    { label: "Source", value: "source" },
+  ];
 
   useEffect(() => {
     requestAnimationFrame(() => {
@@ -53,10 +50,10 @@ export const MathBlock: FC = () => {
             <Tabs.Trigger
               key={tab.value}
               value={tab.value}
-              className={`inline-block rounded-t-lg border-b-2 border-transparent p-4 ${
+              className={`inline-block rounded-t-lg border-b-2 p-4 ${
                 value === tab.value
                   ? "border-gray-800 text-black dark:border-gray-200 dark:text-white"
-                  : "hover:border-gray-600 hover:text-gray-900 dark:hover:border-gray-400 dark:hover:text-gray-100"
+                  : "border-transparent hover:border-gray-600 hover:text-gray-900 dark:hover:border-gray-400 dark:hover:text-gray-100"
               }`}
             >
               {tab.label}
