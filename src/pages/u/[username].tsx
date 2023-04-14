@@ -30,12 +30,10 @@ export const getServerSideProps = async (
 const Profile: NextPageWithAuthAndLayout<InferGetServerSidePropsType<typeof getServerSideProps>> = (
   props
 ) => {
-  const { data: userProfile, isLoading } = api.users.getProfileByUsername.useQuery(
-    props.profileName
-  );
+  const { data: userProfile, status } = api.users.getProfileByUsername.useQuery(props.profileName);
 
-  if (isLoading || !userProfile) {
-    // won't happen since we prefetch
+  if (status !== "success") {
+    // won't happen since the query has been prefetched
     return <h1 className="text-3xl font-bold">Loading...</h1>;
   }
 
