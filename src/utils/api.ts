@@ -30,12 +30,14 @@ export const api = createTRPCNext<AppRouter>({
       queryClientConfig: {
         defaultOptions: {
           queries: {
+            staleTime: 1000,
+            refetchOnWindowFocus: false,
             retry(failureCount, _err) {
               const err = _err as never as TRPCClientErrorLike<AppRouter>;
               const MAX_QUERY_RETRIES = 3;
 
               const code = err?.data?.code;
-              if (code === "NOT_FOUND" || code === "BAD_REQUEST") {
+              if (code === "BAD_REQUEST" || code === "FORBIDDEN" || code === "UNAUTHORIZED") {
                 // prevent refetch on queries that always will fail
                 return false;
               }
@@ -67,7 +69,7 @@ export const api = createTRPCNext<AppRouter>({
    *
    * @see https://trpc.io/docs/nextjs#ssr-boolean-default-false
    */
-  ssr: false,
+  ssr: true,
 });
 
 /**
