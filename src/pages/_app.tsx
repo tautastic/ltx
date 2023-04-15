@@ -9,7 +9,7 @@ import SEO from "next-seo.config";
 import Head from "next/head";
 
 import { type NextPageWithAuthAndLayout } from "~/lib/types";
-import { api } from "~/utils/api";
+import api from "~/utils/api";
 import "~/styles/globals.css";
 
 type AppPropsWithAuthAndLayout = AppProps<{ session: Session | null }> & {

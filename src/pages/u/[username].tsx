@@ -3,7 +3,7 @@ import type { NextPageWithAuthAndLayout } from "~/lib/types";
 import AuthDropdown from "~/components/auth-dropdown";
 import Header from "~/components/header";
 import Footer from "~/components/footer";
-import { api } from "~/utils/api";
+import api from "~/utils/api";
 import ssr from "~/utils/ssr";
 
 export const getServerSideProps = async (
