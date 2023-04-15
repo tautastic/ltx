@@ -7,6 +7,10 @@ import Header from "~/components/header";
 import { Box, Star } from "lucide-react";
 import dynamic from "next/dynamic";
 
+const Provider = dynamic(() => import("~/components/editor/provider"), {
+  ssr: false,
+});
+
 const Editor = dynamic(() => import("~/components/editor"), {
   ssr: false,
 });
@@ -74,8 +78,10 @@ Home.getLayout = (page) => {
       </Header>
       <Background />
       <main className="flex min-h-screen flex-col items-center justify-start gap-y-16 px-6 py-24 invert-0 md:gap-y-14 md:py-32">
-        {page}
-        <Editor readOnly />
+        <Provider>
+          {page}
+          <Editor readOnly />
+        </Provider>
       </main>
       <Footer />
     </>

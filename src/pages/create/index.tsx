@@ -4,6 +4,10 @@ import Header from "~/components/header";
 import Footer from "~/components/footer";
 import dynamic from "next/dynamic";
 
+const Provider = dynamic(() => import("~/components/editor/provider"), {
+  ssr: false,
+});
+
 const Editor = dynamic(() => import("~/components/editor"), {
   ssr: false,
 });
@@ -19,7 +23,9 @@ Create.getLayout = (page) => {
       <Header>
         <AuthDropdown />
       </Header>
-      <main className="min-h-screen">{page}</main>
+      <main className="min-h-screen">
+        <Provider>{page}</Provider>
+      </main>
       <Footer />
     </div>
   );

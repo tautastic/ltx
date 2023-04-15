@@ -1,24 +1,15 @@
-import { ProsemirrorAdapterProvider } from "@prosemirror-adapter/react";
-import { MilkdownProvider } from "@milkdown/react";
 import EditorCore from "~/components/editor/core";
-import compose from "~/utils/compose";
 import { type FC } from "react";
 
-type EditorProps = {
-  placeholder?: string;
+const LtxEditor: FC<{
+  defaultValue?: string;
   readOnly?: boolean;
-};
-
-const Provider = compose(MilkdownProvider, ProsemirrorAdapterProvider);
-
-const LtxEditor: FC<EditorProps> = (props) => {
+}> = (props) => {
   return (
-    <Provider>
-      <EditorCore
-        defaultValue={props.placeholder || defaultPlaceholder}
-        readOnly={props.readOnly || false}
-      />
-    </Provider>
+    <EditorCore
+      defaultValue={props.defaultValue || defaultPlaceholder}
+      readOnly={props.readOnly || false}
+    />
   );
 };
 

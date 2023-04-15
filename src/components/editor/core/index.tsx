@@ -12,11 +12,6 @@ import MathblockReadonly from "~/components/editor/core/mathblock-readonly";
 import Mathblock from "~/components/editor/core/mathblock";
 import twcx from "~/utils/twcx";
 
-type EditorCoreProps = {
-  defaultValue: string;
-  readOnly: boolean;
-};
-
 const createEditor = (
   root: HTMLElement,
   placeholder: string,
@@ -65,7 +60,10 @@ const createEditor = (
     );
 };
 
-const EditorCore: FC<EditorCoreProps> = ({ defaultValue, readOnly }) => {
+const EditorCore: FC<{
+  defaultValue: string;
+  readOnly: boolean;
+}> = ({ defaultValue, readOnly }) => {
   const nodeViewFactory = useNodeViewFactory();
   const editorInfo = useEditor(
     (root) => {
