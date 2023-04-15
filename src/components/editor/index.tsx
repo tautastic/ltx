@@ -15,7 +15,7 @@ const LtxEditor: FC<EditorProps> = (props) => {
   return (
     <Provider>
       <EditorCore
-        placeholder={props.placeholder || defaultPlaceholder}
+        defaultValue={props.placeholder || defaultPlaceholder}
         readOnly={props.readOnly || false}
       />
     </Provider>

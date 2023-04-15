@@ -13,7 +13,7 @@ import Mathblock from "~/components/editor/core/mathblock";
 import twcx from "~/utils/twcx";
 
 type EditorCoreProps = {
-  placeholder: string;
+  defaultValue: string;
   readOnly: boolean;
 };
 
@@ -41,7 +41,7 @@ const createEditor = (
             return {
               ...attrs,
               class: twcx(
-                "milkdown-theme-ltx prose outline-none prose-sm mx-auto max-w-[90ch] rounded-md bg-gray-50 p-6 text-black dark:prose-invert md:prose-base prose-headings:mb-2 dark:bg-gray-950 dark:text-gray-100 sm:my-14 sm:max-w-[70ch] sm:p-14 md:max-w-[75ch] lg:max-w-[95ch]",
+                "prose outline-none prose-sm mx-auto max-w-[90ch] rounded-md bg-gray-50 p-6 text-black dark:prose-invert md:prose-base prose-headings:mb-2 dark:bg-gray-950 dark:text-gray-100 sm:my-14 sm:max-w-[70ch] sm:p-14 md:max-w-[75ch] lg:max-w-[95ch]",
                 attrs?.class || ""
               ),
             };
@@ -65,10 +65,13 @@ const createEditor = (
     );
 };
 
-const EditorCore: FC<EditorCoreProps> = ({ placeholder, readOnly }) => {
+const EditorCore: FC<EditorCoreProps> = ({ defaultValue, readOnly }) => {
   const nodeViewFactory = useNodeViewFactory();
-  const editorInfo = useEditor((root) =>
-    createEditor(root, placeholder, readOnly, nodeViewFactory)
+  const editorInfo = useEditor(
+    (root) => {
+      return createEditor(root, defaultValue, readOnly, nodeViewFactory);
+    },
+    [defaultValue, readOnly, nodeViewFactory]
   );
 
   useEffect(() => {
