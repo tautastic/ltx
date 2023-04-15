@@ -23,7 +23,7 @@ model Page {
   updatedAt   DateTime @updatedAt
   title       String
   description String?  @db.Text
-  expression  String   @db.Text
+  content     String   @db.Text
   author      User     @relation(name: "AuthoredPages", fields: [authorId], references: [id])
   authorId    String
   starredBy   User[]   @relation("StarredPages")
