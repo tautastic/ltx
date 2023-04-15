@@ -1,27 +1,15 @@
-import { MilkdownProvider } from "@milkdown/react";
-import { ProsemirrorAdapterProvider } from "@prosemirror-adapter/react";
-import { Box, Star } from "lucide-react";
-import dynamic from "next/dynamic";
+import { type NextPageWithAuthAndLayout } from "~/lib/types";
 import AuthDropdown from "~/components/auth-dropdown";
-import Footer from "~/components/footer";
-import Header from "~/components/header";
 import Background from "~/components/background";
 import { Button } from "~/components/ui/button";
-import { type NextPageWithAuthAndLayout } from "~/lib/types";
-import compose from "~/utils/compose";
+import Footer from "~/components/footer";
+import Header from "~/components/header";
+import { Box, Star } from "lucide-react";
+import dynamic from "next/dynamic";
 
-const LTXEditor = dynamic(
-  () =>
-    import("~/components/editor").then((mod) => ({
-      default: mod.LTXEditor,
-    })),
-  {
-    ssr: false,
-    loading: () => <div>Loading...</div>,
-  }
-);
-
-const Provider = compose(MilkdownProvider, ProsemirrorAdapterProvider);
+const Editor = dynamic(() => import("~/components/editor"), {
+  ssr: false,
+});
 
 const Home: NextPageWithAuthAndLayout = () => {
   return (
@@ -87,9 +75,7 @@ Home.getLayout = (page) => {
       <Background />
       <main className="flex min-h-screen flex-col items-center justify-start gap-y-16 px-6 py-24 invert-0 md:gap-y-14 md:py-32">
         {page}
-        <Provider>
-          <LTXEditor readOnly={true} />
-        </Provider>
+        <Editor readOnly />
       </main>
       <Footer />
     </>

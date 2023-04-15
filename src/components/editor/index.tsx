@@ -1,82 +1,28 @@
-import { defaultValueCtx, Editor, editorViewOptionsCtx, rootCtx } from "@milkdown/core";
-import { Milkdown, useEditor } from "@milkdown/react";
-import { commonmark } from "@milkdown/preset-commonmark";
-import { math, mathBlockSchema } from "@milkdown/plugin-math";
-import { type MilkdownPlugin } from "@milkdown/ctx";
-import { useEffect, useMemo } from "react";
-import { $view } from "@milkdown/utils";
-import { useNodeViewFactory } from "@prosemirror-adapter/react";
+import { ProsemirrorAdapterProvider } from "@prosemirror-adapter/react";
+import { MilkdownProvider } from "@milkdown/react";
+import EditorCore from "~/components/editor/core";
+import compose from "~/utils/compose";
+import { type FC } from "react";
 
-import { MathBlock } from "~/components/editor/mathBlock";
-import "katex/dist/katex.min.css";
-import twcx from "~/utils/twcx";
-
-interface EditorProps {
+type EditorProps = {
   placeholder?: string;
   readOnly?: boolean;
-}
-
-export const LTXEditor = ({ placeholder = defaultPlaceholder, readOnly = false }: EditorProps) => {
-  const nodeViewFactory = useNodeViewFactory();
-  const mathPlugins: MilkdownPlugin[] = useMemo(() => {
-    return [
-      $view(mathBlockSchema.node, () =>
-        nodeViewFactory({
-          component: MathBlock,
-          stopEvent: () => true,
-        })
-      ),
-      math,
-    ].flat();
-  }, [nodeViewFactory]);
-
-  const editorInfo = useEditor((root) => {
-    return Editor.make()
-      .config((ctx) => {
-        ctx.set(rootCtx, root);
-        ctx.set(defaultValueCtx, placeholder);
-      })
-      .config((ctx) => {
-        ctx.update(editorViewOptionsCtx, (prev) => {
-          const prevClass = prev.attributes;
-          return {
-            ...prev,
-            editable: () => !readOnly,
-            attributes: (state) => {
-              const attrs = typeof prevClass === "function" ? prevClass(state) : prevClass;
-              return {
-                ...attrs,
-                "aria-readonly": readOnly ? "true" : "false",
-                "class": twcx(
-                  "milkdown-theme-ltx prose group/editor outline-none prose-sm mx-auto max-w-[90ch] rounded-md bg-gray-50 p-6 text-black dark:prose-invert md:prose-base prose-headings:mb-2 dark:bg-gray-950 dark:text-gray-100 sm:my-14 sm:max-w-[70ch] sm:p-14 md:max-w-[75ch] lg:max-w-[95ch]",
-                  attrs?.class || ""
-                ),
-              };
-            },
-          };
-        });
-      })
-      .use(commonmark);
-  }, []);
-
-  useEffect(() => {
-    requestAnimationFrame(() => {
-      const effect = async () => {
-        const editor = editorInfo.get();
-        if (!editor) return;
-
-        editor.use(mathPlugins);
-        await editor.create();
-      };
-
-      effect().catch((e) => {
-        console.error(e);
-      });
-    });
-  }, [editorInfo, mathPlugins]);
-
-  return <Milkdown />;
 };
+
+const Provider = compose(MilkdownProvider, ProsemirrorAdapterProvider);
+
+const LtxEditor: FC<EditorProps> = (props) => {
+  return (
+    <Provider>
+      <EditorCore
+        placeholder={props.placeholder || defaultPlaceholder}
+        readOnly={props.readOnly || false}
+      />
+    </Provider>
+  );
+};
+
+export default LtxEditor;
 
 const defaultPlaceholder = `Es sei $\\Omega = \\sum_{n \\in \\N} A_{n}$ eine Zerlegung des Grundraums $\\Omega$ in paarweise disjunkte Mengen $A_{1}, A_{2},\\dotsc\\,$. Zeigen Sie, dass das System
 $$

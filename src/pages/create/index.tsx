@@ -1,31 +1,15 @@
-import { MilkdownProvider } from "@milkdown/react";
 import { type NextPageWithAuthAndLayout } from "~/lib/types";
-import Header from "~/components/header";
 import AuthDropdown from "~/components/auth-dropdown";
+import Header from "~/components/header";
 import Footer from "~/components/footer";
 import dynamic from "next/dynamic";
-import compose from "~/utils/compose";
-import { ProsemirrorAdapterProvider } from "@prosemirror-adapter/react";
 
-const LTXEditor = dynamic(
-  () =>
-    import("~/components/editor").then((mod) => ({
-      default: mod.LTXEditor,
-    })),
-  {
-    ssr: false,
-    loading: () => <div>Loading...</div>,
-  }
-);
-
-const Provider = compose(MilkdownProvider, ProsemirrorAdapterProvider);
+const Editor = dynamic(() => import("~/components/editor"), {
+  ssr: false,
+});
 
 const Create: NextPageWithAuthAndLayout = () => {
-  return (
-    <Provider>
-      <LTXEditor />
-    </Provider>
-  );
+  return <Editor />;
 };
 
 Create.auth = true;

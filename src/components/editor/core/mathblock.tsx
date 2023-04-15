@@ -1,18 +1,18 @@
-import { katexOptionsCtx } from "@milkdown/plugin-math";
-import { useInstance } from "@milkdown/react";
 import { useNodeViewContext } from "@prosemirror-adapter/react";
-import * as Tabs from "@radix-ui/react-tabs";
-import katex from "katex";
-import type { FC } from "react";
 import { useEffect, useMemo, useRef, useState } from "react";
+import { katexOptionsCtx } from "@milkdown/plugin-math";
 import { Button } from "~/components/ui/button";
+import { useInstance } from "@milkdown/react";
+import * as Tabs from "@radix-ui/react-tabs";
+import type { FC } from "react";
+import katex from "katex";
 
 type Tab = {
   label: string;
   value: string;
 };
 
-export const MathBlock: FC = () => {
+const Mathblock: FC = () => {
   const { node, setAttrs } = useNodeViewContext();
   const code = useMemo(() => node.attrs.value as string, [node.attrs.value]);
   const codePanel = useRef<HTMLDivElement>(null);
@@ -44,7 +44,7 @@ export const MathBlock: FC = () => {
         setValue(value);
       }}
     >
-      <Tabs.List className="group-aria-readonly/editor:hidden">
+      <Tabs.List>
         <div className="-mb-px flex flex-wrap">
           {tabs.map((tab) => (
             <Tabs.Trigger
@@ -85,3 +85,5 @@ export const MathBlock: FC = () => {
     </Tabs.Root>
   );
 };
+
+export default Mathblock;
