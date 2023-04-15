@@ -36,7 +36,7 @@ const createEditor = (
             return {
               ...attrs,
               class: twcx(
-                "prose outline-none prose-sm mx-auto max-w-[90ch] rounded-md bg-gray-50 p-6 text-black dark:prose-invert md:prose-base prose-headings:mb-2 dark:bg-gray-950 dark:text-gray-100 sm:my-14 sm:max-w-[70ch] sm:p-14 md:max-w-[75ch] lg:max-w-[95ch]",
+                "milkdown-theme-ltx prose outline-none prose-sm mx-auto max-w-[90ch] rounded-md bg-gray-50 p-6 text-black dark:prose-invert md:prose-base prose-headings:mb-2 dark:bg-gray-950 dark:text-gray-100 sm:my-14 sm:max-w-[70ch] sm:p-14 md:max-w-[75ch] lg:max-w-[95ch]",
                 attrs?.class || ""
               ),
             };
