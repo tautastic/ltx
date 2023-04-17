@@ -1,11 +1,13 @@
-import { type ReactNode } from "react";
-import Link from "next/link";
 import { Ltx } from "~/components/ui/brand-icons";
-import twcx from "~/utils/twcx";
 import useScroll from "~/lib/hooks/use-scroll";
+import { useRouter } from "next/router";
+import { type ReactNode } from "react";
+import twcx from "~/utils/twcx";
+import Link from "next/link";
 
 const Header = (props: { children?: ReactNode }) => {
   const scrolled = useScroll(10);
+  const onHome = useRouter().asPath === "/";
 
   return (
     <header
@@ -17,9 +19,13 @@ const Header = (props: { children?: ReactNode }) => {
       )}
     >
       <nav className="mx-auto flex h-full max-w-6xl items-center justify-between gap-x-4">
-        <Link aria-label="Go to LTX homepage" title="Go to LTX homepage" href="/">
-          <Ltx className={"h-[22px] w-auto md:h-[28px]"} width={56} />
-        </Link>
+        {onHome ? (
+          <Ltx className="h-[22px] w-auto cursor-pointer md:h-[28px]" width={56} />
+        ) : (
+          <Link aria-label="Go to LTX homepage" title="Go to LTX homepage" href="/">
+            <Ltx className="h-[22px] w-auto md:h-[28px]" width={56} />
+          </Link>
+        )}
         {props.children}
       </nav>
     </header>
