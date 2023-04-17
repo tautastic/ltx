@@ -9,11 +9,13 @@ import { $view } from "@milkdown/utils";
 import "katex/dist/katex.min.css";
 
 import MathblockReadonly from "~/components/editor/core/mathblock-readonly";
+import PlaceholderPlugin, { placeholderConfig } from "~/components/editor/core/placeholder-plugin";
 import Mathblock from "~/components/editor/core/mathblock";
 import twcx from "~/utils/twcx";
 
 const createEditor = (
   root: HTMLElement,
+  defaultValue: string,
   placeholder: string,
   readOnly: boolean,
   nodeViewFactory: CreateReactNodeView
@@ -21,7 +23,10 @@ const createEditor = (
   return Editor.make()
     .config((ctx) => {
       ctx.set(rootCtx, root);
-      ctx.set(defaultValueCtx, placeholder);
+      ctx.set(defaultValueCtx, defaultValue);
+      ctx.set(placeholderConfig.key, {
+        placeholder,
+      });
       ctx.set(historyKeymap.key, {
         Undo: "Ctrl-z",
         Redo: "Ctrl-y",
@@ -36,7 +41,7 @@ const createEditor = (
             return {
               ...attrs,
               class: twcx(
-                "milkdown-theme-ltx prose outline-none prose-sm mx-auto max-w-[90ch] rounded-md bg-gray-50 p-6 text-black dark:prose-invert md:prose-base prose-headings:mb-2 dark:bg-gray-950 dark:text-gray-100 sm:my-14 sm:max-w-[70ch] sm:p-14 md:max-w-[75ch] lg:max-w-[95ch]",
+                "milkdown-theme-ltx break-words prose outline-none prose-sm rounded-md bg-gray-50 p-6 text-black dark:prose-invert md:prose-base prose-headings:mb-2 dark:bg-gray-950 dark:text-gray-100 sm:p-14",
                 attrs?.class || ""
               ),
             };
@@ -46,6 +51,7 @@ const createEditor = (
     })
     .use(commonmark)
     .use(history)
+    .use(PlaceholderPlugin)
     .use(
       [
         $view(mathBlockSchema.node, () =>
@@ -62,12 +68,13 @@ const createEditor = (
 
 const EditorCore: FC<{
   defaultValue: string;
+  placeholder: string;
   readOnly: boolean;
-}> = ({ defaultValue, readOnly }) => {
+}> = ({ defaultValue, placeholder, readOnly }) => {
   const nodeViewFactory = useNodeViewFactory();
   const editorInfo = useEditor(
     (root) => {
-      return createEditor(root, defaultValue, readOnly, nodeViewFactory);
+      return createEditor(root, defaultValue, placeholder, readOnly, nodeViewFactory);
     },
     [defaultValue, readOnly, nodeViewFactory]
   );

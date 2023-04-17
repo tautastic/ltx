@@ -76,15 +76,16 @@
     @apply my-0 inline-block max-w-full;
   }
 
+  .milkdown-theme-ltx.prose {
+    max-width: 100% !important;
+  }
+
   .milkdown-theme-ltx.prose :where(blockquote):not(:where([class~="not-prose"] *)) {
     @apply font-normal;
   }
 
   .milkdown-theme-ltx.prose :where(blockquote p:first-of-type):not(:where([class~="not-prose"] *))::before,
-  .milkdown-theme-ltx.prose :where(blockquote p:first-of-type):not(:where([class~="not-prose"] *))::after {
-    content: "";
-  }
-
+  .milkdown-theme-ltx.prose :where(blockquote p:first-of-type):not(:where([class~="not-prose"] *))::after,
   .milkdown-theme-ltx.prose :where(code):not(:where([class~="not-prose"] *))::before,
   .milkdown-theme-ltx.prose :where(code):not(:where([class~="not-prose"] *))::after {
     content: "";
@@ -115,10 +116,19 @@
     @apply bg-gray-50 dark:bg-gray-900;
   }
 
+  div[data-milkdown-root],
+  div.milkdown {
+    @apply w-full;
+  }
+
   /* A little workaround to turn the element into a space */
   .milkdown-theme-ltx.prose br[data-is-inline="true"],
   .milkdown-theme-ltx.prose br[data-is-inline="true"]::after {
     content: " ";
+  }
+
+  .milkdown-theme-ltx.prose[data-placeholder]:first-child::before {
+    @apply pointer-events-none absolute font-normal text-gray-600 content-[attr(data-placeholder)] dark:text-gray-500;
   }
 }
 

@@ -13,7 +13,11 @@ const Editor = dynamic(() => import("~/components/editor"), {
 });
 
 const Create: NextPageWithAuthAndLayout = () => {
-  return <Editor />;
+  return (
+    <div className="flex w-full flex-col gap-y-10 sm:max-w-[70ch] md:max-w-[75ch] lg:max-w-[95ch]">
+      <Editor placeholder="Start typing here..." />
+    </div>
+  );
 };
 
 Create.auth = true;
@@ -23,7 +27,7 @@ Create.getLayout = (page) => {
       <Header>
         <AuthDropdown />
       </Header>
-      <main className="min-h-screen">
+      <main className="flex min-h-screen flex-col items-center justify-start py-8">
         <Provider>{page}</Provider>
       </main>
       <Footer />
