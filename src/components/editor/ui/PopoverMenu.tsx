@@ -1,0 +1,120 @@
+import * as Popover from "@radix-ui/react-popover";
+import twcx from "~/utils/twcx";
+import { icons } from "lucide-react";
+import { forwardRef, ReactNode } from "react";
+import { Surface } from "./Surface";
+import { Toolbar } from "./Toolbar";
+
+export const Trigger = Popover.Trigger;
+export const Portal = Popover.Portal;
+
+export type MenuProps = {
+  children: ReactNode;
+  customTrigger?: boolean;
+  isActive?: boolean;
+  isOpen?: boolean;
+  onOpenChange?: (state: boolean) => void;
+  tooltip?: string;
+  trigger: ReactNode;
+  triggerClassName?: string;
+  withPortal?: boolean;
+};
+
+export const Menu = ({
+  customTrigger,
+  trigger,
+  triggerClassName,
+  children,
+  isOpen,
+  withPortal,
+  tooltip,
+  onOpenChange,
+}: MenuProps) => {
+  return (
+    <Popover.Root onOpenChange={onOpenChange}>
+      {customTrigger ? (
+        <Trigger asChild>{trigger}</Trigger>
+      ) : (
+        <Trigger asChild>
+          <Toolbar.Button className={triggerClassName} tooltip={!isOpen ? tooltip : ""}>
+            {trigger}
+          </Toolbar.Button>
+        </Trigger>
+      )}
+      {withPortal ? (
+        <Popover.Portal>
+          <Popover.Content asChild sideOffset={8}>
+            <Surface className="z-[9999] flex max-h-80 min-w-[15rem] flex-col gap-0.5 overflow-auto p-2">
+              {children}
+            </Surface>
+          </Popover.Content>
+        </Popover.Portal>
+      ) : (
+        <Popover.Content asChild sideOffset={8}>
+          <Surface className="z-[9999] flex max-h-80 min-w-[15rem] flex-col gap-0.5 overflow-auto p-2">
+            {children}
+          </Surface>
+        </Popover.Content>
+      )}
+    </Popover.Root>
+  );
+};
+
+Menu.displayName = "Menu";
+
+export const Item = ({
+  label,
+  close = true,
+  icon,
+  iconComponent,
+  disabled,
+  onClick,
+  isActive,
+}: {
+  close?: boolean;
+  disabled?: boolean;
+  icon?: keyof typeof icons;
+  iconComponent?: ReactNode;
+  isActive?: boolean;
+  label: string | ReactNode;
+  onClick: () => void;
+}) => {
+  const className = twcx(
+    "flex items-center gap-2 p-1.5 text-sm font-medium text-gray-500 text-left bg-transparent w-full rounded",
+    !isActive && !disabled,
+    "hover:bg-gray-100 hover:text-gray-800 dark:hover:bg-gray-900 dark:hover:text-gray-200",
+    isActive && !disabled && "bg-gray-100 text-gray-800 dark:bg-gray-900 dark:text-gray-200",
+    disabled && "text-gray-400 cursor-not-allowed dark:text-gray-600"
+  );
+
+  const IconComponent = icon ? icons[icon] : null;
+  const IconCustomComponent = iconComponent || null;
+
+  const ItemComponent = close ? Popover.Close : "button";
+
+  return (
+    <ItemComponent className={className} onClick={onClick} disabled={disabled}>
+      {IconComponent && <IconComponent className="h-4 w-4" />}
+      {IconCustomComponent}
+      {label}
+    </ItemComponent>
+  );
+};
+
+export type CategoryTitle = {
+  children: ReactNode;
+};
+
+export const CategoryTitle = ({ children }: CategoryTitle) => {
+  return (
+    <div className="mb-1.5 mt-4 select-none px-1 text-[0.625rem] font-medium uppercase text-gray-400 first:mt-1.5 dark:text-gray-600">
+      {children}
+    </div>
+  );
+};
+
+export const Divider = forwardRef<HTMLHRElement>((props, ref) => {
+  return <hr {...props} ref={ref} className="my-1 border-gray-200 dark:border-gray-800" />;
+});
+
+Divider.displayName = "Divider";

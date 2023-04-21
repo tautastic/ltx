@@ -1,25 +1,18 @@
-import { defaultValue, type NextPageWithAuthAndLayout } from "~/lib/types";
+import { type NextPageWithAuthAndLayout } from "~/lib/types";
 import AuthDropdown from "~/components/auth-dropdown";
+import React from "react";
 import Background from "~/components/background";
 import { Button } from "~/components/ui/button";
 import Footer from "~/components/footer";
 import Header from "~/components/header";
 import { Box, Star } from "lucide-react";
-import dynamic from "next/dynamic";
 import Link from "next/link";
-
-const Provider = dynamic(() => import("~/components/editor/provider"), {
-  ssr: false,
-});
-
-const Editor = dynamic(() => import("~/components/editor"), {
-  ssr: false,
-});
+import { BlockEditor } from "~/components/editor/BlockEditor";
 
 const Home: NextPageWithAuthAndLayout = () => {
   return (
     <>
-      <div className="mb-14 flex flex-col items-center justify-between gap-y-8 text-center md:gap-y-16">
+      <div className="flex flex-col items-center justify-between gap-y-8 text-center md:gap-y-16">
         <h1 className="-mb-2 flex flex-wrap items-center justify-center overflow-hidden text-5.5xl font-extrabold tracking-[-0.04em] subpixel-antialiased xs:text-7xl md:text-7.5xl xl:flex-nowrap xl:gap-x-3 xl:text-8xl">
           <span
             data-text="Quadratisch."
@@ -73,8 +66,8 @@ const Home: NextPageWithAuthAndLayout = () => {
           </a>
         </div>
       </div>
-      <div className="sm:max-w-[70ch] md:max-w-[75ch] lg:max-w-[95ch]">
-        <Editor defaultValue={defaultValue} readOnly />
+      <div className="m-auto w-full dark:bg-gray-950 sm:max-w-[70ch] md:max-w-[75ch] lg:max-w-[95ch]">
+        <BlockEditor isHeaderVisible={false} />
       </div>
     </>
   );
@@ -89,7 +82,7 @@ Home.getLayout = (page) => {
       </Header>
       <Background />
       <main className="flex min-h-screen flex-col items-center justify-start gap-y-16 px-6 py-24 invert-0 md:gap-y-14 md:py-32">
-        <Provider>{page}</Provider>
+        {page}
       </main>
       <Footer />
     </>

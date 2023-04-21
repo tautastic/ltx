@@ -10,7 +10,7 @@ import Head from "next/head";
 
 import { type NextPageWithAuthAndLayout } from "~/lib/types";
 import api from "~/utils/api";
-import "~/styles/globals.css";
+import "~/styles/index.css";
 
 type AppPropsWithAuthAndLayout = AppProps<{ session: Session | null }> & {
   Component: NextPageWithAuthAndLayout;

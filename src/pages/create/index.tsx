@@ -6,21 +6,12 @@ import { Button } from "~/components/ui/button";
 import { Input } from "~/components/ui/input";
 import Header from "~/components/header";
 import Footer from "~/components/footer";
-import dynamic from "next/dynamic";
 import {
   Fieldset,
   FieldsetAction,
   FieldsetContent,
   FieldsetFooter,
 } from "~/components/ui/fieldset";
-
-const Provider = dynamic(() => import("~/components/editor/provider"), {
-  ssr: false,
-});
-
-const Editor = dynamic(() => import("~/components/editor"), {
-  ssr: false,
-});
 
 type TagProps = {
   color: string;
@@ -48,7 +39,6 @@ const Create: NextPageWithAuthAndLayout = () => {
   ];
   return (
     <div className="flex w-full flex-col gap-y-10 sm:max-w-[70ch] md:max-w-[75ch] lg:max-w-[95ch]">
-      <Editor placeholder="Start typing here..." />
       <Fieldset>
         <FieldsetContent>
           <h4 className="mb-1 text-xl font-[600]">Save Page</h4>
@@ -111,9 +101,7 @@ Create.getLayout = (page) => {
       <Header>
         <AuthDropdown />
       </Header>
-      <main className="flex min-h-screen flex-col items-center justify-start py-8">
-        <Provider>{page}</Provider>
-      </main>
+      <main className="flex min-h-screen flex-col items-center justify-start py-8">{page}</main>
       <Footer />
     </div>
   );
