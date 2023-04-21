@@ -2,7 +2,7 @@
   "author": "Ahmed Sami",
   "description": "A simple web app for creating and sharing LaTeX documents",
   "name": "ltx",
-  "version": "0.5.1",
+  "version": "0.5.2",
   "private": true,
   "license": "MIT",
   "scripts": {
