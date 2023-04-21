@@ -6,6 +6,7 @@ import Footer from "~/components/footer";
 import Header from "~/components/header";
 import { Box, Star } from "lucide-react";
 import dynamic from "next/dynamic";
+import Link from "next/link";
 
 const Provider = dynamic(() => import("~/components/editor/provider"), {
   ssr: false,
@@ -53,12 +54,14 @@ const Home: NextPageWithAuthAndLayout = () => {
         </h2>
 
         <div className="flex w-full flex-col justify-center gap-x-8 gap-y-6 sm:flex-row">
-          <Button
-            className="h-12 text-base sm:w-[200px] xl:h-[56px] xl:w-[240px] xl:text-lg"
-            Prefix={<Box aria-label="Box with ring icon" className="h-5 w-5" />}
-          >
-            Getting started
-          </Button>
+          <Link href="/create">
+            <Button
+              className="h-12 w-full text-base sm:w-[200px] xl:h-[56px] xl:w-[240px] xl:text-lg"
+              Prefix={<Box aria-label="Box with ring icon" className="h-5 w-5" />}
+            >
+              Getting started
+            </Button>
+          </Link>
           <a href="https://github.com/tautastic/ltx" target="_blank" rel="noreferrer">
             <Button
               className="h-12 w-full text-base sm:w-[200px] xl:h-[56px] xl:w-[240px] xl:text-lg"

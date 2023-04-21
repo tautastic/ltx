@@ -1,7 +1,7 @@
 import { type AppProps } from "next/app";
 import { type Session } from "next-auth";
-import { SessionProvider, signIn, useSession } from "next-auth/react";
-import { type ReactNode, useEffect } from "react";
+import { SessionProvider, useSession } from "next-auth/react";
+import { type ReactNode } from "react";
 import { ThemeProvider } from "next-themes";
 import { NextSeo } from "next-seo";
 import NextNProgress from "nextjs-progressbar";
@@ -47,25 +47,14 @@ const MyApp = ({ Component, pageProps: { session, ...pageProps } }: AppPropsWith
 };
 
 const Auth = ({ children }: { children: ReactNode }) => {
-  const { data: session, status } = useSession();
-  const isUser = !!session?.user;
+  // if `{ required: true }` is supplied, `status` can only be "loading" or "authenticated"
+  const { status } = useSession({ required: true });
 
-  useEffect(() => {
-    if (status === "loading") {
-      // Do nothing while loading
-      return;
-    }
-    if (!isUser) {
-      // If not authenticated, force log in
-      void signIn();
-    }
-  }, [isUser, status]);
-
-  if (isUser) {
-    return <>{children}</>;
+  if (status === "loading") {
+    return null;
   }
 
-  return null;
+  return <>{children}</>;
 };
 
 export default api.withTRPC(MyApp);
