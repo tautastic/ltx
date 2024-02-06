@@ -1,4 +1,4 @@
-import { defaultValue, type NextPageWithAuthAndLayout } from "~/lib/types";
+import { type NextPageWithAuthAndLayout } from "~/lib/types";
 import AuthDropdown from "~/components/auth-dropdown";
 import React from "react";
 import Background from "~/components/background";
@@ -8,16 +8,8 @@ import Header from "~/components/header";
 import { Box, Star } from "lucide-react";
 import Link from "next/link";
 import Editor from "~/components/editor";
-import { useEditor } from "@tiptap/react";
-import StarterKit from "@tiptap/starter-kit";
-import Mathematics from "@tiptap-pro/extension-mathematics";
 
 const Home: NextPageWithAuthAndLayout = () => {
-  const editor = useEditor({
-    extensions: [StarterKit, Mathematics],
-    content: defaultValue,
-  });
-
   return (
     <>
       <div className="mb-14 flex flex-col items-center justify-between gap-y-8 text-center md:gap-y-16">
@@ -75,7 +67,7 @@ const Home: NextPageWithAuthAndLayout = () => {
         </div>
       </div>
       <div className="sm:max-w-[70ch] md:max-w-[75ch] lg:max-w-[95ch]">
-        <Editor editor={editor} />
+        <Editor />
       </div>
     </>
   );

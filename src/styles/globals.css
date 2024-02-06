@@ -71,32 +71,19 @@
   }
 }
 
-.ProseMirror > * + * {
-  margin-top: 0.75em;
-}
-
 .ProseMirror .Tiptap-mathematics-editor {
-  background: #202020;
-  color: #fff;
-  font-family: monospace;
-  padding: 0.2rem 0.5rem;
+  @apply bg-gray-700 px-[0.5rem] py-[0.2rem] font-mono text-white;
 }
 
 .ProseMirror .Tiptap-mathematics-render {
-  padding: 0 0.25rem;
+  @apply px-[0.25rem] py-0;
 }
 
 .ProseMirror .Tiptap-mathematics-render--editable {
-  cursor: pointer;
-  transition: background 0.2s;
-}
-
-.ProseMirror .Tiptap-mathematics-render--editable:hover {
-  background: #eee;
+  @apply cursor-pointer transition-[background] duration-200 hover:bg-gray-700 hover:text-white;
 }
 
 .ProseMirror .Tiptap-mathematics-editor,
 .ProseMirror .Tiptap-mathematics-render {
-  border-radius: 0.25rem;
-  display: inline-block;
+  @apply inline-block rounded-[0.25rem];
 }
