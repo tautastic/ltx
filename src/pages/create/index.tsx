@@ -12,6 +12,10 @@ import {
   FieldsetContent,
   FieldsetFooter,
 } from "~/components/ui/fieldset";
+import Editor from "~/components/editor";
+import { useEditor } from "@tiptap/react";
+import StarterKit from "@tiptap/starter-kit";
+import Mathematics from "@tiptap-pro/extension-mathematics";
 
 type TagProps = {
   color: string;
@@ -20,6 +24,10 @@ type TagProps = {
 };
 
 const Create: NextPageWithAuthAndLayout = () => {
+  const editor = useEditor({
+    extensions: [StarterKit, Mathematics],
+    content: "Start typing here...",
+  });
   const tags: TagProps[] = [
     {
       color: "#1e9de7",
@@ -39,6 +47,7 @@ const Create: NextPageWithAuthAndLayout = () => {
   ];
   return (
     <div className="flex w-full flex-col gap-y-10 sm:max-w-[70ch] md:max-w-[75ch] lg:max-w-[95ch]">
+      <Editor editor={editor} />
       <Fieldset>
         <FieldsetContent>
           <h4 className="mb-1 text-xl font-[600]">Save Page</h4>

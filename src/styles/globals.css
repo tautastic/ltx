@@ -59,77 +59,6 @@
   .hero-text-bg {
     @apply before:text-fill-transparent relative w-full grow select-none before:absolute before:left-0 before:top-0 before:w-full before:bg-gradient-to-b before:from-black/75 before:to-black before:bg-clip-text before:text-center before:content-[attr(data-text)] before:dark:from-white before:dark:to-white/60;
   }
-
-  .milkdown-theme-ltx blockquote {
-    @apply border-l-4 pl-4 font-serif not-italic;
-  }
-
-  .milkdown-theme-ltx code {
-    @apply font-mono font-normal;
-  }
-
-  .milkdown-theme-ltx pre code {
-    @apply text-[inherit];
-  }
-
-  .milkdown-theme-ltx img {
-    @apply my-0 inline-block max-w-full;
-  }
-
-  .milkdown-theme-ltx.prose {
-    max-width: 100% !important;
-  }
-
-  .milkdown-theme-ltx.prose :where(blockquote):not(:where([class~="not-prose"] *)) {
-    @apply font-normal;
-  }
-
-  .milkdown-theme-ltx.prose :where(blockquote p:first-of-type):not(:where([class~="not-prose"] *))::before,
-  .milkdown-theme-ltx.prose :where(blockquote p:first-of-type):not(:where([class~="not-prose"] *))::after,
-  .milkdown-theme-ltx.prose :where(code):not(:where([class~="not-prose"] *))::before,
-  .milkdown-theme-ltx.prose :where(code):not(:where([class~="not-prose"] *))::after {
-    content: "";
-  }
-
-  .milkdown-theme-ltx.prose .tableWrapper {
-    @apply relative mb-2 overflow-x-auto;
-  }
-
-  .milkdown-theme-ltx.prose table {
-    @apply m-4 overflow-visible text-sm shadow-md sm:rounded-lg;
-  }
-
-  .milkdown-theme-ltx.prose td,
-  th {
-    @apply px-6 py-3;
-  }
-
-  .milkdown-theme-ltx.prose tr {
-    @apply border-b border-gray-200 dark:border-gray-600;
-  }
-
-  .milkdown-theme-ltx.prose :where(td, th) p {
-    @apply m-0;
-  }
-
-  .milkdown-theme-ltx.prose :where(td, th):nth-child(odd) {
-    @apply bg-gray-50 dark:bg-gray-900;
-  }
-
-  div[data-milkdown-root],
-  div.milkdown {
-    @apply w-full;
-  }
-
-  /* A little workaround to turn the element into a space */
-  .milkdown-theme-ltx.prose br[data-is-inline="true"],
-  .milkdown-theme-ltx.prose br[data-is-inline="true"]::after {
-    content: " ";
-  }
-
-  .milkdown-theme-ltx.prose[data-placeholder]:first-child::before {
-    @apply pointer-events-none absolute font-normal text-gray-600 content-[attr(data-placeholder)] dark:text-gray-500;
-  }
 }
 
 @layer utilities {
@@ -140,4 +69,34 @@
   .focus-visible-ring {
     @apply focus-visible:border-blue-500 focus-visible:shadow-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-200 focus-visible:ring-offset-0 dark:focus-visible:ring-blue-800;
   }
+}
+
+.ProseMirror > * + * {
+  margin-top: 0.75em;
+}
+
+.ProseMirror .Tiptap-mathematics-editor {
+  background: #202020;
+  color: #fff;
+  font-family: monospace;
+  padding: 0.2rem 0.5rem;
+}
+
+.ProseMirror .Tiptap-mathematics-render {
+  padding: 0 0.25rem;
+}
+
+.ProseMirror .Tiptap-mathematics-render--editable {
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.ProseMirror .Tiptap-mathematics-render--editable:hover {
+  background: #eee;
+}
+
+.ProseMirror .Tiptap-mathematics-editor,
+.ProseMirror .Tiptap-mathematics-render {
+  border-radius: 0.25rem;
+  display: inline-block;
 }

@@ -2,7 +2,7 @@
   "author": "Ahmed Sami",
   "description": "A simple web app for creating and sharing LaTeX documents",
   "name": "ltx",
-  "version": "0.5.3",
+  "version": "0.6.0",
   "private": true,
   "license": "MIT",
   "scripts": {
@@ -29,6 +29,8 @@
     "@radix-ui/react-select": "^2.0.0",
     "@radix-ui/react-tabs": "^1.0.4",
     "@tanstack/react-query": "^4.18.0",
+    "@tiptap-pro/extension-mathematics": "^2.6.4",
+    "@tiptap/extension-text-align": "^2.2.1",
     "@tiptap/pm": "^2.2.1",
     "@tiptap/react": "^2.2.1",
     "@tiptap/starter-kit": "^2.2.1",
