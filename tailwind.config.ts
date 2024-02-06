@@ -1,13 +1,12 @@
-const defaultTheme = require("tailwindcss/defaultTheme");
+import type { Config } from "tailwindcss";
+import defaultTheme from "tailwindcss/defaultTheme";
 
-/** @type {import('tailwindcss').Config} */
 const config = {
   content: ["./src/pages/**/*.{js,ts,jsx,tsx}", "./src/components/**/*.{js,ts,jsx,tsx}"],
   darkMode: "class",
   plugins: [
     require("@tailwindcss/forms"),
     require("@tailwindcss/typography"),
-    // @ts-ignore
     require("tailwindcss-animate"),
   ],
   theme: {
@@ -227,6 +226,6 @@ const config = {
       },
     },
   },
-};
+} satisfies Config;
 
-module.exports = config;
+export default config;

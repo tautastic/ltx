@@ -1,20 +1,11 @@
-import { defaultValue, type NextPageWithAuthAndLayout } from "~/lib/types";
+import { type NextPageWithAuthAndLayout } from "~/lib/types";
 import AuthDropdown from "~/components/auth-dropdown";
 import Background from "~/components/background";
 import { Button } from "~/components/ui/button";
 import Footer from "~/components/footer";
 import Header from "~/components/header";
 import { Box, Star } from "lucide-react";
-import dynamic from "next/dynamic";
 import Link from "next/link";
-
-const Provider = dynamic(() => import("~/components/editor/provider"), {
-  ssr: false,
-});
-
-const Editor = dynamic(() => import("~/components/editor"), {
-  ssr: false,
-});
 
 const Home: NextPageWithAuthAndLayout = () => {
   return (
@@ -73,9 +64,7 @@ const Home: NextPageWithAuthAndLayout = () => {
           </a>
         </div>
       </div>
-      <div className="sm:max-w-[70ch] md:max-w-[75ch] lg:max-w-[95ch]">
-        <Editor defaultValue={defaultValue} readOnly />
-      </div>
+      <div className="sm:max-w-[70ch] md:max-w-[75ch] lg:max-w-[95ch]"></div>
     </>
   );
 };
@@ -89,7 +78,7 @@ Home.getLayout = (page) => {
       </Header>
       <Background />
       <main className="flex min-h-screen flex-col items-center justify-start gap-y-16 px-6 py-24 invert-0 md:gap-y-14 md:py-32">
-        <Provider>{page}</Provider>
+        {page}
       </main>
       <Footer />
     </>
