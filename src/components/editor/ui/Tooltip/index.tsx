@@ -10,7 +10,7 @@ const isMac =
 
 const ShortcutKey = ({ children }: { children: string }): JSX.Element => {
   const className =
-    "inline-flex items-center justify-center w-5 h-5 p-1 text-[0.625rem] rounded font-semibold leading-none border border-neutral-200 text-neutral-500 border-b-2";
+    "inline-flex items-center justify-center w-5 h-5 p-1 text-[0.625rem] rounded font-semibold leading-none border border-gray-200 text-gray-500 border-b-2";
 
   if (children === "Mod") {
     return <kbd className={className}>{isMac ? "⌘" : "Ctrl"}</kbd>; // ⌃
@@ -37,13 +37,13 @@ export const Tooltip = ({
   const renderTooltip = useCallback(
     (attrs: TippyProps) => (
       <span
-        className="z-[999] flex items-center gap-2 rounded-lg border border-neutral-100 bg-white px-2.5 py-1 shadow-sm"
+        className="z-[999] flex items-center gap-2 rounded-lg border border-gray-100 bg-white px-2.5 py-1 shadow-sm"
         tabIndex={-1}
         data-placement={attrs["data-placement"]}
         data-reference-hidden={attrs["data-reference-hidden"]}
         data-escaped={attrs["data-escaped"]}
       >
-        {title && <span className="text-xs font-medium text-neutral-500">{title}</span>}
+        {title && <span className="text-xs font-medium text-gray-500">{title}</span>}
         {shortcut && (
           <span className="flex items-center gap-0.5">
             {shortcut.map((shortcutKey) => (

@@ -55,7 +55,7 @@ export const LinkEditorPanel = ({
   return (
     <Surface className="p-2">
       <form onSubmit={state.handleSubmit} className="flex items-center gap-2">
-        <label className="flex cursor-text items-center gap-2 rounded-lg bg-neutral-100 p-2 dark:bg-neutral-900">
+        <label className="flex cursor-text items-center gap-2 rounded-lg bg-gray-100 p-2 dark:bg-gray-900">
           <Icon name="Link" className="flex-none text-black dark:text-white" />
           <input
             type="url"
@@ -70,7 +70,7 @@ export const LinkEditorPanel = ({
         </Button>
       </form>
       <div className="mt-3">
-        <label className="flex cursor-pointer select-none items-center justify-start gap-2 text-sm font-semibold text-neutral-500 dark:text-neutral-400">
+        <label className="flex cursor-pointer select-none items-center justify-start gap-2 text-sm font-semibold text-gray-500 dark:text-gray-400">
           Open in new tab
           <Toggle active={state.openInNewTab} onChange={state.setOpenInNewTab} />
         </label>

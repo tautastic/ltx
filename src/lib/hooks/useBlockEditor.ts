@@ -2,6 +2,7 @@ import { type Editor, useEditor } from "@tiptap/react";
 
 import { ExtensionKit } from "~/extensions/extension-kit";
 import { useSidebar } from "./useSidebar";
+import { defaultValue } from "~/lib/types";
 
 declare global {
   interface Window {
@@ -15,9 +16,12 @@ export const useBlockEditor = () => {
   const editor = useEditor(
     {
       autofocus: true,
+      onUpdate: ({ editor, transaction }) => {
+        console.log(editor.getJSON());
+      },
       onCreate: ({ editor }) => {
         if (editor.isEmpty) {
-          editor.commands.setContent("bla");
+          editor.commands.setContent(defaultValue);
         }
       },
       extensions: [

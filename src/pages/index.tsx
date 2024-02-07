@@ -12,7 +12,7 @@ import { BlockEditor } from "~/components/editor/BlockEditor";
 const Home: NextPageWithAuthAndLayout = () => {
   return (
     <>
-      <div className="mb-14 flex flex-col items-center justify-between gap-y-8 text-center md:gap-y-16">
+      <div className="flex flex-col items-center justify-between gap-y-8 text-center md:gap-y-16">
         <h1 className="-mb-2 flex flex-wrap items-center justify-center overflow-hidden text-5.5xl font-extrabold tracking-[-0.04em] subpixel-antialiased xs:text-7xl md:text-7.5xl xl:flex-nowrap xl:gap-x-3 xl:text-8xl">
           <span
             data-text="Quadratisch."
@@ -66,8 +66,8 @@ const Home: NextPageWithAuthAndLayout = () => {
           </a>
         </div>
       </div>
-      <div className="sm:max-w-[70ch] md:max-w-[75ch] lg:max-w-[95ch]">
-        <BlockEditor />
+      <div className="m-auto w-full dark:bg-gray-950 sm:max-w-[70ch] md:max-w-[75ch] lg:max-w-[95ch]">
+        <BlockEditor isHeaderVisible={false} />
       </div>
     </>
   );

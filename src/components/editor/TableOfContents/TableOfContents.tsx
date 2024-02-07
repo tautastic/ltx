@@ -31,7 +31,7 @@ export const TableOfContents = memo(({ editor, onItemClick }: TableOfContentsPro
 
   return (
     <>
-      <div className="mb-2 text-xs font-semibold uppercase text-neutral-500 dark:text-neutral-400">
+      <div className="mb-2 text-xs font-semibold uppercase text-gray-500 dark:text-gray-400">
         Table of contents
       </div>
       {data && data.content.length > 0 ? (
@@ -43,9 +43,8 @@ export const TableOfContents = memo(({ editor, onItemClick }: TableOfContentsPro
               style={{ marginLeft: `${1 * item.level - 1}rem` }}
               onClick={onItemClick}
               className={twcx(
-                "block w-full truncate rounded bg-opacity-10 p-1 text-sm font-medium text-neutral-500 transition-all hover:bg-black hover:bg-opacity-5 hover:text-neutral-800 dark:text-neutral-300",
-                item.isActive &&
-                  "bg-neutral-100 text-neutral-800 dark:bg-neutral-900 dark:text-neutral-100"
+                "block w-full truncate rounded bg-opacity-10 p-1 text-sm font-medium text-gray-500 transition-all hover:bg-black hover:bg-opacity-5 hover:text-gray-800 dark:text-gray-300",
+                item.isActive && "bg-gray-100 text-gray-800 dark:bg-gray-900 dark:text-gray-100"
               )}
             >
               {item.itemIndex}. {item.textContent}
@@ -53,7 +52,7 @@ export const TableOfContents = memo(({ editor, onItemClick }: TableOfContentsPro
           ))}
         </div>
       ) : (
-        <div className="text-sm text-neutral-500">Start adding headlines to your document …</div>
+        <div className="text-sm text-gray-500">Start adding headlines to your document …</div>
       )}
     </>
   );

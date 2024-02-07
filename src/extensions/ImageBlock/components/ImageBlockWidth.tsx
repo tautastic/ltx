@@ -22,7 +22,7 @@ export const ImageBlockWidth = memo(({ onChange, value }: ImageBlockWidthProps) 
   return (
     <div className="flex items-center gap-2">
       <input
-        className="h-2 appearance-none rounded border-0 bg-neutral-200 fill-neutral-300"
+        className="h-2 appearance-none rounded border-0 bg-gray-200 fill-gray-300"
         type="range"
         min="25"
         max="100"
@@ -30,7 +30,7 @@ export const ImageBlockWidth = memo(({ onChange, value }: ImageBlockWidthProps) 
         onChange={handleChange}
         value={currentValue}
       />
-      <span className="select-none text-xs font-semibold text-neutral-500">{value}%</span>
+      <span className="select-none text-xs font-semibold text-gray-500">{value}%</span>
     </div>
   );
 });

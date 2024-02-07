@@ -11,11 +11,11 @@ export type EditorInfoProps = {
 export const EditorInfo = memo(({ characters, user, words }: EditorInfoProps) => {
   return (
     <div className="flex items-center">
-      <div className="mr-4 flex flex-col justify-center border-r border-neutral-200 pr-4 text-right dark:border-neutral-800">
-        <div className="text-xs font-semibold text-neutral-500 dark:text-neutral-400">
+      <div className="mr-4 flex flex-col justify-center border-r border-gray-200 pr-4 text-right dark:border-gray-800">
+        <div className="text-xs font-semibold text-gray-500 dark:text-gray-400">
           {words} {words === 1 ? "word" : "words"}
         </div>
-        <div className="text-xs font-semibold text-neutral-500 dark:text-neutral-400">
+        <div className="text-xs font-semibold text-gray-500 dark:text-gray-400">
           {characters} {characters === 1 ? "character" : "characters"}
         </div>
       </div>
@@ -26,7 +26,7 @@ export const EditorInfo = memo(({ characters, user, words }: EditorInfoProps) =>
               <Tooltip title={user.name}>
                 <img
                   className="h-8 w-8 rounded-full border border-white dark:border-black"
-                  src={`https://api.dicebear.com/7.x/notionists-neutral/svg?seed=${
+                  src={`https://api.dicebear.com/7.x/notionists-gray/svg?seed=${
                     user.name
                   }&backgroundColor=${user.color.replace("#", "")}`}
                   alt="avatar"

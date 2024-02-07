@@ -13,8 +13,8 @@ export const Toggle = ({ onChange, active = false, size = "large" }: ToggleProps
 
   const buttonClass = twcx(
     "inline-flex cursor-pointer items-center rounded-full border-transparent transition-colors",
-    !active ? "bg-neutral-200 hover:bg-neutral-300" : "bg-black",
-    !active ? "dark:bg-neutral-800 dark:hover:bg-neutral-700" : "dark:bg-white",
+    !active ? "bg-gray-200 hover:bg-gray-300" : "bg-black",
+    !active ? "dark:bg-gray-800 dark:hover:bg-gray-700" : "dark:bg-white",
     size === "small" && "h-3 w-6 px-0.5",
     size === "large" && "h-5 w-9 px-0.5"
   );

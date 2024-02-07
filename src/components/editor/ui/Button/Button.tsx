@@ -33,39 +33,36 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
           "text-white bg-black border-black dark:text-black dark:bg-white dark:border-white",
           !disabled &&
             !active &&
-            "hover:bg-neutral-800 active:bg-neutral-900 dark:hover:bg-neutral-200 dark:active:bg-neutral-300",
-          active && twcx("bg-neutral-900 dark:bg-neutral-300", activeClassname)
+            "hover:bg-gray-800 active:bg-gray-900 dark:hover:bg-gray-200 dark:active:bg-gray-300",
+          active && twcx("bg-gray-900 dark:bg-gray-300", activeClassname)
         ),
 
       variant === "secondary" &&
         twcx(
-          "text-neutral-900 dark:text-white",
+          "text-gray-900 dark:text-white",
           !disabled &&
             !active &&
-            "hover:bg-neutral-100 active:bg-neutral-200 dark:hover:bg-neutral-900 dark:active:bg-neutral-800",
-          active && "bg-neutral-200 dark:bg-neutral-800"
+            "hover:bg-gray-100 active:bg-gray-200 dark:hover:bg-gray-900 dark:active:bg-gray-800",
+          active && "bg-gray-200 dark:bg-gray-800"
         ),
 
       variant === "tertiary" &&
         twcx(
-          "bg-neutral-50 text-neutral-900 dark:bg-neutral-900 dark:text-white dark:border-neutral-900",
+          "bg-gray-50 text-gray-900 dark:bg-gray-900 dark:text-white dark:border-gray-900",
           !disabled &&
             !active &&
-            "hover:bg-neutral-100 active:bg-neutral-200 dark:hover:bg-neutral-800 dark:active:bg-neutral-700",
-          active && twcx("bg-neutral-200 dark:bg-neutral-800", activeClassname)
+            "hover:bg-gray-100 active:bg-gray-200 dark:hover:bg-gray-800 dark:active:bg-gray-700",
+          active && twcx("bg-gray-200 dark:bg-gray-800", activeClassname)
         ),
 
       variant === "ghost" &&
         twcx(
-          "bg-transparent border-transparent text-neutral-500 dark:text-neutral-400",
+          "bg-transparent border-transparent text-gray-500 dark:text-gray-400",
           !disabled &&
             !active &&
-            "hover:bg-black/5 hover:text-neutral-700 active:bg-black/10 active:text-neutral-800 dark:hover:bg-white/10 dark:hover:text-neutral-300 dark:active:text-neutral-200",
+            "hover:bg-black/5 hover:text-gray-700 active:bg-black/10 active:text-gray-800 dark:hover:bg-white/10 dark:hover:text-gray-300 dark:active:text-gray-200",
           active &&
-            twcx(
-              "bg-black/10 text-neutral-800 dark:bg-white/20 dark:text-neutral-200",
-              activeClassname
-            )
+            twcx("bg-black/10 text-gray-800 dark:bg-white/20 dark:text-gray-200", activeClassname)
         ),
 
       buttonSize === "medium" && "py-2 px-3",

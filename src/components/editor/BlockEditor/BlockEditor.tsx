@@ -15,7 +15,11 @@ import { EditorHeader } from "./components/EditorHeader";
 import { TextMenu } from "../menus/TextMenu";
 import { ContentItemMenu } from "~/components/editor/menus";
 
-export const BlockEditor = () => {
+export interface BlockEditorProps {
+  isHeaderVisible?: boolean;
+}
+
+export const BlockEditor = ({ isHeaderVisible = true }: BlockEditorProps) => {
   const menuContainerRef = useRef(null);
 
   const { editor, characterCount, leftSidebar } = useBlockEditor();
@@ -25,15 +29,19 @@ export const BlockEditor = () => {
   }
 
   return (
-    <div className="flex h-full" ref={menuContainerRef}>
-      <Sidebar isOpen={leftSidebar.isOpen} onClose={leftSidebar.close} editor={editor} />
+    <div className="flex h-full w-full" ref={menuContainerRef}>
+      {isHeaderVisible && (
+        <Sidebar isOpen={leftSidebar.isOpen} onClose={leftSidebar.close} editor={editor} />
+      )}
       <div className="relative flex h-full flex-1 flex-col overflow-hidden">
-        <EditorHeader
-          characters={characterCount.characters()}
-          words={characterCount.words()}
-          isSidebarOpen={leftSidebar.isOpen}
-          toggleSidebar={leftSidebar.toggle}
-        />
+        {isHeaderVisible && (
+          <EditorHeader
+            characters={characterCount.characters()}
+            words={characterCount.words()}
+            isSidebarOpen={leftSidebar.isOpen}
+            toggleSidebar={leftSidebar.toggle}
+          />
+        )}
         <EditorContent editor={editor} className="flex-1 overflow-y-auto" />
         <ContentItemMenu editor={editor} />
         <LinkMenu editor={editor} appendTo={menuContainerRef} />
