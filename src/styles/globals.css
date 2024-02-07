@@ -70,20 +70,3 @@
     @apply focus-visible:border-blue-500 focus-visible:shadow-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-200 focus-visible:ring-offset-0 dark:focus-visible:ring-blue-800;
   }
 }
-
-.ProseMirror .Tiptap-mathematics-editor {
-  @apply bg-gray-700 px-[0.5rem] py-[0.2rem] font-mono text-white;
-}
-
-.ProseMirror .Tiptap-mathematics-render {
-  @apply px-[0.25rem] py-0;
-}
-
-.ProseMirror .Tiptap-mathematics-render--editable {
-  @apply cursor-pointer transition-[background] duration-200 hover:bg-gray-700 hover:text-white;
-}
-
-.ProseMirror .Tiptap-mathematics-editor,
-.ProseMirror .Tiptap-mathematics-render {
-  @apply inline-block rounded-[0.25rem];
-}
