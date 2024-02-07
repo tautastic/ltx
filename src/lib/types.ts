@@ -21,3 +21,5 @@ _Beweis_. Um zu zeigen, dass $\\mathcal{A}$ eine $\\sigma$-Algebra ist, müssen 
 Da $\\mathcal{A}$ die Eigenschaften der leeren Menge, des Komplements und der Vereinigung abzählbarer Mengen besitzt, ist es eine $\\sigma$-Algebra.
 
 $\\blacksquare$`;
+
+export const themeColors = ["#fb7185", "#fdba74", "#d9f99d", "#a7f3d0", "#a5f3fc", "#a5b4fc"];

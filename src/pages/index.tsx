@@ -7,6 +7,7 @@ import Footer from "~/components/footer";
 import Header from "~/components/header";
 import { Box, Star } from "lucide-react";
 import Link from "next/link";
+import { BlockEditor } from "~/components/editor/BlockEditor";
 
 const Home: NextPageWithAuthAndLayout = () => {
   return (
@@ -65,7 +66,9 @@ const Home: NextPageWithAuthAndLayout = () => {
           </a>
         </div>
       </div>
-      <div className="sm:max-w-[70ch] md:max-w-[75ch] lg:max-w-[95ch]"></div>
+      <div className="sm:max-w-[70ch] md:max-w-[75ch] lg:max-w-[95ch]">
+        <BlockEditor />
+      </div>
     </>
   );
 };
