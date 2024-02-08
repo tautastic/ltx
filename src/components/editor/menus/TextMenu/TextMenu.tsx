@@ -3,7 +3,7 @@ import { Toolbar } from "~/components/editor/ui/Toolbar";
 import { useTextmenuCommands } from "./hooks/useTextmenuCommands";
 import { useTextmenuStates } from "./hooks/useTextmenuStates";
 import { BubbleMenu, type Editor } from "@tiptap/react";
-import { ForwardedRef, memo } from "react";
+import { memo } from "react";
 import * as Popover from "@radix-ui/react-popover";
 import { Surface } from "~/components/editor/ui/Surface";
 import { ColorPicker } from "~/components/editor/panels";
