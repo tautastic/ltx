@@ -5,7 +5,7 @@ import { type EditorState } from "@tiptap/pm/state";
 import { type EditorView } from "@tiptap/pm/view";
 
 export interface MenuProps {
-  appendTo?: React.RefObject<never>;
+  appendTo?: React.RefObject<any>;
   editor: Editor;
   shouldHide?: boolean;
 }

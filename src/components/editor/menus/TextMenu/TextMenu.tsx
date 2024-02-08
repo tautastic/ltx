@@ -3,7 +3,7 @@ import { Toolbar } from "~/components/editor/ui/Toolbar";
 import { useTextmenuCommands } from "./hooks/useTextmenuCommands";
 import { useTextmenuStates } from "./hooks/useTextmenuStates";
 import { BubbleMenu, type Editor } from "@tiptap/react";
-import { memo } from "react";
+import { ForwardedRef, memo } from "react";
 import * as Popover from "@radix-ui/react-popover";
 import { Surface } from "~/components/editor/ui/Surface";
 import { ColorPicker } from "~/components/editor/panels";
@@ -13,8 +13,6 @@ import { useTextmenuContentTypes } from "./hooks/useTextmenuContentTypes";
 import { ContentTypePicker } from "./components/ContentTypePicker";
 import { EditLinkPopover } from "./components/EditLinkPopover";
 
-// We memorize the button so each button is not rerendered
-// on every editor state change
 const MemoButton = memo(Toolbar.Button);
 const MemoColorPicker = memo(ColorPicker);
 const MemoFontFamilyPicker = memo(FontFamilyPicker);

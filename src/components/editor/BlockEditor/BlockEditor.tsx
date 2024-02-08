@@ -20,7 +20,7 @@ export interface BlockEditorProps {
 }
 
 export const BlockEditor = ({ isHeaderVisible = true }: BlockEditorProps) => {
-  const menuContainerRef = useRef(null);
+  const menuContainerRef = useRef<HTMLDivElement>(null);
 
   const { editor, characterCount, leftSidebar } = useBlockEditor();
 
@@ -33,7 +33,7 @@ export const BlockEditor = ({ isHeaderVisible = true }: BlockEditorProps) => {
       {isHeaderVisible && (
         <Sidebar isOpen={leftSidebar.isOpen} onClose={leftSidebar.close} editor={editor} />
       )}
-      <div className="relative flex h-full flex-1 flex-col overflow-hidden">
+      <div className="relative flex h-full flex-1 flex-col">
         {isHeaderVisible && (
           <EditorHeader
             characters={characterCount.characters()}

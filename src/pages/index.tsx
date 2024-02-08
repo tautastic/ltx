@@ -8,6 +8,7 @@ import Header from "~/components/header";
 import { Box, Star } from "lucide-react";
 import Link from "next/link";
 import { BlockEditor } from "~/components/editor/BlockEditor";
+import { Fieldset, FieldsetContent } from "~/components/ui/fieldset";
 
 const Home: NextPageWithAuthAndLayout = () => {
   return (
@@ -66,9 +67,11 @@ const Home: NextPageWithAuthAndLayout = () => {
           </a>
         </div>
       </div>
-      <div className="m-auto w-full dark:bg-gray-950 sm:max-w-[70ch] md:max-w-[75ch] lg:max-w-[95ch]">
-        <BlockEditor isHeaderVisible={false} />
-      </div>
+      <Fieldset className="m-auto w-full sm:max-w-[70ch] md:max-w-[75ch] lg:max-w-[95ch]">
+        <FieldsetContent className="px-4">
+          <BlockEditor isHeaderVisible={false} />
+        </FieldsetContent>
+      </Fieldset>
     </>
   );
 };
