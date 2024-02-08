@@ -1,4 +1,4 @@
-import { useCallback, useState } from "react";
+import { type ChangeEvent, useCallback, useState } from "react";
 import { HexColorPicker } from "react-colorful";
 import { ColorButton } from "./ColorButton";
 import { Toolbar } from "../../ui/Toolbar";
@@ -14,7 +14,7 @@ export type ColorPickerProps = {
 export const ColorPicker = ({ color, onChange, onClear }: ColorPickerProps) => {
   const [colorInputValue, setColorInputValue] = useState(color || "");
 
-  const handleColorUpdate = useCallback((event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleColorUpdate = useCallback((event: ChangeEvent<HTMLInputElement>) => {
     setColorInputValue(event.target.value);
   }, []);
 

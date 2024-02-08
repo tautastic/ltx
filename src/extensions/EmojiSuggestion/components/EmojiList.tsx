@@ -4,6 +4,7 @@ import React, { forwardRef, useCallback, useEffect, useImperativeHandle, useStat
 import { Button } from "~/components/editor/ui/Button";
 import { Panel } from "~/components/editor/ui/Panel";
 import { type EmojiListProps } from "../types";
+import Image from "next/image";
 
 const EmojiList = forwardRef((props: EmojiListProps, ref) => {
   const [selectedIndex, setSelectedIndex] = useState(0);
@@ -95,7 +96,7 @@ const EmojiList = forwardRef((props: EmojiListProps, ref) => {
           data-emoji-name={item.name}
         >
           {item.fallbackImage ? (
-            <img src={item.fallbackImage} className="h-5 w-5" alt="emoji" />
+            <Image src={item.fallbackImage} className="h-5 w-5" alt="emoji" />
           ) : (
             item.emoji
           )}{" "}

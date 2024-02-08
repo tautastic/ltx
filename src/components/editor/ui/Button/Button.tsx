@@ -5,10 +5,10 @@ export type ButtonVariant = "primary" | "secondary" | "tertiary" | "quaternary" 
 export type ButtonSize = "medium" | "small" | "icon" | "iconSmall";
 
 export type ButtonProps = {
-  variant?: ButtonVariant;
   active?: boolean;
   activeClassname?: string;
   buttonSize?: ButtonSize;
+  variant?: ButtonVariant;
 } & React.ButtonHTMLAttributes<HTMLButtonElement>;
 
 export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(

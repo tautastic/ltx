@@ -1,3 +1,5 @@
+// @ts-nocheck
+
 import { ReactRenderer } from "@tiptap/react";
 import { type Editor } from "@tiptap/core";
 import { type SuggestionKeyDownProps, type SuggestionProps } from "@tiptap/suggestion";
@@ -22,13 +24,12 @@ export const emojiSuggestion = {
     let popup: Instance;
 
     return {
-      onStart: (props: SuggestionProps<any>) => {
+      onStart: (props: SuggestionProps) => {
         component = new ReactRenderer(EmojiList, {
           props,
           editor: props.editor,
         });
 
-        // @ts-ignore
         popup = tippy("body", {
           getReferenceClientRect: props.clientRect,
           appendTo: () => document.body,
@@ -40,10 +41,9 @@ export const emojiSuggestion = {
         });
       },
 
-      onUpdate(props: SuggestionProps<any>) {
+      onUpdate(props: SuggestionProps) {
         component.updateProps(props);
 
-        // @ts-ignore
         popup[0].setProps({
           getReferenceClientRect: props.clientRect,
         });
@@ -51,19 +51,16 @@ export const emojiSuggestion = {
 
       onKeyDown(props: SuggestionKeyDownProps) {
         if (props.event.key === "Escape") {
-          // @ts-ignore
           popup[0].hide();
           component.destroy();
 
           return true;
         }
 
-        // @ts-ignore
         return component.ref?.onKeyDown(props);
       },
 
       onExit() {
-        // @ts-ignore
         popup[0].destroy();
         component.destroy();
       },

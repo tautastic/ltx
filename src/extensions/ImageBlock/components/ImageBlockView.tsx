@@ -2,6 +2,7 @@ import twcx from "~/utils/twcx";
 import { type Node } from "@tiptap/pm/model";
 import { type Editor, NodeViewWrapper } from "@tiptap/react";
 import { useCallback, useRef } from "react";
+import Image from "next/image";
 
 interface ImageBlockViewProps {
   editor: Editor;
@@ -33,7 +34,7 @@ export const ImageBlockView = (props: ImageBlockViewProps) => {
     <NodeViewWrapper>
       <div className={wrapperClassName} style={{ width: node.attrs.width }}>
         <div contentEditable={false} ref={imageWrapperRef}>
-          <img className="block" src={src} alt="" onClick={onClick} />
+          <Image className="block" src={src} alt="" onClick={onClick} />
         </div>
       </div>
     </NodeViewWrapper>

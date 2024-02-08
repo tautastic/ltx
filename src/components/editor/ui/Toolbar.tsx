@@ -6,8 +6,8 @@ import { Button, type ButtonProps } from "./Button";
 import Tooltip from "./Tooltip";
 
 export type ToolbarWrapperProps = {
-  shouldShowContent?: boolean;
   isVertical?: boolean;
+  shouldShowContent?: boolean;
 } & HTMLProps<HTMLDivElement>;
 
 const ToolbarWrapper = forwardRef<HTMLDivElement, ToolbarWrapperProps>(
@@ -53,9 +53,9 @@ ToolbarDivider.displayName = "Toolbar.Divider";
 export type ToolbarButtonProps = ButtonHTMLAttributes<HTMLButtonElement> & {
   active?: boolean;
   activeClassname?: string;
+  buttonSize?: ButtonProps["buttonSize"];
   tooltip?: string;
   tooltipShortcut?: string[];
-  buttonSize?: ButtonProps["buttonSize"];
   variant?: ButtonProps["variant"];
 };
 

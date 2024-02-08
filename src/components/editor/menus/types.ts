@@ -5,16 +5,16 @@ import { type EditorState } from "@tiptap/pm/state";
 import { type EditorView } from "@tiptap/pm/view";
 
 export interface MenuProps {
+  appendTo?: React.RefObject<never>;
   editor: Editor;
-  appendTo?: React.RefObject<any>;
   shouldHide?: boolean;
 }
 
 export interface ShouldShowProps {
   editor?: CoreEditor;
-  view: EditorView;
-  state?: EditorState;
-  oldState?: EditorState;
   from?: number;
+  oldState?: EditorState;
+  state?: EditorState;
   to?: number;
+  view: EditorView;
 }

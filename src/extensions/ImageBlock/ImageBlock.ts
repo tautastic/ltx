@@ -8,8 +8,8 @@ declare module "@tiptap/core" {
   interface Commands<ReturnType> {
     imageBlock: {
       setImageBlock: (attributes: { src: string }) => ReturnType;
-      setImageBlockAt: (attributes: { src: string; pos: number | Range }) => ReturnType;
       setImageBlockAlign: (align: "left" | "center" | "right") => ReturnType;
+      setImageBlockAt: (attributes: { pos: number | Range; src: string }) => ReturnType;
       setImageBlockWidth: (width: number) => ReturnType;
     };
   }

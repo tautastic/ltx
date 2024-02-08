@@ -1,7 +1,7 @@
 import * as Popover from "@radix-ui/react-popover";
 import twcx from "~/utils/twcx";
 import { icons } from "lucide-react";
-import { forwardRef, ReactNode } from "react";
+import { forwardRef, type ReactNode } from "react";
 import { Surface } from "./Surface";
 import { Toolbar } from "./Toolbar";
 

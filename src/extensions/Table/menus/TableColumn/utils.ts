@@ -12,9 +12,9 @@ export const isColumnGripSelected = ({
   from,
 }: {
   editor: Editor;
-  view: EditorView;
-  state: EditorState;
   from: number;
+  state: EditorState;
+  view: EditorView;
 }) => {
   const domAtPos = view.domAtPos(from).node as HTMLElement;
   const nodeDOM = view.nodeDOM(from) as HTMLElement;

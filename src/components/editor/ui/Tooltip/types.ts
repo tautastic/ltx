@@ -3,15 +3,15 @@ import { type Placement, type Props } from "tippy.js";
 
 export interface TooltipProps {
   children?: string | React.ReactNode;
+  content?: React.ReactNode;
   enabled?: boolean;
-  title?: string;
   shortcut?: string[];
   tippyOptions?: Omit<Partial<Props>, "content">;
-  content?: React.ReactNode;
+  title?: string;
 }
 
 export interface TippyProps {
+  "data-escaped"?: string;
   "data-placement": Placement;
   "data-reference-hidden"?: string;
-  "data-escaped"?: string;
 }

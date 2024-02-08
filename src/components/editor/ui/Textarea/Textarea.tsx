@@ -1,9 +1,9 @@
-import { forwardRef } from "react";
+import { forwardRef, type TextareaHTMLAttributes } from "react";
 import twcx from "~/utils/twcx";
 
 export const Textarea = forwardRef<
   HTMLTextAreaElement,
-  React.TextareaHTMLAttributes<HTMLTextAreaElement>
+  TextareaHTMLAttributes<HTMLTextAreaElement>
 >(({ className, ...rest }, ref) => {
   const textAreaClassName = twcx(
     "bg-black/5 border-0 rounded-lg caret-black block text-black text-sm font-medium h-[4.5rem] px-2 py-1 w-full",

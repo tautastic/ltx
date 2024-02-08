@@ -1,4 +1,5 @@
 import twcx from "~/utils/twcx";
+import { type ReactNode } from "react";
 
 export const DropdownCategoryTitle = ({ children }: { children: React.ReactNode }) => {
   return (
@@ -15,11 +16,11 @@ export const DropdownButton = ({
   disabled,
   className,
 }: {
-  children: React.ReactNode;
+  children: ReactNode;
+  className?: string;
+  disabled?: boolean;
   isActive?: boolean;
   onClick?: () => void;
-  disabled?: boolean;
-  className?: string;
 }) => {
   const buttonClass = twcx(
     "flex items-center gap-2 p-1.5 text-sm font-medium text-gray-500 dark:text-gray-400 text-left bg-transparent w-full rounded",

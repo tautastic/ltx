@@ -1,11 +1,12 @@
 import { memo } from "react";
 import { type EditorUser } from "../types";
 import Tooltip from "../../ui/Tooltip";
+import Image from "next/image";
 
 export type EditorInfoProps = {
   characters: number;
-  words: number;
   user?: EditorUser;
+  words: number;
 };
 
 export const EditorInfo = memo(({ characters, user, words }: EditorInfoProps) => {
@@ -24,9 +25,9 @@ export const EditorInfo = memo(({ characters, user, words }: EditorInfoProps) =>
           {user && (
             <div key={user.clientId} className="-ml-3">
               <Tooltip title={user.name}>
-                <img
+                <Image
                   className="h-8 w-8 rounded-full border border-white dark:border-black"
-                  src={`https://api.dicebear.com/7.x/notionists-gray/svg?seed=${
+                  src={`https://api.dicebear.com/7.x/notionists/svg?seed=${
                     user.name
                   }&backgroundColor=${user.color.replace("#", "")}`}
                   alt="avatar"

@@ -2,11 +2,11 @@ import { Button } from "~/components/editor/ui/Button";
 import { Icon } from "~/components/editor/ui/Icon";
 import { Surface } from "~/components/editor/ui/Surface";
 import { Toggle } from "~/components/editor/ui/Toggle";
-import { useState, useCallback, useMemo } from "react";
+import { useState, useCallback, useMemo, type FormEvent, type ChangeEvent } from "react";
 
 export type LinkEditorPanelProps = {
-  initialUrl?: string;
   initialOpenInNewTab?: boolean;
+  initialUrl?: string;
   onSetLink: (url: string, openInNewTab?: boolean) => void;
 };
 
@@ -18,14 +18,14 @@ export const useLinkEditorState = ({
   const [url, setUrl] = useState(initialUrl || "");
   const [openInNewTab, setOpenInNewTab] = useState(initialOpenInNewTab || false);
 
-  const onChange = useCallback((event: React.ChangeEvent<HTMLInputElement>) => {
+  const onChange = useCallback((event: ChangeEvent<HTMLInputElement>) => {
     setUrl(event.target.value);
   }, []);
 
   const isValidUrl = useMemo(() => /^(\S+):(\/\/)?\S+$/.test(url), [url]);
 
   const handleSubmit = useCallback(
-    (e: React.FormEvent) => {
+    (e: FormEvent) => {
       e.preventDefault();
       if (isValidUrl) {
         onSetLink(url, openInNewTab);

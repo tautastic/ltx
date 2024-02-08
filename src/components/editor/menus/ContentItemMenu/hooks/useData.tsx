@@ -7,7 +7,7 @@ export const useData = () => {
   const [currentNodePos, setCurrentNodePos] = useState<number>(-1);
 
   const handleNodeChange = useCallback(
-    (data: { node: Node | null; editor: Editor; pos: number }) => {
+    (data: { editor: Editor; node: Node | null; pos: number }) => {
       if (data.node) {
         setCurrentNode(data.node);
       }

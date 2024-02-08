@@ -228,7 +228,6 @@ const select = (type: "row" | "column") => (index: number) => (tr: Transaction) 
       const $head = tr.doc.resolve(head);
       const $anchor = tr.doc.resolve(anchor);
 
-      // @ts-ignore
       return tr.setSelection(new CellSelection($anchor, $head));
     }
   }
@@ -251,7 +250,6 @@ export const selectTable = (tr: Transaction) => {
       const $head = tr.doc.resolve(head);
       const $anchor = tr.doc.resolve(anchor);
 
-      // @ts-ignore
       return tr.setSelection(new CellSelection($anchor, $head));
     }
   }

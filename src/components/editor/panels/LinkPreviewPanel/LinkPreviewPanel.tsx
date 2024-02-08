@@ -4,9 +4,9 @@ import { Toolbar } from "~/components/editor/ui/Toolbar";
 import Tooltip from "~/components/editor/ui/Tooltip";
 
 export type LinkPreviewPanelProps = {
-  url: string;
-  onEdit: () => void;
   onClear: () => void;
+  onEdit: () => void;
+  url: string;
 };
 
 export const LinkPreviewPanel = ({ onClear, onEdit, url }: LinkPreviewPanelProps) => {

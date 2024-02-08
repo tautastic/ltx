@@ -3,8 +3,8 @@ import { icons } from "lucide-react";
 import { memo } from "react";
 
 export type IconProps = {
-  name: keyof typeof icons;
   className?: string;
+  name: keyof typeof icons;
   strokeWidth?: number;
 };
 

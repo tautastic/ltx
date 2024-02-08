@@ -2,8 +2,8 @@ import twcx from "~/utils/twcx";
 import { type HTMLProps, forwardRef } from "react";
 
 export type SurfaceProps = HTMLProps<HTMLDivElement> & {
-  withShadow?: boolean;
   withBorder?: boolean;
+  withShadow?: boolean;
 };
 
 export const Surface = forwardRef<HTMLDivElement, SurfaceProps>(
