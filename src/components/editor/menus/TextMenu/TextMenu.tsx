@@ -12,6 +12,7 @@ import { FontSizePicker } from "./components/FontSizePicker";
 import { useTextmenuContentTypes } from "./hooks/useTextmenuContentTypes";
 import { ContentTypePicker } from "./components/ContentTypePicker";
 import { EditLinkPopover } from "./components/EditLinkPopover";
+import useWindowSize from "~/lib/hooks/use-window-size";
 
 const MemoButton = memo(Toolbar.Button);
 const MemoColorPicker = memo(ColorPicker);
@@ -27,6 +28,91 @@ export const TextMenu = ({ editor }: TextMenuProps) => {
   const commands = useTextmenuCommands(editor);
   const states = useTextmenuStates(editor);
   const blockOptions = useTextmenuContentTypes(editor);
+  const { windowSize } = useWindowSize();
+
+  const isMediumWidth = !!windowSize.width && windowSize.width < 1024;
+  const isSmallWidth = !!windowSize.width && windowSize.width < 640;
+
+  const PopoverItems = (
+    <>
+      <MemoButton
+        tooltip="Bold"
+        tooltipShortcut={["Mod", "B"]}
+        onClick={commands.onBold}
+        active={states.isBold}
+      >
+        <Icon name="Bold" />
+      </MemoButton>
+      <MemoButton
+        tooltip="Italic"
+        tooltipShortcut={["Mod", "I"]}
+        onClick={commands.onItalic}
+        active={states.isItalic}
+      >
+        <Icon name="Italic" />
+      </MemoButton>
+      <MemoButton
+        tooltip="Underline"
+        tooltipShortcut={["Mod", "U"]}
+        onClick={commands.onUnderline}
+        active={states.isUnderline}
+      >
+        <Icon name="Underline" />
+      </MemoButton>
+      <MemoButton
+        tooltip="Strikehrough"
+        tooltipShortcut={["Mod", "X"]}
+        onClick={commands.onStrike}
+        active={states.isStrike}
+      >
+        <Icon name="Strikethrough" />
+      </MemoButton>
+      <MemoButton
+        tooltip="Code"
+        tooltipShortcut={["Mod", "E"]}
+        onClick={commands.onCode}
+        active={states.isCode}
+      >
+        <Icon name="Code" />
+      </MemoButton>
+      <MemoButton tooltip="Code block" onClick={commands.onCodeBlock}>
+        <Icon name="Code2" />
+      </MemoButton>
+      <EditLinkPopover onSetLink={commands.onLink} />
+      <Popover.Root>
+        <Popover.Trigger asChild>
+          <MemoButton active={!!states.currentHighlight} tooltip="Highlight text">
+            <Icon name="Highlighter" />
+          </MemoButton>
+        </Popover.Trigger>
+        <Popover.Content side="top" sideOffset={8} asChild>
+          <Surface className="p-1">
+            <MemoColorPicker
+              color={states.currentHighlight}
+              onChange={commands.onChangeHighlight}
+              onClear={commands.onClearHighlight}
+            />
+          </Surface>
+        </Popover.Content>
+      </Popover.Root>
+      <Popover.Root>
+        <Popover.Trigger asChild>
+          <MemoButton active={!!states.currentColor} tooltip="Text color">
+            <Icon name="Palette" />
+          </MemoButton>
+        </Popover.Trigger>
+        <Popover.Content side="top" sideOffset={8} asChild>
+          <Surface className="p-1">
+            <MemoColorPicker
+              color={states.currentColor}
+              onChange={commands.onChangeColor}
+              onClear={commands.onClearColor}
+            />
+          </Surface>
+        </Popover.Content>
+      </Popover.Root>
+    </>
+  );
 
   return (
     <BubbleMenu
@@ -41,82 +127,7 @@ export const TextMenu = ({ editor }: TextMenuProps) => {
         <MemoFontFamilyPicker onChange={commands.onSetFont} value={states.currentFont || ""} />
         <MemoFontSizePicker onChange={commands.onSetFontSize} value={states.currentSize || ""} />
         <Toolbar.Divider />
-        <MemoButton
-          tooltip="Bold"
-          tooltipShortcut={["Mod", "B"]}
-          onClick={commands.onBold}
-          active={states.isBold}
-        >
-          <Icon name="Bold" />
-        </MemoButton>
-        <MemoButton
-          tooltip="Italic"
-          tooltipShortcut={["Mod", "I"]}
-          onClick={commands.onItalic}
-          active={states.isItalic}
-        >
-          <Icon name="Italic" />
-        </MemoButton>
-        <MemoButton
-          tooltip="Underline"
-          tooltipShortcut={["Mod", "U"]}
-          onClick={commands.onUnderline}
-          active={states.isUnderline}
-        >
-          <Icon name="Underline" />
-        </MemoButton>
-        <MemoButton
-          tooltip="Strikehrough"
-          tooltipShortcut={["Mod", "X"]}
-          onClick={commands.onStrike}
-          active={states.isStrike}
-        >
-          <Icon name="Strikethrough" />
-        </MemoButton>
-        <MemoButton
-          tooltip="Code"
-          tooltipShortcut={["Mod", "E"]}
-          onClick={commands.onCode}
-          active={states.isCode}
-        >
-          <Icon name="Code" />
-        </MemoButton>
-        <MemoButton tooltip="Code block" onClick={commands.onCodeBlock}>
-          <Icon name="Code2" />
-        </MemoButton>
-        <EditLinkPopover onSetLink={commands.onLink} />
-        <Popover.Root>
-          <Popover.Trigger asChild>
-            <MemoButton active={!!states.currentHighlight} tooltip="Highlight text">
-              <Icon name="Highlighter" />
-            </MemoButton>
-          </Popover.Trigger>
-          <Popover.Content side="top" sideOffset={8} asChild>
-            <Surface className="p-1">
-              <MemoColorPicker
-                color={states.currentHighlight}
-                onChange={commands.onChangeHighlight}
-                onClear={commands.onClearHighlight}
-              />
-            </Surface>
-          </Popover.Content>
-        </Popover.Root>
-        <Popover.Root>
-          <Popover.Trigger asChild>
-            <MemoButton active={!!states.currentColor} tooltip="Text color">
-              <Icon name="Palette" />
-            </MemoButton>
-          </Popover.Trigger>
-          <Popover.Content side="top" sideOffset={8} asChild>
-            <Surface className="p-1">
-              <MemoColorPicker
-                color={states.currentColor}
-                onChange={commands.onChangeColor}
-                onClear={commands.onClearColor}
-              />
-            </Surface>
-          </Popover.Content>
-        </Popover.Root>
+        {!isMediumWidth && PopoverItems}
         <Popover.Root>
           <Popover.Trigger asChild>
             <MemoButton tooltip="More options">
@@ -124,7 +135,8 @@ export const TextMenu = ({ editor }: TextMenuProps) => {
             </MemoButton>
           </Popover.Trigger>
           <Popover.Content side="top" asChild>
-            <Toolbar.Wrapper>
+            <Toolbar.Wrapper className={isSmallWidth ? "max-w-[15ch] overflow-x-scroll" : ""}>
+              {isMediumWidth && PopoverItems}
               <MemoButton
                 tooltip="Align left"
                 tooltipShortcut={["Shift", "Mod", "L"]}
