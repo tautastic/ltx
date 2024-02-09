@@ -19,6 +19,8 @@ import {
   HorizontalRule,
   ImageBlock,
   Link,
+  LineHeight,
+  Margin,
   Placeholder,
   Selection,
   SlashCommand,
@@ -38,7 +40,7 @@ import {
   Column,
   TaskItem,
   TaskList,
-} from ".";
+} from "./index";
 import { CodeBlockLowlight } from "@tiptap/extension-code-block-lowlight";
 import { ImageUpload } from "./ImageUpload";
 import { TableOfContentsNode } from "./TableOfContentsNode";
@@ -81,6 +83,10 @@ export const ExtensionKit = (userId?: string) => [
   Link.configure({
     openOnClick: false,
   }),
+  LineHeight.configure({
+    defaultHeight: "1",
+  }),
+  Margin.configure({}),
   Highlight.configure({ multicolor: true }),
   Underline,
   CharacterCount.configure({ limit: 50000 }),

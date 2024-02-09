@@ -38,6 +38,8 @@ export const useTextmenuStates = (editor: Editor) => {
     currentHighlight: editor.getAttributes("highlight")?.color || undefined,
     currentFont: editor.getAttributes("textStyle")?.fontFamily || undefined,
     currentSize: editor.getAttributes("textStyle")?.fontSize || undefined,
+    currentLineHeight: editor.getAttributes("textStyle")?.lineHeight,
+    currentMargin: editor.getAttributes("textStyle")?.margin,
     shouldShow,
   };
 };

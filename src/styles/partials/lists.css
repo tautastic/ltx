@@ -24,7 +24,7 @@
 
   & > ul,
   & > ol {
-    @apply my-8 first:mt-0 last:mb-0;
+    @apply my-2 first:mt-0 last:mb-0;
   }
 
   ul[data-type="taskList"] {

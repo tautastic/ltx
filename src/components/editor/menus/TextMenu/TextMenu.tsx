@@ -13,11 +13,15 @@ import { useTextmenuContentTypes } from "./hooks/useTextmenuContentTypes";
 import { ContentTypePicker } from "./components/ContentTypePicker";
 import { EditLinkPopover } from "./components/EditLinkPopover";
 import useWindowSize from "~/lib/hooks/use-window-size";
+import { LineHeightPicker } from "~/components/editor/menus/TextMenu/components/LineHeightPicker";
+import { MarginPicker } from "~/components/editor/menus/TextMenu/components/MarginPicker";
 
 const MemoButton = memo(Toolbar.Button);
 const MemoColorPicker = memo(ColorPicker);
 const MemoFontFamilyPicker = memo(FontFamilyPicker);
 const MemoFontSizePicker = memo(FontSizePicker);
+const MemoLineHeightPicker = memo(LineHeightPicker);
+const MemoMarginPicker = memo(MarginPicker);
 const MemoContentTypePicker = memo(ContentTypePicker);
 
 export type TextMenuProps = {
@@ -126,6 +130,12 @@ export const TextMenu = ({ editor }: TextMenuProps) => {
         <MemoContentTypePicker options={blockOptions} />
         <MemoFontFamilyPicker onChange={commands.onSetFont} value={states.currentFont || ""} />
         <MemoFontSizePicker onChange={commands.onSetFontSize} value={states.currentSize || ""} />
+        <Toolbar.Divider />
+        <MemoMarginPicker onChange={commands.onSetMargin} value={states.currentMargin || ""} />
+        <MemoLineHeightPicker
+          onChange={commands.onSetLineHeight}
+          value={states.currentLineHeight || ""}
+        />
         <Toolbar.Divider />
         {!isMediumWidth && PopoverItems}
         <Popover.Root>

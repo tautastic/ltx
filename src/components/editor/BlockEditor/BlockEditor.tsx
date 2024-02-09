@@ -8,9 +8,9 @@ import { LinkMenu } from "~/components/editor/menus";
 import { useBlockEditor } from "~/lib/hooks/useBlockEditor";
 
 import { Sidebar } from "~/components/editor/Sidebar";
-import ImageBlockMenu from "~/extensions/ImageBlock/components/ImageBlockMenu";
-import { ColumnsMenu } from "~/extensions/MultiColumn/menus";
-import { TableColumnMenu, TableRowMenu } from "~/extensions/Table/menus";
+import ImageBlockMenu from "~/components/editor/extensions/ImageBlock/components/ImageBlockMenu";
+import { ColumnsMenu } from "~/components/editor/extensions/MultiColumn/menus";
+import { TableColumnMenu, TableRowMenu } from "~/components/editor/extensions/Table/menus";
 import { EditorHeader } from "./components/EditorHeader";
 import { TextMenu } from "../menus/TextMenu";
 import { ContentItemMenu } from "~/components/editor/menus";

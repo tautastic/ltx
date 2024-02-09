@@ -28,6 +28,7 @@ export const placeholders = {
                   fontSize: "",
                   fontFamily: "",
                   color: "rgb(169, 169, 169)",
+                  lineHeight: null,
                 },
               },
             ],
@@ -49,6 +50,9 @@ export const placeholders = {
             text: "Harmonische Schwingungen",
           },
         ],
+      },
+      {
+        type: "horizontalRule",
       },
       {
         type: "paragraph",

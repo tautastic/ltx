@@ -37,6 +37,8 @@ export { Figcaption } from "./Figcaption";
 export { BlockquoteFigure } from "./BlockquoteFigure";
 export { Quote } from "./BlockquoteFigure/Quote";
 export { QuoteCaption } from "./BlockquoteFigure/QuoteCaption";
+export { LineHeight } from "./LineHeight";
+export { Margin } from "./Margin";
 export { Link } from "./Link";
 export { ImageUpload } from "./ImageUpload";
 export { ImageBlock } from "./ImageBlock";

@@ -60,6 +60,26 @@ export const useTextmenuCommands = (editor: Editor) => {
     [editor]
   );
 
+  const onSetLineHeight = useCallback(
+    (height: string) => {
+      if (!height || height.length === 0) {
+        return editor.chain().focus().unsetLineHeight().run();
+      }
+      return editor.chain().focus().setLineHeight(height).run();
+    },
+    [editor]
+  );
+
+  const onSetMargin = useCallback(
+    (margin: string) => {
+      if (!margin || margin.length === 0) {
+        return editor.chain().focus().unsetMargin().run();
+      }
+      return editor.chain().focus().setMargin(margin).run();
+    },
+    [editor]
+  );
+
   const onSetFontSize = useCallback(
     (fontSize: string) => {
       if (!fontSize || fontSize.length === 0) {
@@ -87,6 +107,8 @@ export const useTextmenuCommands = (editor: Editor) => {
     onClearHighlight,
     onSetFont,
     onSetFontSize,
+    onSetLineHeight,
+    onSetMargin,
     onLink,
   };
 };

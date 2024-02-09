@@ -3,7 +3,7 @@ import { type EditorState } from "@tiptap/pm/state";
 import { type EditorView } from "@tiptap/pm/view";
 
 import { isTableSelected } from "../../utils";
-import { Table } from "../..";
+import { Table } from "../../index";
 
 export const isColumnGripSelected = ({
   editor,
