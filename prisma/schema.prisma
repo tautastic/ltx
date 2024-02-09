@@ -15,6 +15,8 @@ model Tag {
   author   User   @relation(name: "AuthoredTags", fields: [authorId], references: [id])
   authorId String
   pages    Page[]
+
+  @@index([authorId])
 }
 
 model Page {
@@ -29,6 +31,8 @@ model Page {
   starredBy   User[]   @relation("StarredPages")
   isPrivate   Boolean  @default(false)
   tags        Tag[]
+
+  @@index([authorId])
 }
 
 model User {
@@ -65,6 +69,7 @@ model Account {
   user              User    @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@unique([provider, providerAccountId])
+  @@index([userId])
 }
 
 model Session {
@@ -73,6 +78,8 @@ model Session {
   userId       String
   expires      DateTime
   user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
 }
 
 model VerificationToken {
