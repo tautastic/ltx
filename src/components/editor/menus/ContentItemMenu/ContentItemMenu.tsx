@@ -29,7 +29,7 @@ export const ContentItemMenu = ({ editor }: ContentItemMenuProps) => {
 
   return (
     <DragHandle
-      className="m-auto max-w-6 scale-75 md:scale-100"
+      className="m-auto max-w-6 scale-75 md:max-w-12 md:scale-100"
       pluginKey="ContentItemMenu"
       editor={editor}
       onNodeChange={data.handleNodeChange}

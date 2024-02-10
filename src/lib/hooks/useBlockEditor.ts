@@ -1,4 +1,4 @@
-import { type Editor, useEditor } from "@tiptap/react";
+import { type Editor, EditorEvents, useEditor } from "@tiptap/react";
 
 import { ExtensionKit } from "~/components/editor/extensions/extension-kit";
 import { useSidebar } from "./useSidebar";
@@ -16,9 +16,13 @@ export const useBlockEditor = () => {
   const editor = useEditor(
     {
       autofocus: true,
+      onUpdate(props: EditorEvents["update"]): void {
+        console.log(props.editor.getJSON());
+      },
+
       onCreate: ({ editor }) => {
         if (editor.isEmpty) {
-          editor.commands.setContent(placeholders["de-physik"]);
+          editor.commands.setContent(placeholders["de-stochastik"]);
         }
       },
       extensions: [

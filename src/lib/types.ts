@@ -192,6 +192,52 @@ export const placeholders = {
         content: [
           {
             type: "text",
+            marks: [
+              {
+                type: "textStyle",
+                attrs: {
+                  fontSize: null,
+                  fontFamily: null,
+                  color: "#b0b0b0",
+                  lineHeight: null,
+                },
+              },
+            ],
+            text: "Stochastik",
+          },
+        ],
+      },
+      {
+        type: "heading",
+        attrs: {
+          "id": "5ee999d4-60ae-4950-b0ce-794f160c44c1",
+          "data-toc-id": "5ee999d4-60ae-4950-b0ce-794f160c44c1",
+          "textAlign": "left",
+          "level": 1,
+        },
+        content: [
+          {
+            type: "text",
+            text: "Sigma-Algebra",
+          },
+        ],
+      },
+      {
+        type: "paragraph",
+        attrs: {
+          class: null,
+          textAlign: "left",
+        },
+      },
+      {
+        type: "paragraph",
+        attrs: {
+          class: null,
+          textAlign: "left",
+        },
+        content: [
+          {
+            type: "text",
             text: "Es sei $\\Omega = \\sum_{n \\in \\N} A_{n}$ eine Zerlegung des Grundraums $\\Omega$ in paarweise disjunkte Mengen $A_{1}, A_{2},\\dotsc\\,$. Zeigen Sie, dass das System",
           },
         ],
@@ -205,20 +251,25 @@ export const placeholders = {
         content: [
           {
             type: "text",
+            marks: [
+              {
+                type: "textStyle",
+                attrs: {
+                  fontSize: null,
+                  fontFamily: null,
+                  color: null,
+                  lineHeight: null,
+                },
+              },
+              {
+                type: "divStyle",
+                attrs: {
+                  horizontalMargin: null,
+                  verticalMargin: "1rem",
+                },
+              },
+            ],
             text: "$\\mathcal{A} = \\left\\{B \\subseteq \\Omega \\vert \\exists T \\subseteq \\N \\,\\text{mit}\\, B = \\sum_{n \\in T} A_{n} \\right\\}$",
-          },
-        ],
-      },
-      {
-        type: "paragraph",
-        attrs: {
-          class: null,
-          textAlign: "left",
-        },
-        content: [
-          {
-            type: "text",
-            text: "eine $\\sigma$-Algebra ist.",
           },
         ],
       },
@@ -233,13 +284,60 @@ export const placeholders = {
             type: "text",
             marks: [
               {
+                type: "textStyle",
+                attrs: {
+                  fontSize: null,
+                  fontFamily: null,
+                  color: null,
+                  lineHeight: null,
+                },
+              },
+            ],
+            text: "eine $\\sigma$-Algebra ist.",
+          },
+        ],
+      },
+      {
+        type: "horizontalRule",
+      },
+      {
+        type: "paragraph",
+        attrs: {
+          class: null,
+          textAlign: "left",
+        },
+        content: [
+          {
+            type: "text",
+            marks: [
+              {
                 type: "italic",
+              },
+              {
+                type: "textStyle",
+                attrs: {
+                  fontSize: null,
+                  fontFamily: null,
+                  color: null,
+                  lineHeight: null,
+                },
               },
             ],
             text: "Beweis",
           },
           {
             type: "text",
+            marks: [
+              {
+                type: "textStyle",
+                attrs: {
+                  fontSize: null,
+                  fontFamily: null,
+                  color: null,
+                  lineHeight: null,
+                },
+              },
+            ],
             text: ". Um zu zeigen, dass $\\mathcal{A}$ eine $\\sigma$-Algebra ist, müssen wir zeigen, dass die leere Menge $\\emptyset$ in $\\mathcal{A}$ enthalten ist und dass $\\mathcal{A}$ die Eigenschaften des Komplements und der Vereinigung abzählbarer Mengen besitzt.",
           },
         ],
@@ -262,6 +360,17 @@ export const placeholders = {
                 content: [
                   {
                     type: "text",
+                    marks: [
+                      {
+                        type: "textStyle",
+                        attrs: {
+                          fontSize: null,
+                          fontFamily: null,
+                          color: null,
+                          lineHeight: null,
+                        },
+                      },
+                    ],
                     text: "Die leere Menge ist in $\\mathcal{A}$ enthalten, da sie sich als Vereinigung leerer Mengen darstellen lässt. Denn $\\emptyset = \\sum_{n \\in \\emptyset} A_n$, also gehört $\\emptyset$ zu $\\mathcal{A}$.",
                   },
                 ],
@@ -280,6 +389,17 @@ export const placeholders = {
                 content: [
                   {
                     type: "text",
+                    marks: [
+                      {
+                        type: "textStyle",
+                        attrs: {
+                          fontSize: null,
+                          fontFamily: null,
+                          color: null,
+                          lineHeight: null,
+                        },
+                      },
+                    ],
                     text: "Für jedes $B \\in \\mathcal{A}$ gibt es eine Menge $T \\subseteq \\N$ mit $B = \\sum_{n \\in T} A_n$. Dann ist das Komplement von $B$ gegeben durch $B^c = \\Omega \\setminus B = \\sum_{n \\in \\N \\setminus T} A_n$, also gehört auch das Komplement von $B$ zu $\\mathcal{A}$.",
                   },
                 ],
@@ -298,6 +418,17 @@ export const placeholders = {
                 content: [
                   {
                     type: "text",
+                    marks: [
+                      {
+                        type: "textStyle",
+                        attrs: {
+                          fontSize: null,
+                          fontFamily: null,
+                          color: null,
+                          lineHeight: null,
+                        },
+                      },
+                    ],
                     text: "Schließlich betrachten wir eine abzählbare Familie $(B_i){i \\in I}$ von Mengen in $\\mathcal{A}$. Für jedes $i \\in I$ gibt es eine Menge $T_i \\subseteq \\N$ mit $B_i = \\sum_{n \\in T_i} A_n$. Dann ist die Vereinigung der Mengen $B_i$ gegeben durch",
                   },
                 ],
@@ -310,14 +441,26 @@ export const placeholders = {
                 },
                 content: [
                   {
-                    type: "hardBreak",
-                  },
-                  {
                     type: "text",
+                    marks: [
+                      {
+                        type: "textStyle",
+                        attrs: {
+                          fontSize: null,
+                          fontFamily: null,
+                          color: null,
+                          lineHeight: null,
+                        },
+                      },
+                      {
+                        type: "divStyle",
+                        attrs: {
+                          horizontalMargin: null,
+                          verticalMargin: "1rem",
+                        },
+                      },
+                    ],
                     text: "$\\bigcup_{i \\in I} B_i = \\sum_{i \\in I} \\sum_{n \\in T_i} A_n = \\sum_{n \\in \\bigcup_{i \\in I} T_i} A_n,$",
-                  },
-                  {
-                    type: "hardBreak",
                   },
                 ],
               },
@@ -330,6 +473,17 @@ export const placeholders = {
                 content: [
                   {
                     type: "text",
+                    marks: [
+                      {
+                        type: "textStyle",
+                        attrs: {
+                          fontSize: null,
+                          fontFamily: null,
+                          color: null,
+                          lineHeight: null,
+                        },
+                      },
+                    ],
                     text: "also gehört auch die Vereinigung der Mengen $B_i$ zu $\\mathcal{A}$.",
                   },
                 ],
@@ -347,6 +501,17 @@ export const placeholders = {
         content: [
           {
             type: "text",
+            marks: [
+              {
+                type: "textStyle",
+                attrs: {
+                  fontSize: null,
+                  fontFamily: null,
+                  color: null,
+                  lineHeight: null,
+                },
+              },
+            ],
             text: "Da $\\mathcal{A}$ die Eigenschaften der leeren Menge, des Komplements und der Vereinigung abzählbarer Mengen besitzt, ist es eine $\\sigma$-Algebra. ",
           },
         ],
@@ -360,9 +525,27 @@ export const placeholders = {
         content: [
           {
             type: "text",
-            text: "$\\blacksquare$ ",
+            marks: [
+              {
+                type: "textStyle",
+                attrs: {
+                  fontSize: null,
+                  fontFamily: null,
+                  color: null,
+                  lineHeight: null,
+                },
+              },
+            ],
+            text: "$\\blacksquare$",
           },
         ],
+      },
+      {
+        type: "paragraph",
+        attrs: {
+          class: null,
+          textAlign: "left",
+        },
       },
     ],
   },

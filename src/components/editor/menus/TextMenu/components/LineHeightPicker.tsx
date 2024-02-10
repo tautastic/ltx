@@ -7,13 +7,14 @@ import LineHeightIcon from "~/components/editor/ui/LineHeightIcon";
 import { Input } from "~/components/ui/input";
 
 const LINE_HEIGHTS = [
-  { label: "1", value: "" },
+  { label: "base", value: "" },
+  { label: "1", value: "1rem" },
   { label: "1.25", value: "1.25rem" },
   { label: "1.75", value: "1.75rem" },
   { label: "2", value: "2rem" },
 ];
 
-const lineHeightRegex = /^(\d*\.?\d+)(rem|em|px|%)$/;
+const lineHeightRegex = /^(-?\d*\.?\d+)(rem|em|px|%)$/;
 
 export type LineHeightPickerProps = {
   onChange: (value: string) => void;

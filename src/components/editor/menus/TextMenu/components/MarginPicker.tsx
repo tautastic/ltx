@@ -12,10 +12,11 @@ export type MarginPickerProps = {
   value: string;
 };
 
-const marginRegex = /^(\d*\.?\d+)(rem|em|px|%)$/;
+const marginRegex = /^(-?\d*\.?\d+)(rem|em|px|%)$/;
 
 const MARGIN_PRESETS = [
-  { label: "0", value: "" },
+  { label: "base", value: "" },
+  { label: "0", value: "0" },
   { label: "0.5", value: "0.5rem" },
   { label: "1", value: "1rem" },
   { label: "2", value: "2rem" },

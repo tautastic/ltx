@@ -1,6 +1,6 @@
 .ProseMirror {
   p {
-    @apply text-sm first:mt-0 last:mb-0 md:text-base;
+    @apply text-sm first:mt-0 last:mb-0 md:text-base md:leading-relaxed;
   }
 
   & > p {

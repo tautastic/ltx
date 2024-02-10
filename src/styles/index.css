@@ -7,6 +7,12 @@
 @import "./partials/table.css";
 @import "./partials/typography.css";
 
+.Tiptap-mathematics-render {
+  .katex {
+    @apply leading-4;
+  }
+}
+
 .ProseMirror {
   @apply z-0 pl-8 pr-6 caret-black outline-0 dark:caret-white md:px-14 lg:px-24 lg:py-10;
 
