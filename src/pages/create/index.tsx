@@ -13,7 +13,7 @@ import {
   FieldsetFooter,
 } from "~/components/ui/fieldset";
 import { BlockEditor } from "~/components/editor/BlockEditor";
-import React from "react";
+import React, { useRef } from "react";
 
 type TagProps = {
   color: string;
@@ -22,6 +22,7 @@ type TagProps = {
 };
 
 const Create: NextPageWithAuthAndLayout = () => {
+  const editorContainerRef = useRef<HTMLDivElement>(null);
   const tags: TagProps[] = [
     {
       color: "#1e9de7",
@@ -41,9 +42,12 @@ const Create: NextPageWithAuthAndLayout = () => {
   ];
   return (
     <div className="flex w-full flex-col gap-y-10 sm:max-w-[70ch] md:max-w-[75ch] lg:max-w-[95ch]">
-      <Fieldset className="m-auto w-full max-w-screen-sm md:max-w-[75ch] lg:max-w-[95ch]">
+      <Fieldset
+        ref={editorContainerRef}
+        className="m-auto w-full max-w-screen-sm opacity-0 md:max-w-[75ch] lg:max-w-[95ch]"
+      >
         <FieldsetContent className="px-0">
-          <BlockEditor isHeaderVisible={false} />
+          <BlockEditor containerRef={editorContainerRef} isHeaderVisible={false} />
         </FieldsetContent>
         <Fieldset className="border-x-0 border-b-0">
           <FieldsetContent>

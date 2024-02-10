@@ -70,7 +70,7 @@ const Home: NextPageWithAuthAndLayout = () => {
       </div>
       <Fieldset
         ref={editorContainerRef}
-        className="m-auto w-full max-w-screen-sm opacity-0 transition-opacity delay-300 duration-500 ease-in md:max-w-[75ch] lg:max-w-[95ch]"
+        className="m-auto w-full max-w-screen-sm opacity-0 md:max-w-[75ch] lg:max-w-[95ch]"
       >
         <FieldsetContent className="px-0">
           <BlockEditor

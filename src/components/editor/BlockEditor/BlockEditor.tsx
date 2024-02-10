@@ -30,14 +30,19 @@ export const BlockEditor = ({
   const { editor, characterCount, leftSidebar } = useBlockEditor();
 
   useEffect(() => {
-    if (editor && defaultValue) {
-      editor.chain().setContent(defaultValue).run();
-      if (containerRef && containerRef.current !== null) {
-        containerRef.current.style.opacity = "1";
-      }
-      return () => editor.chain().clearContent(true).run();
+    if (!editor) {
+      return () => {};
     }
-    return () => {};
+
+    if (defaultValue) {
+      editor.chain().setContent(defaultValue).run();
+    }
+
+    if (containerRef && containerRef.current !== null) {
+      containerRef.current.style.opacity = "1";
+    }
+
+    return () => editor.chain().clearContent(true).run();
   }, [containerRef, defaultValue, editor]);
 
   if (!editor) {
