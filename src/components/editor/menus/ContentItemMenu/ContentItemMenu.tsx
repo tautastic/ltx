@@ -33,6 +33,9 @@ export const ContentItemMenu = ({ editor }: ContentItemMenuProps) => {
       pluginKey="ContentItemMenu"
       editor={editor}
       onNodeChange={data.handleNodeChange}
+      tippyOptions={{
+        placement: "left",
+      }}
     >
       <div className="flex items-center gap-0.5">
         <Popover.Root open={menuOpen} onOpenChange={setMenuOpen}>
