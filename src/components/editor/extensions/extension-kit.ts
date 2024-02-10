@@ -40,6 +40,7 @@ import {
   Column,
   TaskItem,
   TaskList,
+  DivStyle,
 } from "./index";
 import { CodeBlockLowlight } from "@tiptap/extension-code-block-lowlight";
 import { ImageUpload } from "./ImageUpload";
@@ -50,7 +51,7 @@ import { Mathematics } from "@tiptap-pro/extension-mathematics";
 import "katex/dist/katex.min.css";
 
 export const ExtensionKit = (userId?: string) => [
-  Mathematics.configure({}),
+  Mathematics,
   Document,
   Columns,
   TaskList,
@@ -86,7 +87,7 @@ export const ExtensionKit = (userId?: string) => [
   LineHeight.configure({
     defaultHeight: "1",
   }),
-  Margin.configure({}),
+  Margin,
   Highlight.configure({ multicolor: true }),
   Underline,
   CharacterCount.configure({ limit: 50000 }),
@@ -146,6 +147,7 @@ export const ExtensionKit = (userId?: string) => [
     width: 2,
     class: "ProseMirror-dropcursor border-black",
   }),
+  DivStyle,
 ];
 
 export default ExtensionKit;

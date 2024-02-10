@@ -115,6 +115,7 @@ export const TextMenu = ({ editor }: TextMenuProps) => {
           </Surface>
         </Popover.Content>
       </Popover.Root>
+      <Toolbar.Divider />
     </>
   );
 
@@ -131,7 +132,16 @@ export const TextMenu = ({ editor }: TextMenuProps) => {
         <MemoFontFamilyPicker onChange={commands.onSetFont} value={states.currentFont || ""} />
         <MemoFontSizePicker onChange={commands.onSetFontSize} value={states.currentSize || ""} />
         <Toolbar.Divider />
-        <MemoMarginPicker onChange={commands.onSetMargin} value={states.currentMargin || ""} />
+        <MemoMarginPicker
+          direction="Horizontal"
+          onChange={commands.onSetHorizontalMargin}
+          value={states.currentHorizontalMargin || ""}
+        />
+        <MemoMarginPicker
+          direction="Vertical"
+          onChange={commands.onSetVerticalMargin}
+          value={states.currentVerticalMargin || ""}
+        />
         <MemoLineHeightPicker
           onChange={commands.onSetLineHeight}
           value={states.currentLineHeight || ""}

@@ -70,12 +70,22 @@ export const useTextmenuCommands = (editor: Editor) => {
     [editor]
   );
 
-  const onSetMargin = useCallback(
+  const onSetHorizontalMargin = useCallback(
     (margin: string) => {
       if (!margin || margin.length === 0) {
-        return editor.chain().focus().unsetMargin().run();
+        return editor.chain().focus().unsetHorizontalMargin().run();
       }
-      return editor.chain().focus().setMargin(margin).run();
+      return editor.chain().focus().setHorizontalMargin(margin).run();
+    },
+    [editor]
+  );
+
+  const onSetVerticalMargin = useCallback(
+    (margin: string) => {
+      if (!margin || margin.length === 0) {
+        return editor.chain().focus().unsetVerticalMargin().run();
+      }
+      return editor.chain().focus().setVerticalMargin(margin).run();
     },
     [editor]
   );
@@ -108,7 +118,8 @@ export const useTextmenuCommands = (editor: Editor) => {
     onSetFont,
     onSetFontSize,
     onSetLineHeight,
-    onSetMargin,
+    onSetHorizontalMargin,
+    onSetVerticalMargin,
     onLink,
   };
 };

@@ -3,9 +3,13 @@ import "@tiptap/extension-text-style";
 
 declare module "@tiptap/core" {
   interface Commands<ReturnType> {
-    margin: {
-      setMargin: (margin: string) => ReturnType;
-      unsetMargin: () => ReturnType;
+    horizontalMargin: {
+      setHorizontalMargin: (horizontalMargin: string) => ReturnType;
+      unsetHorizontalMargin: () => ReturnType;
+    };
+    verticalMargin: {
+      setVerticalMargin: (verticalMargin: string) => ReturnType;
+      unsetVerticalMargin: () => ReturnType;
     };
   }
 }
@@ -15,7 +19,7 @@ export const Margin = Extension.create({
 
   addOptions() {
     return {
-      types: ["textStyle"],
+      types: ["divStyle"],
     };
   },
 
@@ -30,15 +34,27 @@ export const Margin = Extension.create({
       {
         types: this.options.types,
         attributes: {
-          margin: {
+          horizontalMargin: {
             parseHTML: (element) => element.style.margin.replace(/['"]+/g, ""),
             renderHTML: (attributes) => {
-              if (!attributes.margin) {
+              if (!attributes.horizontalMargin) {
                 return {};
               }
 
               return {
-                style: `margin: ${attributes.margin}`,
+                style: `margin-left: ${attributes.horizontalMargin}; margin-right: ${attributes.horizontalMargin}`,
+              };
+            },
+          },
+          verticalMargin: {
+            parseHTML: (element) => element.style.margin.replace(/['"]+/g, ""),
+            renderHTML: (attributes) => {
+              if (!attributes.verticalMargin) {
+                return {};
+              }
+
+              return {
+                style: `margin-top: ${attributes.verticalMargin}; margin-bottom: ${attributes.verticalMargin}`,
               };
             },
           },
@@ -49,14 +65,26 @@ export const Margin = Extension.create({
 
   addCommands() {
     return {
-      setMargin:
-        (margin: string) =>
+      setHorizontalMargin:
+        (horizontalMargin: string) =>
         ({ chain }) =>
-          chain().setMark("textStyle", { margin }).run(),
-      unsetMargin:
+          chain().setMark("divStyle", { horizontalMargin }).run(),
+      unsetHorizontalMargin:
+        () =>
+        ({ chain }) => {
+          return chain()
+            .setMark("divStyle", { horizontalMargin: null })
+            .removeEmptyDivStyle()
+            .run();
+        },
+      setVerticalMargin:
+        (verticalMargin: string) =>
+        ({ chain }) =>
+          chain().setMark("divStyle", { verticalMargin }).run(),
+      unsetVerticalMargin:
         () =>
         ({ chain }) =>
-          chain().setMark("textStyle", { margin: null }).removeEmptyTextStyle().run(),
+          chain().setMark("divStyle", { verticalMargin: null }).removeEmptyDivStyle().run(),
     };
   },
 });

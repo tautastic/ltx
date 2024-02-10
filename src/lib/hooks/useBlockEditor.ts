@@ -16,9 +16,6 @@ export const useBlockEditor = () => {
   const editor = useEditor(
     {
       autofocus: true,
-      onUpdate: ({ editor }) => {
-        console.log(editor.getJSON());
-      },
       onCreate: ({ editor }) => {
         if (editor.isEmpty) {
           editor.commands.setContent(placeholders["de-physik"]);

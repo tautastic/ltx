@@ -39,7 +39,8 @@ export const useTextmenuStates = (editor: Editor) => {
     currentFont: editor.getAttributes("textStyle")?.fontFamily || undefined,
     currentSize: editor.getAttributes("textStyle")?.fontSize || undefined,
     currentLineHeight: editor.getAttributes("textStyle")?.lineHeight,
-    currentMargin: editor.getAttributes("textStyle")?.margin,
+    currentHorizontalMargin: editor.getAttributes("divStyle")?.horizontalMargin,
+    currentVerticalMargin: editor.getAttributes("divStyle")?.verticalMargin,
     shouldShow,
   };
 };
