@@ -1,7 +1,7 @@
 "use client";
 
-import { EditorContent } from "@tiptap/react";
-import React, { useRef } from "react";
+import { type Content, EditorContent } from "@tiptap/react";
+import React, { useEffect, useRef } from "react";
 
 import { LinkMenu } from "~/components/editor/menus";
 
@@ -16,13 +16,29 @@ import { TextMenu } from "../menus/TextMenu";
 import { ContentItemMenu } from "~/components/editor/menus";
 
 export interface BlockEditorProps {
+  containerRef?: React.RefObject<HTMLDivElement>;
+  defaultValue?: Content;
   isHeaderVisible?: boolean;
 }
 
-export const BlockEditor = ({ isHeaderVisible = true }: BlockEditorProps) => {
+export const BlockEditor = ({
+  containerRef,
+  defaultValue,
+  isHeaderVisible = true,
+}: BlockEditorProps) => {
   const menuContainerRef = useRef<HTMLDivElement>(null);
-
   const { editor, characterCount, leftSidebar } = useBlockEditor();
+
+  useEffect(() => {
+    if (editor && defaultValue) {
+      editor.chain().setContent(defaultValue).run();
+      if (containerRef && containerRef.current !== null) {
+        containerRef.current.style.opacity = "1";
+      }
+      return () => editor.chain().clearContent(true).run();
+    }
+    return () => {};
+  }, [containerRef, defaultValue, editor]);
 
   if (!editor) {
     return null;
@@ -42,7 +58,7 @@ export const BlockEditor = ({ isHeaderVisible = true }: BlockEditorProps) => {
             toggleSidebar={leftSidebar.toggle}
           />
         )}
-        <EditorContent editor={editor} className="flex-1 overflow-y-auto" />
+        <EditorContent className="flex-1 overflow-y-auto" editor={editor} />
         <ContentItemMenu editor={editor} />
         <LinkMenu editor={editor} appendTo={menuContainerRef} />
         <TextMenu editor={editor} />

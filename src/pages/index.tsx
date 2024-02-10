@@ -1,6 +1,6 @@
-import { type NextPageWithAuthAndLayout } from "~/lib/types";
+import { type NextPageWithAuthAndLayout, placeholders } from "~/lib/types";
 import AuthDropdown from "~/components/auth-dropdown";
-import React from "react";
+import React, { useRef } from "react";
 import Background from "~/components/background";
 import { Button } from "~/components/ui/button";
 import Footer from "~/components/footer";
@@ -11,6 +11,7 @@ import { BlockEditor } from "~/components/editor/BlockEditor";
 import { Fieldset, FieldsetContent } from "~/components/ui/fieldset";
 
 const Home: NextPageWithAuthAndLayout = () => {
+  const editorContainerRef = useRef<HTMLDivElement>(null);
   return (
     <>
       <div className="flex flex-col items-center justify-between gap-y-8 px-4 text-center md:gap-y-16">
@@ -67,9 +68,16 @@ const Home: NextPageWithAuthAndLayout = () => {
           </a>
         </div>
       </div>
-      <Fieldset className="m-auto w-full max-w-screen-sm md:max-w-[75ch] lg:max-w-[95ch]">
+      <Fieldset
+        ref={editorContainerRef}
+        className="m-auto w-full max-w-screen-sm opacity-0 transition-opacity delay-300 duration-500 ease-in md:max-w-[75ch] lg:max-w-[95ch]"
+      >
         <FieldsetContent className="px-0">
-          <BlockEditor isHeaderVisible={false} />
+          <BlockEditor
+            containerRef={editorContainerRef}
+            defaultValue={placeholders["de-stochastik"]}
+            isHeaderVisible={false}
+          />
         </FieldsetContent>
       </Fieldset>
     </>

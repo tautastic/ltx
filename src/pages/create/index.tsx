@@ -12,6 +12,8 @@ import {
   FieldsetContent,
   FieldsetFooter,
 } from "~/components/ui/fieldset";
+import { BlockEditor } from "~/components/editor/BlockEditor";
+import React from "react";
 
 type TagProps = {
   color: string;
@@ -39,39 +41,44 @@ const Create: NextPageWithAuthAndLayout = () => {
   ];
   return (
     <div className="flex w-full flex-col gap-y-10 sm:max-w-[70ch] md:max-w-[75ch] lg:max-w-[95ch]">
-      <Fieldset>
-        <FieldsetContent>
-          <h4 className="mb-1 text-xl font-[600]">Save Page</h4>
-          <p className="mb-2 text-sm text-gray-900 dark:text-gray-200">
-            In order to save your page, please tell us more about it.
-          </p>
-          <div className="flex flex-col gap-y-4">
-            <Input placeholder="Title" minLength={1} maxLength={48} required />
-            <Textarea placeholder="Description" rows={5} maxLength={300} />
-            <ul className="flex select-none flex-wrap items-center gap-4">
-              {tags.map((tag) => (
-                <Tag key={tag.id} {...tag} />
-              ))}
-              <li className="inline-flex h-10 rounded-md border border-gray-200 dark:border-gray-800">
-                <button
-                  type="button"
-                  title="Create tag"
-                  className="inline-flex w-full items-center justify-center px-2"
-                >
-                  <PlusIcon
-                    textRendering={"geometricPrecision"}
-                    className="text-gray-700 dark:text-gray-400"
-                  />
-                </button>
-              </li>
-            </ul>
-          </div>
+      <Fieldset className="m-auto w-full max-w-screen-sm md:max-w-[75ch] lg:max-w-[95ch]">
+        <FieldsetContent className="px-0">
+          <BlockEditor isHeaderVisible={false} />
         </FieldsetContent>
-        <FieldsetFooter>
-          <FieldsetAction>
-            <Button Size="sm">Save</Button>
-          </FieldsetAction>
-        </FieldsetFooter>
+        <Fieldset className="border-x-0 border-b-0">
+          <FieldsetContent>
+            <h4 className="mb-1 text-xl font-[600]">Save Page</h4>
+            <p className="mb-2 text-sm text-gray-900 dark:text-gray-200">
+              In order to save your page, please tell us more about it.
+            </p>
+            <div className="flex flex-col gap-y-4">
+              <Input placeholder="Title" minLength={1} maxLength={48} required />
+              <Textarea placeholder="Description" rows={5} maxLength={300} />
+              <ul className="flex select-none flex-wrap items-center gap-4">
+                {tags.map((tag) => (
+                  <Tag key={tag.id} {...tag} />
+                ))}
+                <li className="inline-flex h-10 rounded-md border border-gray-200 dark:border-gray-800">
+                  <button
+                    type="button"
+                    title="Create tag"
+                    className="inline-flex w-full items-center justify-center px-2"
+                  >
+                    <PlusIcon
+                      textRendering={"geometricPrecision"}
+                      className="text-gray-700 dark:text-gray-400"
+                    />
+                  </button>
+                </li>
+              </ul>
+            </div>
+          </FieldsetContent>
+          <FieldsetFooter>
+            <FieldsetAction>
+              <Button Size="sm">Save</Button>
+            </FieldsetAction>
+          </FieldsetFooter>
+        </Fieldset>
       </Fieldset>
     </div>
   );

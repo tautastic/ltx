@@ -1,18 +1,24 @@
-import type { FC, ReactNode } from "react";
+import type { FC, ForwardedRef, ReactNode } from "react";
 import twcx from "~/utils/twcx";
+import { forwardRef } from "react";
 
-const Fieldset: FC<{ children?: ReactNode; className?: string }> = (props) => {
-  return (
-    <div
-      className={twcx(
-        "relative rounded border border-gray-200 bg-white dark:border-gray-800 dark:bg-black",
-        props.className
-      )}
-    >
-      {props.children}
-    </div>
-  );
-};
+const Fieldset = forwardRef(
+  (props: { children?: ReactNode; className?: string }, ref: ForwardedRef<HTMLDivElement>) => {
+    return (
+      <div
+        ref={ref}
+        className={twcx(
+          "relative rounded border border-gray-200 bg-white dark:border-gray-800 dark:bg-black",
+          props.className
+        )}
+      >
+        {props.children}
+      </div>
+    );
+  }
+);
+
+Fieldset.displayName = "FieldSet";
 
 const FieldsetContent: FC<{ children?: ReactNode; className?: string }> = (props) => {
   return (
