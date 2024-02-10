@@ -29,26 +29,26 @@ export const ContentItemMenu = ({ editor }: ContentItemMenuProps) => {
 
   return (
     <DragHandle
+      className="m-auto max-w-6 scale-75 md:scale-100"
       pluginKey="ContentItemMenu"
       editor={editor}
       onNodeChange={data.handleNodeChange}
-      tippyOptions={{
-        placement: "left",
-        zIndex: 99,
-      }}
     >
       <div className="flex items-center gap-0.5">
-        <Toolbar.Button onClick={actions.handleAdd}>
-          <Icon name="Plus" />
-        </Toolbar.Button>
         <Popover.Root open={menuOpen} onOpenChange={setMenuOpen}>
           <Popover.Trigger asChild>
             <Toolbar.Button>
-              <Icon name="GripVertical" />
+              <Icon className="h-4 w-4" name="GripVertical" />
             </Toolbar.Button>
           </Popover.Trigger>
-          <Popover.Content side="bottom" align="start" sideOffset={8}>
-            <Surface className="flex min-w-[16rem] flex-col p-2">
+          <Popover.Content side="bottom" align="start" sideOffset={2}>
+            <Surface className="flex flex-col p-2 md:min-w-[16rem]">
+              <Popover.Close>
+                <DropdownButton onClick={actions.handleAdd}>
+                  <Icon name="Plus" />
+                  Add Node
+                </DropdownButton>
+              </Popover.Close>
               <Popover.Close>
                 <DropdownButton onClick={actions.resetTextFormatting}>
                   <Icon name="RemoveFormatting" />

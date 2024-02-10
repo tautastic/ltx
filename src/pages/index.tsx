@@ -13,7 +13,7 @@ import { Fieldset, FieldsetContent } from "~/components/ui/fieldset";
 const Home: NextPageWithAuthAndLayout = () => {
   return (
     <>
-      <div className="flex flex-col items-center justify-between gap-y-8 text-center md:gap-y-16">
+      <div className="flex flex-col items-center justify-between gap-y-8 px-4 text-center md:gap-y-16">
         <h1 className="-mb-2 flex flex-wrap items-center justify-center overflow-hidden text-5.5xl font-extrabold tracking-[-0.04em] subpixel-antialiased xs:text-7xl md:text-7.5xl xl:flex-nowrap xl:gap-x-3 xl:text-8xl">
           <span
             data-text="Quadratisch."
@@ -67,8 +67,8 @@ const Home: NextPageWithAuthAndLayout = () => {
           </a>
         </div>
       </div>
-      <Fieldset className="m-auto w-full sm:max-w-[70ch] md:max-w-[75ch] lg:max-w-[95ch]">
-        <FieldsetContent className="px-4">
+      <Fieldset className="m-auto w-full max-w-screen-sm md:max-w-[75ch] lg:max-w-[95ch]">
+        <FieldsetContent className="px-0">
           <BlockEditor isHeaderVisible={false} />
         </FieldsetContent>
       </Fieldset>
@@ -84,7 +84,7 @@ Home.getLayout = (page) => {
         <AuthDropdown />
       </Header>
       <Background />
-      <main className="flex min-h-screen flex-col items-center justify-start gap-y-16 px-6 py-24 invert-0 md:gap-y-14 md:py-32">
+      <main className="flex min-h-screen flex-col items-center justify-start gap-y-16 px-2 py-24 invert-0 md:gap-y-14 md:py-32">
         {page}
       </main>
       <Footer />

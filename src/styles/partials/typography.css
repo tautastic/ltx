@@ -1,6 +1,6 @@
 .ProseMirror {
   p {
-    @apply leading-relaxed first:mt-0 last:mb-0;
+    @apply text-sm first:mt-0 last:mb-0 md:text-base;
   }
 
   & > p {
@@ -8,27 +8,27 @@
   }
 
   h1 {
-    @apply text-3xl;
+    @apply text-2xl md:text-3xl;
   }
 
   h2 {
-    @apply text-2xl;
+    @apply text-xl md:text-2xl;
   }
 
   h3 {
-    @apply text-xl;
+    @apply text-lg md:text-xl;
   }
 
   h4 {
-    @apply text-lg;
+    @apply text-base md:text-lg;
   }
 
   h5 {
-    @apply text-base;
+    @apply text-sm md:text-base;
   }
 
   h6 {
-    @apply text-sm;
+    @apply text-xs md:text-sm;
   }
 
   h1,
