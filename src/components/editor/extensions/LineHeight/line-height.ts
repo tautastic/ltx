@@ -22,7 +22,7 @@ export const LineHeight = Extension.create({
   addGlobalAttributes() {
     return [
       {
-        types: ["paragraph"],
+        types: ["paragraph", "heading"],
         attributes: {
           class: {},
         },
