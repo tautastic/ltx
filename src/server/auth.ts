@@ -1,6 +1,6 @@
 import { type GetServerSidePropsContext } from "next";
 import { getServerSession, type NextAuthOptions } from "next-auth";
-import { PrismaAdapter } from "@next-auth/prisma-adapter";
+import { PrismaAdapter } from "@auth/prisma-adapter";
 import DiscordProvider, { type DiscordProfile } from "next-auth/providers/discord";
 import GithubProvider, { type GithubProfile } from "next-auth/providers/github";
 import GoogleProvider, { type GoogleProfile } from "next-auth/providers/google";
@@ -10,6 +10,7 @@ import { customAlphabet } from "nanoid";
 
 import { env } from "~/env.mjs";
 import { prisma } from "~/server/db";
+import { type Adapter } from "next-auth/adapters";
 
 const formatUserName = (p: string, u: string) => {
   const h1 = u.replaceAll(/[^a-zA-Z0-9_-]+/g, "") + "@" + p;
@@ -150,7 +151,7 @@ export const authOptions: NextAuthOptions = {
     updateAge: 60 * 60 * 24, // 1 day
   },
   secret: env.NEXTAUTH_SECRET,
-  adapter: PrismaAdapter(prisma),
+  adapter: PrismaAdapter(prisma) as Adapter,
 };
 
 /**
