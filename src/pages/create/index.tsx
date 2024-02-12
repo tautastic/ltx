@@ -13,35 +13,54 @@ import {
   FieldsetFooter,
 } from "~/components/ui/fieldset";
 import { BlockEditor } from "~/components/editor/BlockEditor";
-import React, { useRef, useState } from "react";
+import React, { useCallback, useRef, useState } from "react";
 import {
   Dialog,
+  DialogAction,
   DialogContent,
+  DialogFooter,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
 } from "~/components/ui/dialog";
-import { DialogBody } from "next/dist/client/components/react-dev-overlay/internal/components/Dialog";
 import { ColorPicker } from "~/components/editor/panels";
 import * as Popover from "@radix-ui/react-popover";
 import { Label } from "~/components/ui/label";
-import { Tag, type TagProps } from "~/components/ui/tag";
+import { Tag } from "~/components/tag";
+import api from "~/utils/api";
+import { useSession } from "next-auth/react";
+import { useQueryClient } from "@tanstack/react-query";
 
-type CreateTagDialogProps = {
-  newTagColor: string;
-  newTagName: string;
-  setNewTagColor: React.Dispatch<React.SetStateAction<string>>;
-  setNewTagName: React.Dispatch<React.SetStateAction<string>>;
-};
+const CreateTagDialog = () => {
+  const queryClient = useQueryClient();
+  const [dialogOpen, setDialogOpen] = useState(false);
+  const [newTagColor, setNewTagColor] = useState("#ffffff");
+  const [newTagName, setNewTagName] = useState("");
+  const newTagMutation = api.tags.createNewTag.useMutation();
+  const handleNewTagSubmit = useCallback(async () => {
+    if (newTagName.trim().length < 1) {
+      return;
+    }
 
-const CreateTagDialog = ({
-  newTagColor,
-  newTagName,
-  setNewTagColor,
-  setNewTagName,
-}: CreateTagDialogProps) => {
+    await newTagMutation.mutateAsync(
+      {
+        color: newTagColor,
+        name: newTagName,
+      },
+      {
+        onSuccess: () => {
+          queryClient.invalidateQueries({ stale: true });
+        },
+      }
+    );
+
+    setNewTagColor("#ffffff");
+    setNewTagName("");
+    setDialogOpen(false);
+  }, [newTagColor, newTagMutation, newTagName, queryClient]);
+
   return (
-    <Dialog>
+    <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
       <DialogTrigger
         type="button"
         title="Create tag"
@@ -56,12 +75,15 @@ const CreateTagDialog = ({
         <DialogHeader>
           <DialogTitle>Create new Tag</DialogTitle>
         </DialogHeader>
-        <DialogBody className="flex flex-col gap-y-4">
+        <div className="flex flex-col gap-y-4">
           <Input
+            required={true}
+            aria-required={true}
             type="text"
             aria-label="Tag Name"
             Size="default"
             placeholder="Name"
+            value={newTagName}
             onChange={(e) => setNewTagName(e.currentTarget.value)}
           />
           <Popover.Root>
@@ -91,35 +113,47 @@ const CreateTagDialog = ({
           </Popover.Root>
           <Label>Preview</Label>
           <ul className="select-none">
-            <Tag color={newTagColor} id={""} name={newTagName} readonly={true} />
+            <Tag
+              placeholder="Name"
+              color={newTagColor}
+              id={"newTagId"}
+              name={newTagName}
+              readonly={true}
+            />
           </ul>
-        </DialogBody>
+        </div>
+        <DialogFooter>
+          <DialogAction>
+            <Button onClick={handleNewTagSubmit} Size="sm">
+              Create
+            </Button>
+          </DialogAction>
+        </DialogFooter>
       </DialogContent>
     </Dialog>
   );
 };
 
 const Create: NextPageWithAuthAndLayout = () => {
+  const queryClient = useQueryClient();
   const editorContainerRef = useRef<HTMLDivElement>(null);
-  const [newTagName, setNewTagName] = useState("");
-  const [newTagColor, setNewTagColor] = useState("#ffffff");
-  const tags: TagProps[] = [
-    {
-      color: "#1e9de7",
-      id: "tag-1",
-      name: "Mathematics",
-    },
-    {
-      color: "#27b648",
-      id: "tag-2",
-      name: "Biology",
-    },
-    {
-      color: "#dcaa24",
-      id: "tag-3",
-      name: "English",
-    },
-  ];
+  const session = useSession().data;
+  const deleteTagByIdMutation = api.tags.deleteTagById.useMutation();
+
+  const handleDeleteTag = async (id: string) => {
+    await deleteTagByIdMutation.mutateAsync(id, {
+      onSuccess: () => {
+        queryClient.invalidateQueries({ stale: true });
+      },
+    });
+  };
+
+  if (!session || !session.user) {
+    return null;
+  }
+
+  const { data: tags } = api.tags.getTagListByAuthorId.useQuery(session?.user.id);
+
   return (
     <div className="flex w-full flex-col gap-y-10 sm:max-w-[70ch] md:max-w-[75ch] lg:max-w-[95ch]">
       <Fieldset
@@ -139,16 +173,12 @@ const Create: NextPageWithAuthAndLayout = () => {
               <Input placeholder="Title" minLength={1} maxLength={48} required />
               <Textarea placeholder="Description" rows={5} maxLength={300} />
               <ul className="flex select-none flex-wrap items-center gap-4">
-                {tags.map((tag) => (
-                  <Tag key={tag.id} {...tag} />
-                ))}
+                {tags &&
+                  tags.map((tag) => (
+                    <Tag onDelete={() => handleDeleteTag(tag.id)} key={tag.id} {...tag} />
+                  ))}
                 <li className="inline-flex h-10 rounded-md border border-gray-200 dark:border-gray-800">
-                  <CreateTagDialog
-                    newTagColor={newTagColor}
-                    newTagName={newTagName}
-                    setNewTagColor={setNewTagColor}
-                    setNewTagName={setNewTagName}
-                  />
+                  <CreateTagDialog />
                 </li>
               </ul>
             </div>

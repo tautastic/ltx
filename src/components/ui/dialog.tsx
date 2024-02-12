@@ -4,6 +4,7 @@ import * as React from "react";
 import * as DialogPrimitive from "@radix-ui/react-dialog";
 import { X } from "lucide-react";
 import twcx from "~/utils/twcx";
+import { FC, ReactNode } from "react";
 
 const Dialog = DialogPrimitive.Root;
 
@@ -20,7 +21,7 @@ const DialogOverlay = React.forwardRef<
   <DialogPrimitive.Overlay
     ref={ref}
     className={twcx(
-      "fixed inset-0 z-50 bg-black/80  data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0",
+      "fixed inset-0 z-50 bg-black/80 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0",
       className
     )}
     {...props}
@@ -62,11 +63,22 @@ DialogHeader.displayName = "DialogHeader";
 
 const DialogFooter = ({ className, ...props }: React.HTMLAttributes<HTMLDivElement>) => (
   <div
-    className={twcx("flex flex-col-reverse sm:flex-row sm:justify-end sm:space-x-2", className)}
+    className={twcx(
+      "relative mx-[-1.5rem] mb-[-1.5rem] flex min-h-[57px] items-center rounded-b border-t border-gray-200 bg-gray-50 px-6 py-3 dark:border-gray-800 dark:bg-gray-900",
+      className
+    )}
     {...props}
   />
 );
 DialogFooter.displayName = "DialogFooter";
+
+const DialogAction: FC<{ children?: ReactNode; className?: string }> = (props) => {
+  return (
+    <div className={twcx("ml-auto flex items-center justify-end", props.className)}>
+      {props.children}
+    </div>
+  );
+};
 
 const DialogTitle = React.forwardRef<
   React.ElementRef<typeof DialogPrimitive.Title>,
@@ -101,6 +113,7 @@ export {
   DialogContent,
   DialogHeader,
   DialogFooter,
+  DialogAction,
   DialogTitle,
   DialogDescription,
 };
