@@ -77,7 +77,7 @@ const AlertDialogTitle = forwardRef<
 >(({ className, ...props }, ref) => (
   <AlertDialogPrimitive.Title
     ref={ref}
-    className={twcx("text-2xl font-semibold text-gray-900", "dark:text-gray-50", className)}
+    className={twcx("text-xl font-semibold text-gray-900", "dark:text-gray-50", className)}
     {...props}
   />
 ));
@@ -102,14 +102,13 @@ const AlertDialogAction = forwardRef<HTMLButtonElement, ButtonProps>(
 );
 AlertDialogAction.displayName = AlertDialogPrimitive.Action.displayName;
 
-const AlertDialogCancel = forwardRef<
-  ElementRef<typeof AlertDialogPrimitive.Cancel>,
-  ComponentPropsWithoutRef<typeof AlertDialogPrimitive.Cancel>
->(({ className, ...props }, ref) => (
-  <AlertDialogPrimitive.Cancel asChild>
-    <Button Type="secondary" className={className} {...props} ref={ref} />
-  </AlertDialogPrimitive.Cancel>
-));
+const AlertDialogCancel = forwardRef<ElementRef<typeof AlertDialogPrimitive.Cancel>, ButtonProps>(
+  ({ className, ...props }, ref) => (
+    <AlertDialogPrimitive.Cancel asChild>
+      <Button Type="secondary" className={className} {...props} ref={ref} />
+    </AlertDialogPrimitive.Cancel>
+  )
+);
 AlertDialogCancel.displayName = AlertDialogPrimitive.Cancel.displayName;
 
 export {

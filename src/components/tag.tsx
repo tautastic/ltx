@@ -1,6 +1,17 @@
 import { TagIcon, XIcon } from "lucide-react";
 import React from "react";
 import twcx from "~/utils/twcx";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "~/components/ui/alert-dialog";
 
 export type TagProps = {
   color: string;
@@ -9,6 +20,30 @@ export type TagProps = {
   onDelete?: () => void;
   placeholder?: string;
   readonly?: boolean;
+};
+
+const DeleteAlert = ({ onDelete }: { onDelete?: () => void }) => {
+  return (
+    <AlertDialog>
+      <AlertDialogTrigger type="button" title="Delete tag" className="m-1 h-min">
+        <XIcon textRendering={"geometricPrecision"} className="h-4 w-4" />
+      </AlertDialogTrigger>
+      <AlertDialogContent>
+        <AlertDialogHeader>
+          <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
+          <AlertDialogDescription>
+            This action cannot be undone. This will permanently delete your tag.
+          </AlertDialogDescription>
+        </AlertDialogHeader>
+        <AlertDialogFooter>
+          <AlertDialogCancel Size="sm">Cancel</AlertDialogCancel>
+          <AlertDialogAction Size="sm" onClick={onDelete}>
+            Continue
+          </AlertDialogAction>
+        </AlertDialogFooter>
+      </AlertDialogContent>
+    </AlertDialog>
+  );
 };
 
 export const Tag = ({ color, id, name, onDelete, placeholder, readonly = false }: TagProps) => {
@@ -31,11 +66,7 @@ export const Tag = ({ color, id, name, onDelete, placeholder, readonly = false }
             <p className="break-keep">{name}</p>
           )}
         </label>
-        {!readonly && (
-          <button type="button" title="Delete tag" className="m-1 h-min">
-            <XIcon onClick={onDelete} textRendering={"geometricPrecision"} className="h-4 w-4" />
-          </button>
-        )}
+        {!readonly && <DeleteAlert onDelete={onDelete} />}
       </div>
     </li>
   );
