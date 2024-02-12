@@ -1,5 +1,5 @@
 import { type NextPageWithAuthAndLayout } from "~/lib/types";
-import { PlusIcon, TagIcon, XIcon } from "lucide-react";
+import { PlusIcon } from "lucide-react";
 import AuthDropdown from "~/components/auth-dropdown";
 import { Textarea } from "~/components/ui/textarea";
 import { Button } from "~/components/ui/button";
@@ -13,16 +13,96 @@ import {
   FieldsetFooter,
 } from "~/components/ui/fieldset";
 import { BlockEditor } from "~/components/editor/BlockEditor";
-import React, { useRef } from "react";
+import React, { useRef, useState } from "react";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "~/components/ui/dialog";
+import { DialogBody } from "next/dist/client/components/react-dev-overlay/internal/components/Dialog";
+import { ColorPicker } from "~/components/editor/panels";
+import * as Popover from "@radix-ui/react-popover";
+import { Label } from "~/components/ui/label";
+import { Tag, type TagProps } from "~/components/ui/tag";
 
-type TagProps = {
-  color: string;
-  id: string;
-  name: string;
+type CreateTagDialogProps = {
+  newTagColor: string;
+  newTagName: string;
+  setNewTagColor: React.Dispatch<React.SetStateAction<string>>;
+  setNewTagName: React.Dispatch<React.SetStateAction<string>>;
+};
+
+const CreateTagDialog = ({
+  newTagColor,
+  newTagName,
+  setNewTagColor,
+  setNewTagName,
+}: CreateTagDialogProps) => {
+  return (
+    <Dialog>
+      <DialogTrigger
+        type="button"
+        title="Create tag"
+        className="inline-flex w-full items-center justify-center px-2"
+      >
+        <PlusIcon
+          textRendering={"geometricPrecision"}
+          className="text-gray-700 dark:text-gray-400"
+        />
+      </DialogTrigger>
+      <DialogContent>
+        <DialogHeader>
+          <DialogTitle>Create new Tag</DialogTitle>
+        </DialogHeader>
+        <DialogBody className="flex flex-col gap-y-4">
+          <Input
+            type="text"
+            aria-label="Tag Name"
+            Size="default"
+            placeholder="Name"
+            onChange={(e) => setNewTagName(e.currentTarget.value)}
+          />
+          <Popover.Root>
+            <Input
+              type="text"
+              aria-label="Tag Color"
+              Size="default"
+              value={newTagColor}
+              onChange={(e) => {
+                setNewTagColor(e.currentTarget.value);
+              }}
+              Suffix={
+                <Popover.Trigger>
+                  <div
+                    style={{
+                      color: newTagColor,
+                      backgroundColor: newTagColor,
+                    }}
+                    className={"h-5 w-5 rounded bg-gray-100 shadow-sm dark:bg-gray-800"}
+                  />
+                </Popover.Trigger>
+              }
+            />
+            <Popover.Content className={"z-10"} sideOffset={10}>
+              <ColorPicker hideFooter={true} color={newTagColor} onChange={setNewTagColor} />
+            </Popover.Content>
+          </Popover.Root>
+          <Label>Preview</Label>
+          <ul className="select-none">
+            <Tag color={newTagColor} id={""} name={newTagName} readonly={true} />
+          </ul>
+        </DialogBody>
+      </DialogContent>
+    </Dialog>
+  );
 };
 
 const Create: NextPageWithAuthAndLayout = () => {
   const editorContainerRef = useRef<HTMLDivElement>(null);
+  const [newTagName, setNewTagName] = useState("");
+  const [newTagColor, setNewTagColor] = useState("#ffffff");
   const tags: TagProps[] = [
     {
       color: "#1e9de7",
@@ -46,10 +126,10 @@ const Create: NextPageWithAuthAndLayout = () => {
         ref={editorContainerRef}
         className="m-auto w-full max-w-screen-sm opacity-0 md:max-w-[75ch] lg:max-w-[95ch]"
       >
-        <FieldsetContent className="px-0">
+        <FieldsetContent className="min-h-[30ch] px-0">
           <BlockEditor containerRef={editorContainerRef} isHeaderVisible={false} />
         </FieldsetContent>
-        <Fieldset className="border-x-0 border-b-0">
+        <Fieldset className="rounded-none border-x-0 border-b-0">
           <FieldsetContent>
             <h4 className="mb-1 text-xl font-[600]">Save Page</h4>
             <p className="mb-2 text-sm text-gray-900 dark:text-gray-200">
@@ -63,16 +143,12 @@ const Create: NextPageWithAuthAndLayout = () => {
                   <Tag key={tag.id} {...tag} />
                 ))}
                 <li className="inline-flex h-10 rounded-md border border-gray-200 dark:border-gray-800">
-                  <button
-                    type="button"
-                    title="Create tag"
-                    className="inline-flex w-full items-center justify-center px-2"
-                  >
-                    <PlusIcon
-                      textRendering={"geometricPrecision"}
-                      className="text-gray-700 dark:text-gray-400"
-                    />
-                  </button>
+                  <CreateTagDialog
+                    newTagColor={newTagColor}
+                    newTagName={newTagName}
+                    setNewTagColor={setNewTagColor}
+                    setNewTagName={setNewTagName}
+                  />
                 </li>
               </ul>
             </div>
@@ -85,23 +161,6 @@ const Create: NextPageWithAuthAndLayout = () => {
         </Fieldset>
       </Fieldset>
     </div>
-  );
-};
-
-const Tag = ({ color, id, name }: TagProps) => {
-  return (
-    <li className="h-10 flex-1 text-sm font-medium">
-      <input type="checkbox" id={id} value={id} className="peer hidden" />
-      <div className="flex justify-between gap-x-6 rounded border border-gray-200 opacity-60 peer-checked:border-blue-600 peer-checked:opacity-100 dark:border-gray-800">
-        <label htmlFor={id} className="flex flex-1 cursor-pointer items-center gap-x-1.5 py-2 pl-3">
-          <TagIcon textRendering={"geometricPrecision"} className="h-4 w-4" color={color} />
-          <p className="break-keep">{name}</p>
-        </label>
-        <button type="button" title="Delete tag" className="m-1 h-min">
-          <XIcon textRendering={"geometricPrecision"} className="h-4 w-4" />
-        </button>
-      </div>
-    </li>
   );
 };
 
