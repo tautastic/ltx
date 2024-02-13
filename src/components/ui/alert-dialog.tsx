@@ -15,9 +15,7 @@ const AlertDialogTrigger = AlertDialogPrimitive.Trigger;
 
 const AlertDialogPortal = ({ children, ...props }: AlertDialogPrimitive.AlertDialogPortalProps) => (
   <AlertDialogPrimitive.Portal {...props}>
-    <div className="fixed inset-0 z-50 flex items-end justify-center sm:items-center">
-      {children}
-    </div>
+    <div className="fixed inset-0 z-50 flex items-center justify-center">{children}</div>
   </AlertDialogPrimitive.Portal>
 );
 AlertDialogPortal.displayName = AlertDialogPrimitive.Portal.displayName;
@@ -46,7 +44,7 @@ const AlertDialogContent = forwardRef<
     <AlertDialogPrimitive.Content
       ref={ref}
       className={twcx(
-        "fixed z-50 flex w-full scale-100 flex-col overflow-hidden rounded-t border-t bg-white animate-in fade-in-90 slide-in-from-bottom-10 dark:border-gray-700 dark:bg-black sm:max-w-lg sm:rounded-lg sm:border sm:zoom-in-90 sm:slide-in-from-bottom-0",
+        "fixed z-50 flex w-full max-w-lg scale-100 flex-col overflow-hidden rounded-lg rounded-t border border-t bg-white animate-in fade-in-90 zoom-in-90 dark:border-gray-700 dark:bg-black",
         className
       )}
       {...props}
