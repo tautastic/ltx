@@ -30,6 +30,7 @@ declare module "next-auth" {
       email: string;
       id: string;
       image?: string | null;
+      isVerified: boolean;
       name: string;
       username: string;
     };
@@ -39,6 +40,7 @@ declare module "next-auth" {
     email: string;
     id: string;
     image?: string | null;
+    isVerified: boolean;
     name: string;
     username: string;
   }
@@ -54,6 +56,7 @@ declare module "next-auth" {
 export const authOptions: NextAuthOptions = {
   providers: [
     DiscordProvider({
+      allowDangerousEmailAccountLinking: true,
       clientId: env.DISCORD_ID,
       clientSecret: env.DISCORD_SECRET,
       profile(profile: DiscordProfile) {
@@ -65,63 +68,72 @@ export const authOptions: NextAuthOptions = {
           profile.image_url = `https://cdn.discordapp.com/avatars/${profile.id}/${profile.avatar}.${format}`;
         }
         return {
+          email: profile.email,
           id: profile.id,
+          isVerified: profile.verified,
+          image: profile.image_url,
           name: profile.username,
           username: formatUserName("1", profile.username),
-          email: profile.email,
-          image: profile.image_url,
         };
       },
     }),
     GithubProvider({
+      allowDangerousEmailAccountLinking: true,
       clientId: env.GITHUB_ID,
       clientSecret: env.GITHUB_SECRET,
       profile(profile: GithubProfile) {
         return {
+          email: profile.email || "",
           id: profile.id.toString(),
+          isVerified: profile.two_factor_authentication,
+          image: profile.avatar_url,
           name: profile.name || profile.login,
           username: formatUserName("2", profile.login),
-          email: profile.email || "",
-          image: profile.avatar_url,
         };
       },
     }),
     GoogleProvider({
+      allowDangerousEmailAccountLinking: true,
       clientId: env.GOOGLE_ID,
       clientSecret: env.GOOGLE_SECRET,
       profile(profile: GoogleProfile) {
         return {
+          email: profile.email,
           id: profile.sub,
+          isVerified: profile.email_verified,
+          image: profile.picture.split("=")[0],
           name: profile.name,
           username: formatUserName("3", profile.name),
-          email: profile.email,
-          image: profile.picture.split("=")[0],
         };
       },
     }),
     SpotifyProvider({
+      allowDangerousEmailAccountLinking: false,
       clientId: env.SPOTIFY_ID,
       clientSecret: env.SPOTIFY_SECRET,
       profile(profile: SpotifyProfile) {
         return {
+          email: profile.email,
           id: profile.id,
+          isVerified: false,
+          image: profile.images[0]?.url,
           name: profile.display_name,
           username: formatUserName("4", profile.id),
-          email: profile.email,
-          image: profile.images[0]?.url,
         };
       },
     }),
     TwitchProvider({
+      allowDangerousEmailAccountLinking: true,
       clientId: env.TWITCH_ID,
       clientSecret: env.TWITCH_SECRET,
       profile(profile: TwitchProfile) {
         return {
+          email: profile.email,
           id: profile.sub,
+          isVerified: true,
+          image: profile.picture,
           name: profile.preferred_username,
           username: formatUserName("4", profile.preferred_username),
-          email: profile.email,
-          image: profile.picture,
         };
       },
     }),
@@ -130,17 +142,25 @@ export const authOptions: NextAuthOptions = {
     signIn: "/auth/signin",
   },
   callbacks: {
-    signIn({ profile }) {
-      // Don't allow sign in if the user doesn't have an email address
-      return profile?.email !== "";
+    signIn({ account, user }) {
+      if (!user?.email || user?.email.length < 1) {
+        return false;
+      }
+
+      if (account?.provider === "Spotify") {
+        return true;
+      }
+
+      return user.isVerified;
     },
     session({ session, user }) {
       if (session.user) {
-        session.user.id = user.id;
-        session.user.username = user.username;
-        session.user.name = user.name;
         session.user.email = user.email;
+        session.user.id = user.id;
+        session.user.isVerified = user.isVerified;
         session.user.image = user.image;
+        session.user.name = user.name;
+        session.user.username = user.username;
       }
       return session;
     },

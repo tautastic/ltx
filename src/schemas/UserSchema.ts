@@ -7,9 +7,9 @@ export const UserSchema = z.object({
   name: z.string().optional(),
   username: z.string().optional(),
   email: z.string().optional(),
-  emailVerified: z.coerce.date().optional(),
   image: z.string().optional(),
   isPrivate: z.boolean(),
+  isVerified: z.boolean(),
 });
 
 export type User = z.infer<typeof UserSchema>;

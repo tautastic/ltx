@@ -43,6 +43,7 @@ model User {
   emailVerified DateTime?
   image         String?
   isPrivate     Boolean   @default(false)
+  isVerified    Boolean   @default(false)
   accounts      Account[]
   sessions      Session[]
   authoredTags  Tag[]     @relation("AuthoredTags")
