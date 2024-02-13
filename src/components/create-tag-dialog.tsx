@@ -12,27 +12,60 @@ import {
 } from "~/components/ui/dialog";
 import { PlusIcon } from "lucide-react";
 import { Input } from "~/components/ui/input";
-import * as Popover from "@radix-ui/react-popover/dist";
+import * as Popover from "@radix-ui/react-popover";
 import { ColorPicker } from "~/components/editor/panels";
 import { Label } from "~/components/ui/label";
 import { Tag } from "~/components/tag";
 import { Button } from "~/components/ui/button";
+import { type SubmitHandler, useForm } from "react-hook-form";
+import { z } from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "~/components/ui/form";
+
+const formSchema = z.object({
+  color: z.string().regex(/^#(?:[0-9a-f]{3}){1,2}$/i, {
+    message: "Color must be a valid Hex value.",
+  }),
+  name: z.string().min(2, {
+    message: "Name must be at least 2 characters.",
+  }),
+});
+
+const defaultValues = {
+  color: "#FFFFFF",
+  name: "",
+};
+
+type formSchemaType = z.infer<typeof formSchema>;
 
 const CreateTagDialog = () => {
   const queryClient = useQueryClient();
   const [dialogOpen, setDialogOpen] = useState(false);
-  const [newTagColor, setNewTagColor] = useState("#ffffff");
-  const [newTagName, setNewTagName] = useState("");
   const newTagMutation = api.tags.createNewTag.useMutation();
-  const handleNewTagSubmit = useCallback(async () => {
-    if (newTagName.trim().length < 1) {
-      return;
-    }
 
+  const form = useForm<formSchemaType>({
+    resolver: zodResolver(formSchema),
+    defaultValues,
+    mode: "onBlur",
+  });
+
+  const onDialogOpen = useCallback(() => {
+    form.reset(form.formState.defaultValues);
+    setDialogOpen(!dialogOpen);
+  }, [dialogOpen, form]);
+
+  const onSubmit: SubmitHandler<formSchemaType> = async (data) => {
     await newTagMutation.mutateAsync(
       {
-        color: newTagColor,
-        name: newTagName,
+        color: data.color,
+        name: data.name,
       },
       {
         onSuccess: () => {
@@ -41,13 +74,11 @@ const CreateTagDialog = () => {
       }
     );
 
-    setNewTagColor("#ffffff");
-    setNewTagName("");
-    setDialogOpen(false);
-  }, [newTagColor, newTagMutation, newTagName, queryClient]);
+    onDialogOpen();
+  };
 
   return (
-    <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
+    <Dialog open={dialogOpen} onOpenChange={onDialogOpen}>
       <DialogTrigger
         type="button"
         title="Create tag"
@@ -62,60 +93,88 @@ const CreateTagDialog = () => {
         <DialogHeader>
           <DialogTitle>Create new Tag</DialogTitle>
         </DialogHeader>
-        <div className="flex flex-col gap-y-4">
-          <Input
-            required={true}
-            aria-required={true}
-            type="text"
-            aria-label="Tag Name"
-            Size="default"
-            placeholder="Name"
-            value={newTagName}
-            onChange={(e) => setNewTagName(e.currentTarget.value)}
-          />
-          <Popover.Root>
-            <Input
-              type="text"
-              aria-label="Tag Color"
-              Size="default"
-              value={newTagColor}
-              onChange={(e) => {
-                setNewTagColor(e.currentTarget.value);
-              }}
-              Suffix={
-                <Popover.Trigger>
-                  <div
-                    style={{
-                      color: newTagColor,
-                      backgroundColor: newTagColor,
-                    }}
-                    className={"h-5 w-5 rounded bg-gray-100 shadow-sm dark:bg-gray-800"}
-                  />
-                </Popover.Trigger>
-              }
+        <Form {...form}>
+          <form onSubmit={form.handleSubmit(onSubmit)} className="flex flex-col gap-y-4">
+            <FormField
+              control={form.control}
+              name="name"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Name</FormLabel>
+                  <FormControl>
+                    <Input
+                      type="text"
+                      aria-label="Name"
+                      Size="default"
+                      placeholder="Name"
+                      {...field}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
             />
-            <Popover.Content className={"z-10"} sideOffset={10}>
-              <ColorPicker hideFooter={true} color={newTagColor} onChange={setNewTagColor} />
-            </Popover.Content>
-          </Popover.Root>
-          <Label>Preview</Label>
-          <ul className="select-none">
-            <Tag
-              placeholder="Name"
-              color={newTagColor}
-              id={"newTagId"}
-              name={newTagName}
-              readonly={true}
+            <FormField
+              control={form.control}
+              name="color"
+              render={({ field }) => (
+                <>
+                  <FormItem>
+                    <FormLabel>Color</FormLabel>
+                    <FormControl>
+                      <Popover.Root>
+                        <Input
+                          type="text"
+                          aria-label="Color"
+                          Size="default"
+                          {...field}
+                          Suffix={
+                            <Popover.Trigger>
+                              <div
+                                style={{
+                                  color: field.value,
+                                  backgroundColor: field.value,
+                                }}
+                                className={"h-5 w-5 rounded bg-gray-100 shadow-sm dark:bg-gray-800"}
+                              />
+                            </Popover.Trigger>
+                          }
+                        />
+                        <Popover.Content className={"z-10"} sideOffset={10}>
+                          <ColorPicker
+                            hideFooter={true}
+                            color={field.value}
+                            onChange={field.onChange}
+                          />
+                        </Popover.Content>
+                      </Popover.Root>
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                  <Label>Preview</Label>
+                  <ul className="select-none">
+                    <Tag
+                      placeholder="Name"
+                      color={
+                        form.getFieldState("color").isDirty ? defaultValues.color : field.value
+                      }
+                      id={"newTagId"}
+                      name={form.getValues("name")}
+                      readonly={true}
+                    />
+                  </ul>
+                </>
+              )}
             />
-          </ul>
-        </div>
-        <DialogFooter>
-          <DialogAction>
-            <Button onClick={handleNewTagSubmit} Size="sm">
-              Create
-            </Button>
-          </DialogAction>
-        </DialogFooter>
+            <DialogFooter>
+              <DialogAction>
+                <Button type="submit" Size="sm">
+                  Create
+                </Button>
+              </DialogAction>
+            </DialogFooter>
+          </form>
+        </Form>
       </DialogContent>
     </Dialog>
   );
