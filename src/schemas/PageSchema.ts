@@ -13,7 +13,7 @@ export const PageSchema = z.object({
 
 export type Page = z.infer<typeof PageSchema>;
 
-export const PageCreateOneInputSchema = z.object({
+export const CreateNewPageSchema = z.object({
   pageArgs: z.object({
     title: z.string(),
     description: z.string().optional(),

@@ -16,7 +16,7 @@ const Checkbox = forwardRef<
     )}
     {...props}
   >
-    <CheckboxPrimitive.Indicator className={twcx("flex items-center justify-center")}>
+    <CheckboxPrimitive.Indicator>
       <Check className="h-4 w-4" />
     </CheckboxPrimitive.Indicator>
   </CheckboxPrimitive.Root>
