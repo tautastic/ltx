@@ -12,7 +12,7 @@ import {
   FieldsetFooter,
 } from "~/components/ui/fieldset";
 import { BlockEditor } from "~/components/editor/BlockEditor";
-import React, { useRef } from "react";
+import React, { useRef, useState } from "react";
 import { Tag } from "~/components/tag";
 import api from "~/utils/api";
 import { useSession } from "next-auth/react";
@@ -32,6 +32,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { useBlockEditor } from "~/lib/hooks/useBlockEditor";
 import { Checkbox } from "~/components/ui/checkbox";
+import toast from "react-hot-toast";
 
 const formSchema = z.object({
   description: z.string().max(300, {
@@ -63,6 +64,7 @@ const Create: NextPageWithAuthAndLayout = () => {
   const deleteTagByIdMutation = api.tags.deleteTagById.useMutation();
   const newPageMutation = api.pages.createNewPage.useMutation();
   const { editor } = useBlockEditor();
+  const [selectedTagIds, setSelectedTagIds] = useState<string[]>([]);
 
   const form = useForm<formSchemaType>({
     resolver: zodResolver(formSchema),
@@ -70,15 +72,28 @@ const Create: NextPageWithAuthAndLayout = () => {
   });
 
   const onSubmit: SubmitHandler<formSchemaType> = async (data) => {
-    await newPageMutation.mutateAsync({
-      selectedTagIds: [],
-      pageArgs: {
-        title: data.title,
-        description: data.description,
-        isPrivate: data.isPrivate,
-        content: JSON.stringify(editor?.getJSON()),
-      },
-    });
+    try {
+      const res = await newPageMutation.mutateAsync({
+        selectedTagIds,
+        pageArgs: {
+          title: data.title,
+          description: data.description,
+          isPrivate: data.isPrivate,
+          content: JSON.stringify(editor?.getJSON()),
+        },
+      });
+
+      if (res.id) {
+        toast.success("Document created successfully!");
+      } else {
+        toast.error("Error creating document!");
+      }
+    } catch (e) {
+      toast.error("Error creating document!");
+    } finally {
+      form.reset(defaultValues);
+      setSelectedTagIds([]);
+    }
   };
 
   const handleDeleteTag = async (id: string) => {
@@ -150,7 +165,14 @@ const Create: NextPageWithAuthAndLayout = () => {
                   <ul className="flex select-none flex-wrap items-center gap-4">
                     {tags &&
                       tags.map((tag) => (
-                        <Tag onDelete={() => handleDeleteTag(tag.id)} key={tag.id} {...tag} />
+                        <Tag
+                          onClick={() => {
+                            setSelectedTagIds([...selectedTagIds, tag.id]);
+                          }}
+                          onDelete={() => handleDeleteTag(tag.id)}
+                          key={tag.id}
+                          {...tag}
+                        />
                       ))}
                     <li className="inline-flex h-10 rounded-md border border-gray-200 dark:border-gray-800">
                       <CreateTagDialog />

@@ -17,6 +17,7 @@ export type TagProps = {
   color: string;
   id: string;
   name: string;
+  onClick?: () => void;
   onDelete?: () => void;
   placeholder?: string;
   readonly?: boolean;
@@ -46,12 +47,20 @@ const DeleteAlert = ({ onDelete }: { onDelete?: () => void }) => {
   );
 };
 
-export const Tag = ({ color, id, name, onDelete, placeholder, readonly = false }: TagProps) => {
+export const Tag = ({
+  color,
+  id,
+  name,
+  onClick,
+  onDelete,
+  placeholder,
+  readonly = false,
+}: TagProps) => {
   const showPlaceholder = name.trim().length < 1 && placeholder && placeholder.trim().length > 0;
 
   return (
     <li className="h-10 flex-1 text-sm font-medium">
-      <input type="checkbox" id={id} value={id} className="peer hidden" />
+      <input onClick={onClick} type="checkbox" id={id} value={id} className="peer hidden" />
       <div
         className={twcx(
           "flex justify-between gap-x-6 rounded border border-gray-200 dark:border-gray-800",

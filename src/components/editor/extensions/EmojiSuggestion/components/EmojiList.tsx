@@ -96,7 +96,8 @@ const EmojiList = forwardRef((props: EmojiListProps, ref) => {
           data-emoji-name={item.name}
         >
           {item.fallbackImage ? (
-            <Image src={item.fallbackImage} className="h-5 w-5" alt="emoji" />
+            // eslint-disable-next-line @next/next/no-img-element
+            <img src={item.fallbackImage} className="h-5 w-5" alt="emoji" />
           ) : (
             item.emoji
           )}{" "}
