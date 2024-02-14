@@ -28,8 +28,8 @@ import {
   FormLabel,
   FormMessage,
 } from "~/components/ui/form";
-import toast from "react-hot-toast";
 import { TRPCClientError } from "@trpc/client";
+import { useToast } from "~/components/ui/use-toast";
 
 const formSchema = z.object({
   color: z.string().regex(/^#(?:[0-9a-f]{3}){1,2}$/i, {
@@ -41,7 +41,7 @@ const formSchema = z.object({
 });
 
 const defaultValues = {
-  color: "#FFFFFF",
+  color: "#2285FA",
   name: "",
 };
 
@@ -49,6 +49,7 @@ type formSchemaType = z.infer<typeof formSchema>;
 
 const CreateTagDialog = () => {
   const queryClient = useQueryClient();
+  const { toast } = useToast();
   const [dialogOpen, setDialogOpen] = useState(false);
   const newTagMutation = api.tags.createNewTag.useMutation();
 
@@ -77,15 +78,27 @@ const CreateTagDialog = () => {
       );
 
       if (res.id) {
-        toast.success("Tag created successfully!");
+        toast({
+          title: "Wuhuu 🎉",
+          description: "Tag created successfully.",
+        });
       } else {
-        toast.error("Error creating tag!");
+        toast({
+          title: "Uh oh! Something went wrong.",
+          description: "Error creating tag.",
+        });
       }
     } catch (e) {
       if (e instanceof TRPCClientError) {
-        toast.error(e?.message);
+        toast({
+          title: "Uh oh! Something went wrong.",
+          description: e?.message,
+        });
       } else {
-        toast.error("Error creating tag!");
+        toast({
+          title: "Uh oh! Something went wrong.",
+          description: "Error creating tag.",
+        });
       }
     } finally {
       onDialogOpen();
@@ -170,9 +183,7 @@ const CreateTagDialog = () => {
                   <ul className="select-none">
                     <Tag
                       placeholder="Name"
-                      color={
-                        form.getFieldState("color").isDirty ? defaultValues.color : field.value
-                      }
+                      color={field.value}
                       id={"newTagId"}
                       name={form.getValues("name")}
                       readonly={true}

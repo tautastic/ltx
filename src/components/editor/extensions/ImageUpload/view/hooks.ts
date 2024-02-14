@@ -1,9 +1,10 @@
 import { type DragEvent, useCallback, useEffect, useRef, useState } from "react";
-import toast from "react-hot-toast";
 import API from "~/lib/image-upload-api";
+import { useToast } from "~/components/ui/use-toast";
 
 export const useUploader = ({ onUpload }: { onUpload: (url: string) => void }) => {
   const [loading, setLoading] = useState(false);
+  const { toast } = useToast();
 
   const uploadFile = useCallback(async () => {
     setLoading(true);
@@ -13,10 +14,13 @@ export const useUploader = ({ onUpload }: { onUpload: (url: string) => void }) =
       onUpload(url);
     } catch (errPayload: any) {
       const error = errPayload?.response?.data?.error || "Something went wrong";
-      toast.error(error);
+      toast({
+        title: "Error",
+        description: error,
+      });
     }
     setLoading(false);
-  }, [onUpload]);
+  }, [onUpload, toast]);
 
   return { loading, uploadFile };
 };

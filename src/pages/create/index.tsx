@@ -32,7 +32,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { useBlockEditor } from "~/lib/hooks/useBlockEditor";
 import { Checkbox } from "~/components/ui/checkbox";
-import toast from "react-hot-toast";
+import { useToast } from "~/components/ui/use-toast";
 
 const formSchema = z.object({
   description: z.string().max(300, {
@@ -59,11 +59,12 @@ type formSchemaType = z.infer<typeof formSchema>;
 
 const Create: NextPageWithAuthAndLayout = () => {
   const queryClient = useQueryClient();
+  const { editor } = useBlockEditor();
+  const { toast } = useToast();
+  const { data: session } = useSession();
   const editorContainerRef = useRef<HTMLDivElement>(null);
-  const session = useSession().data;
   const deleteTagByIdMutation = api.tags.deleteTagById.useMutation();
   const newPageMutation = api.pages.createNewPage.useMutation();
-  const { editor } = useBlockEditor();
   const [selectedTagIds, setSelectedTagIds] = useState<string[]>([]);
 
   const form = useForm<formSchemaType>({
@@ -84,12 +85,21 @@ const Create: NextPageWithAuthAndLayout = () => {
       });
 
       if (res.id) {
-        toast.success("Document created successfully!");
+        toast({
+          title: "Wuhuu 🎉",
+          description: "Document created successfully.",
+        });
       } else {
-        toast.error("Error creating document!");
+        toast({
+          title: "Uh oh! Something went wrong.",
+          description: "Error creating document.",
+        });
       }
     } catch (e) {
-      toast.error("Error creating document!");
+      toast({
+        title: "Uh oh! Something went wrong.",
+        description: "Error creating document.",
+      });
     } finally {
       form.reset(defaultValues);
       setSelectedTagIds([]);

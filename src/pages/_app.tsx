@@ -8,10 +8,10 @@ import NextNProgress from "nextjs-progressbar";
 import SEO from "next-seo.config";
 import Head from "next/head";
 
+import { Toaster } from "~/components/ui/toaster";
 import { type NextPageWithAuthAndLayout } from "~/lib/types";
 import api from "~/utils/api";
 import "~/styles/index.css";
-import { Toaster } from "react-hot-toast";
 
 type AppPropsWithAuthAndLayout = AppProps<{ session: Session | null }> & {
   Component: NextPageWithAuthAndLayout;
@@ -41,7 +41,7 @@ const MyApp = ({ Component, pageProps: { session, ...pageProps } }: AppPropsWith
           ) : (
             getLayout(<Component {...pageProps} />)
           )}
-          <Toaster position={"bottom-right"} />
+          <Toaster />
         </ThemeProvider>
       </SessionProvider>
     </>
