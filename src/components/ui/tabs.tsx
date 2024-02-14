@@ -28,7 +28,7 @@ const TabsTrigger = React.forwardRef<
   <TabsPrimitive.Trigger
     ref={ref}
     className={twcx(
-      "inline-flex h-full flex-1 items-center justify-center whitespace-nowrap border-b-2 border-gray-200 px-3 py-1.5 text-sm font-medium transition-all focus-visible:outline-none disabled:pointer-events-none disabled:opacity-50 data-[state=active]:border-b-blue-300 data-[state=active]:text-black data-[state=active]:shadow-sm dark:border-b dark:border-gray-800 dark:data-[state=active]:border-b-blue-500 dark:data-[state=active]:text-blue-500",
+      "inline-flex h-full flex-1 items-center justify-center whitespace-nowrap border-b-4 border-gray-200 px-3 py-1.5 text-sm font-medium transition-all focus-visible:outline-none disabled:pointer-events-none disabled:opacity-50 data-[state=active]:border-b-blue-300 data-[state=active]:text-black data-[state=active]:shadow-sm dark:border-b dark:border-gray-800 dark:data-[state=active]:border-b-blue-500 dark:data-[state=active]:text-blue-500",
       className
     )}
     {...props}

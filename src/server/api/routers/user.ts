@@ -26,7 +26,6 @@ export const userRouter = createTRPCRouter({
               title: true,
               description: true,
               isPrivate: true,
-              authorId: true,
             },
             where: {
               OR: [
@@ -47,7 +46,6 @@ export const userRouter = createTRPCRouter({
               title: true,
               description: true,
               isPrivate: true,
-              authorId: true,
             },
             where: {
               OR: [

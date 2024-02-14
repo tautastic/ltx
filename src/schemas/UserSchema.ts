@@ -18,8 +18,7 @@ export const UserProfileSchema = UserSchema.extend({
   authoredPages: z
     .lazy(() =>
       PageSchema.omit({
-        createdAt: true,
-        updatedAt: true,
+        authorId: true,
         content: true,
       })
     )
@@ -27,8 +26,7 @@ export const UserProfileSchema = UserSchema.extend({
   starredPages: z
     .lazy(() =>
       PageSchema.omit({
-        createdAt: true,
-        updatedAt: true,
+        authorId: true,
         content: true,
       })
     )
