@@ -10,33 +10,29 @@ import { Avatar, AvatarImage } from "~/components/ui/avatar";
 export const getServerSideProps = async (
   context: GetServerSidePropsContext<{ username: string }>
 ) => {
-  const profileName = context.params?.username as string;
-
-  if (!profileName || profileName.trim().length < 1) {
-    return { notFound: true };
+  if (context.params && context.params.username) {
+    const { username } = context.params;
+    // Perform user existence check
+    const profileExists = await ssr.users.getExistsByUsername.fetch(username);
+    if (profileExists) {
+      // Only prefetch and dehydrate if the user exists
+      await ssr.users.getProfileByUsername.prefetch(username);
+      return {
+        props: {
+          trpcState: ssr.dehydrate(),
+          username,
+        },
+      };
+    }
   }
 
-  // Perform user existence check
-  const profileExists = await ssr.users.getExistsByUsername.fetch(profileName);
-
-  if (!profileExists) {
-    return { notFound: true };
-  }
-
-  // Only prefetch and dehydrate if the user exists
-  await ssr.users.getProfileByUsername.prefetch(profileName);
-  return {
-    props: {
-      trpcState: ssr.dehydrate(),
-      profileName,
-    },
-  };
+  return { notFound: true };
 };
 
 const ProfilePage: NextPageWithAuthAndLayout<
   InferGetServerSidePropsType<typeof getServerSideProps>
-> = (props) => {
-  const { data: userProfile, status } = api.users.getProfileByUsername.useQuery(props.profileName);
+> = ({ username }) => {
+  const { data: userProfile, status } = api.users.getProfileByUsername.useQuery(username);
 
   if (status !== "success") {
     // won't happen since the query has been prefetched
