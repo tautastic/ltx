@@ -33,6 +33,7 @@ import { z } from "zod";
 import { useBlockEditor } from "~/lib/hooks/useBlockEditor";
 import { Checkbox } from "~/components/ui/checkbox";
 import { useToast } from "~/components/ui/use-toast";
+import { Label } from "~/components/ui/label";
 
 const formSchema = z.object({
   description: z.string().max(300, {
@@ -172,22 +173,25 @@ const Create: NextPageWithAuthAndLayout = () => {
                       </FormItem>
                     )}
                   />
-                  <ul className="flex select-none flex-wrap items-center gap-4">
-                    {tags &&
-                      tags.map((tag) => (
-                        <Tag
-                          onClick={() => {
-                            setSelectedTagIds([...selectedTagIds, tag.id]);
-                          }}
-                          onDelete={() => handleDeleteTag(tag.id)}
-                          key={tag.id}
-                          {...tag}
-                        />
-                      ))}
-                    <li className="inline-flex h-10 rounded-md border border-gray-200 dark:border-gray-800">
-                      <CreateTagDialog />
-                    </li>
-                  </ul>
+                  <div>
+                    <Label>Tags</Label>
+                    <ul className="mt-1 flex select-none flex-wrap items-center gap-4">
+                      {tags &&
+                        tags.map((tag) => (
+                          <Tag
+                            onClick={() => {
+                              setSelectedTagIds([...selectedTagIds, tag.id]);
+                            }}
+                            onDelete={() => handleDeleteTag(tag.id)}
+                            key={tag.id}
+                            {...tag}
+                          />
+                        ))}
+                      <li className="inline-flex h-10 rounded-md border border-gray-200 dark:border-gray-800">
+                        <CreateTagDialog />
+                      </li>
+                    </ul>
+                  </div>
                   <FormField
                     control={form.control}
                     name="isPrivate"
