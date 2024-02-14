@@ -28,6 +28,8 @@ import {
   FormLabel,
   FormMessage,
 } from "~/components/ui/form";
+import toast from "react-hot-toast";
+import { TRPCClientError } from "@trpc/client";
 
 const formSchema = z.object({
   color: z.string().regex(/^#(?:[0-9a-f]{3}){1,2}$/i, {
@@ -53,7 +55,6 @@ const CreateTagDialog = () => {
   const form = useForm<formSchemaType>({
     resolver: zodResolver(formSchema),
     defaultValues,
-    mode: "onBlur",
   });
 
   const onDialogOpen = useCallback(() => {
@@ -62,19 +63,33 @@ const CreateTagDialog = () => {
   }, [dialogOpen, form]);
 
   const onSubmit: SubmitHandler<formSchemaType> = async (data) => {
-    await newTagMutation.mutateAsync(
-      {
-        color: data.color,
-        name: data.name,
-      },
-      {
-        onSuccess: () => {
-          queryClient.invalidateQueries({ stale: true });
+    try {
+      const res = await newTagMutation.mutateAsync(
+        {
+          color: data.color,
+          name: data.name,
         },
-      }
-    );
+        {
+          onSuccess: () => {
+            queryClient.invalidateQueries({ stale: true });
+          },
+        }
+      );
 
-    onDialogOpen();
+      if (res.id) {
+        toast.success("Tag created successfully!");
+      } else {
+        toast.error("Error creating tag!");
+      }
+    } catch (e) {
+      if (e instanceof TRPCClientError) {
+        toast.error(e?.message);
+      } else {
+        toast.error("Error creating tag!");
+      }
+    } finally {
+      onDialogOpen();
+    }
   };
 
   return (

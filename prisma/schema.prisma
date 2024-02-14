@@ -16,6 +16,7 @@ model Tag {
   authorId String
   pages    Page[]
 
+  @@unique([authorId, name])
   @@index([authorId])
 }
 
