@@ -7,6 +7,8 @@ import api from "~/utils/api";
 import ssr from "~/utils/ssr";
 import { Avatar, AvatarImage } from "~/components/ui/avatar";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "~/components/ui/tabs";
+import { ProfileOverview } from "~/components/profile-overview";
+import { Book, Star, Users } from "lucide-react";
 
 export const getServerSideProps = async (
   context: GetServerSidePropsContext<{ username: string }>
@@ -51,12 +53,23 @@ const ProfilePage: NextPageWithAuthAndLayout<
           <p className="text-xs font-light text-gray-400">{userProfile.username}</p>
         </div>
         <TabsList>
-          <TabsTrigger value="overview">Overview</TabsTrigger>
-          <TabsTrigger value="people">People</TabsTrigger>
-          <TabsTrigger value="stars">Stars</TabsTrigger>
+          <TabsTrigger value="overview">
+            <Book className="mx-1 h-4 w-4" />
+            Overview
+          </TabsTrigger>
+          <TabsTrigger value="people">
+            <Users className="mx-1 h-4 w-4" />
+            People
+          </TabsTrigger>
+          <TabsTrigger value="stars">
+            <Star className="mx-1 h-4 w-4" />
+            Stars
+          </TabsTrigger>
         </TabsList>
       </div>
-      <TabsContent value="overview">Overview</TabsContent>
+      <TabsContent value="overview">
+        <ProfileOverview />
+      </TabsContent>
       <TabsContent value="people">People</TabsContent>
       <TabsContent value="stars">Stars</TabsContent>
     </Tabs>
