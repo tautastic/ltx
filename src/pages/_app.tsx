@@ -36,12 +36,12 @@ const MyApp = ({ Component, pageProps: { session, ...pageProps } }: AppPropsWith
       />
       <SessionProvider session={session} refetchOnWindowFocus={false}>
         <ThemeProvider defaultTheme="dark" attribute="class" disableTransitionOnChange>
+          <Toaster />
           {Component.auth ? (
             <Auth>{getLayout(<Component {...pageProps} />)}</Auth>
           ) : (
             getLayout(<Component {...pageProps} />)
           )}
-          <Toaster />
         </ThemeProvider>
       </SessionProvider>
     </>
