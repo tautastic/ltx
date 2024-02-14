@@ -129,13 +129,13 @@ const Privacy: NextPageWithAuthAndLayout = () => {
 Privacy.auth = false;
 Privacy.getLayout = (page) => {
   return (
-    <div>
+    <>
       <Header>
         <AuthDropdown />
       </Header>
       <main className="min-h-screen">{page}</main>
       <Footer />
-    </div>
+    </>
   );
 };
 

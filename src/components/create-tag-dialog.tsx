@@ -84,19 +84,19 @@ const CreateTagDialog = () => {
         });
       } else {
         toast({
-          title: "Uh oh! Something went wrong.",
+          title: "🚨 Uh oh! Something went wrong.",
           description: "Error creating tag.",
         });
       }
     } catch (e) {
       if (e instanceof TRPCClientError) {
         toast({
-          title: "Uh oh! Something went wrong.",
+          title: "🚨 Uh oh! Something went wrong.",
           description: e?.message,
         });
       } else {
         toast({
-          title: "Uh oh! Something went wrong.",
+          title: "🚨 Uh oh! Something went wrong.",
           description: "Error creating tag.",
         });
       }

@@ -35,7 +35,7 @@ const MyApp = ({ Component, pageProps: { session, ...pageProps } }: AppPropsWith
         }}
       />
       <SessionProvider session={session} refetchOnWindowFocus={false}>
-        <ThemeProvider attribute="class" disableTransitionOnChange>
+        <ThemeProvider defaultTheme="dark" attribute="class" disableTransitionOnChange>
           {Component.auth ? (
             <Auth>{getLayout(<Component {...pageProps} />)}</Auth>
           ) : (

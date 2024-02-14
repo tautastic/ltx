@@ -89,19 +89,19 @@ const Create: NextPageWithAuthAndLayout = () => {
 
       if (res.id) {
         toast({
-          title: "Wuhuu 🎉",
+          title: "🎉 Wuhuu",
           description: "Document created successfully.",
         });
         await router.push(`/u/${session?.user?.username}`);
       } else {
         toast({
-          title: "Uh oh! Something went wrong.",
+          title: "🚨 Uh oh! Something went wrong.",
           description: "Error creating document.",
         });
       }
     } catch (e) {
       toast({
-        title: "Uh oh! Something went wrong.",
+        title: "🚨 Uh oh! Something went wrong.",
         description: "Error creating document.",
       });
     } finally {
@@ -237,13 +237,15 @@ const Create: NextPageWithAuthAndLayout = () => {
 Create.auth = true;
 Create.getLayout = (page) => {
   return (
-    <div>
+    <>
       <Header>
         <AuthDropdown />
       </Header>
-      <main className="flex min-h-screen flex-col items-center justify-start py-8">{page}</main>
+      <main className="flex min-h-screen flex-col items-center justify-start bg-gray-100 py-8 dark:bg-gray-950">
+        {page}
+      </main>
       <Footer />
-    </div>
+    </>
   );
 };
 export default Create;

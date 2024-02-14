@@ -32,13 +32,13 @@ const Custom404: NextPageWithAuthAndLayout = () => {
 Custom404.auth = false;
 Custom404.getLayout = (page) => {
   return (
-    <div>
+    <>
       <Header>
         <AuthDropdown />
       </Header>
       <main className="min-h-screen">{page}</main>
       <Footer />
-    </div>
+    </>
   );
 };
 

@@ -96,13 +96,13 @@ const Signin: NextPageWithAuthAndLayout = () => {
 Signin.auth = false;
 Signin.getLayout = (page) => {
   return (
-    <div>
+    <>
       <Header>
         <AuthDropdown />
       </Header>
       <main className="flex h-screen flex-col">{page}</main>
       <Footer />
-    </div>
+    </>
   );
 };
 
