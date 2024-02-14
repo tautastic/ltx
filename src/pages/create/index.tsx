@@ -34,6 +34,7 @@ import { useBlockEditor } from "~/lib/hooks/useBlockEditor";
 import { Checkbox } from "~/components/ui/checkbox";
 import { useToast } from "~/components/ui/use-toast";
 import { Label } from "~/components/ui/label";
+import { useRouter } from "next/router";
 
 const formSchema = z.object({
   description: z.string().max(300, {
@@ -60,6 +61,7 @@ type formSchemaType = z.infer<typeof formSchema>;
 
 const Create: NextPageWithAuthAndLayout = () => {
   const queryClient = useQueryClient();
+  const router = useRouter();
   const { editor } = useBlockEditor();
   const { toast } = useToast();
   const { data: session } = useSession();
@@ -90,6 +92,7 @@ const Create: NextPageWithAuthAndLayout = () => {
           title: "Wuhuu 🎉",
           description: "Document created successfully.",
         });
+        await router.push(`/u/${session?.user?.username}`);
       } else {
         toast({
           title: "Uh oh! Something went wrong.",
@@ -131,7 +134,12 @@ const Create: NextPageWithAuthAndLayout = () => {
           <BlockEditor containerRef={editorContainerRef} isHeaderVisible={false} />
         </FieldsetContent>
         <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)}>
+          <form
+            onSubmit={(e) => {
+              e.stopPropagation();
+              form.handleSubmit(onSubmit)(e);
+            }}
+          >
             <Fieldset className="rounded-none border-x-0 border-b-0">
               <FieldsetContent>
                 <h4 className="mb-1 text-xl font-[600]">Save Document</h4>
