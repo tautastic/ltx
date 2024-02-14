@@ -19,6 +19,15 @@ export const userRouter = createTRPCRouter({
         where: { username },
         include: {
           authoredPages: {
+            select: {
+              id: true,
+              createdAt: true,
+              updatedAt: true,
+              title: true,
+              description: true,
+              isPrivate: true,
+              authorId: true,
+            },
             where: {
               OR: [
                 {
@@ -31,6 +40,15 @@ export const userRouter = createTRPCRouter({
             },
           },
           starredPages: {
+            select: {
+              id: true,
+              createdAt: true,
+              updatedAt: true,
+              title: true,
+              description: true,
+              isPrivate: true,
+              authorId: true,
+            },
             where: {
               OR: [
                 {
