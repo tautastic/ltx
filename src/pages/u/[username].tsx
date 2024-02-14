@@ -5,46 +5,113 @@ import Header from "~/components/header";
 import Footer from "~/components/footer";
 import api from "~/utils/api";
 import ssr from "~/utils/ssr";
-import { UserProfile } from "~/schemas";
+import { Avatar, AvatarImage } from "~/components/ui/avatar";
 
 export const getServerSideProps = async (
   context: GetServerSidePropsContext<{ username: string }>
 ) => {
   const profileName = context.params?.username as string;
-  try {
-    const userProfile = await ssr.users.getProfileByUsername.fetch(profileName);
-    return {
-      props: {
-        trpcState: ssr.dehydrate(),
-        userProfile,
-      },
-    };
-  } catch (e) {
-    return {
-      props: { profileName },
-      notFound: true,
-    };
+
+  if (!profileName || profileName.trim().length < 1) {
+    return { notFound: true };
   }
+
+  // Perform user existence check
+  const profileExists = await ssr.users.getExistsByUsername.fetch(profileName);
+
+  if (!profileExists) {
+    return { notFound: true };
+  }
+
+  // Only prefetch and dehydrate if the user exists
+  await ssr.users.getProfileByUsername.prefetch(profileName);
+  return {
+    props: {
+      trpcState: ssr.dehydrate(),
+      profileName,
+    },
+  };
 };
 
-const Profile: NextPageWithAuthAndLayout<
+const ProfilePage: NextPageWithAuthAndLayout<
   InferGetServerSidePropsType<typeof getServerSideProps>
-> = ({ userProfile }) => {
-  if (!userProfile) {
-    return null;
+> = (props) => {
+  const { data: userProfile, status } = api.users.getProfileByUsername.useQuery(props.profileName);
+
+  if (status !== "success") {
+    // won't happen since the query has been prefetched
+    return <h1 className="text-3xl font-bold">Loading...</h1>;
   }
 
-  return <h1 className="text-3xl font-bold">{userProfile.name}</h1>;
+  return (
+    <div className="flex w-full flex-col items-center space-y-12 bg-gray-950 pt-12">
+      <div className="flex w-full max-w-lg flex-col items-center justify-center space-y-1">
+        <Avatar className="mb-2 h-32 w-32">
+          <AvatarImage alt="Profile picture" src={userProfile.image} />
+        </Avatar>
+        <h1 className="text-2xl font-semibold">{userProfile.name}</h1>
+        <p className="text-xs font-light text-gray-400">{userProfile.username}</p>
+      </div>
+      <div className="w-full border-b border-gray-200 dark:border-gray-800">
+        <ul
+          className="m-auto flex w-full max-w-xl justify-between text-center text-sm font-medium"
+          id="default-tab"
+          data-tabs-toggle="#default-tab-content"
+          role="tablist"
+        >
+          <li role="presentation" className="flex-1">
+            <button
+              className="inline-block px-6 py-3 hover:border-gray-300 hover:text-gray-600 dark:hover:border-gray-700 dark:hover:text-gray-300"
+              id="overview-tab"
+              data-tabs-target="#overview"
+              type="button"
+              role="tab"
+              aria-controls="overview"
+              aria-selected="false"
+            >
+              Overview
+            </button>
+          </li>
+          <li role="presentation" className="flex-1">
+            <button
+              className="inline-block px-6 py-3 hover:border-gray-300 hover:text-gray-600 dark:hover:border-gray-700 dark:hover:text-gray-300"
+              id="people-tab"
+              data-tabs-target="#people"
+              type="button"
+              role="tab"
+              aria-controls="people"
+              aria-selected="false"
+            >
+              People
+            </button>
+          </li>
+          <li role="presentation" className="flex-1">
+            <button
+              className="inline-block px-6 py-3 hover:border-gray-300 hover:text-gray-600 dark:hover:border-gray-700 dark:hover:text-gray-300"
+              id="stars-tab"
+              data-tabs-target="#stars"
+              type="button"
+              role="tab"
+              aria-controls="stars"
+              aria-selected="false"
+            >
+              Stars
+            </button>
+          </li>
+        </ul>
+      </div>
+    </div>
+  );
 };
 
-Profile.auth = false;
-Profile.getLayout = (page) => {
+ProfilePage.auth = false;
+ProfilePage.getLayout = (page) => {
   return (
     <>
       <Header>
         <AuthDropdown />
       </Header>
-      <main className="flex min-h-screen flex-col items-center justify-start gap-y-16 px-6 py-24 invert-0 md:gap-y-14 md:py-32">
+      <main className="flex min-h-screen flex-col items-center justify-start gap-y-16 pb-24 invert-0 md:gap-y-14 md:pb-32">
         {page}
       </main>
       <Footer />
@@ -52,4 +119,4 @@ Profile.getLayout = (page) => {
   );
 };
 
-export default Profile;
+export default ProfilePage;
