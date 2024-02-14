@@ -44,25 +44,7 @@ export const userRouter = createTRPCRouter({
           },
           authoredTags: {
             where: {
-              OR: [
-                {
-                  pages: {
-                    some: {
-                      OR: [
-                        {
-                          isPrivate: false,
-                        },
-                        {
-                          authorId: ctx.session?.user?.id,
-                        },
-                      ],
-                    },
-                  },
-                },
-                {
-                  authorId: ctx.session?.user?.id,
-                },
-              ],
+              authorId: ctx.session?.user?.id,
             },
           },
         },

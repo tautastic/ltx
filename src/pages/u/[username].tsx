@@ -5,36 +5,33 @@ import Header from "~/components/header";
 import Footer from "~/components/footer";
 import api from "~/utils/api";
 import ssr from "~/utils/ssr";
+import { UserProfile } from "~/schemas";
 
 export const getServerSideProps = async (
   context: GetServerSidePropsContext<{ username: string }>
 ) => {
   const profileName = context.params?.username as string;
-  const profileExists = await ssr.users.getExistsByUsername.fetch(profileName);
-  if (profileExists) {
-    await ssr.users.getProfileByUsername.prefetch(profileName);
-  } else {
+  try {
+    const userProfile = await ssr.users.getProfileByUsername.fetch(profileName);
+    return {
+      props: {
+        trpcState: ssr.dehydrate(),
+        userProfile,
+      },
+    };
+  } catch (e) {
     return {
       props: { profileName },
       notFound: true,
     };
   }
-  return {
-    props: {
-      trpcState: ssr.dehydrate(),
-      profileName,
-    },
-  };
 };
 
-const Profile: NextPageWithAuthAndLayout<InferGetServerSidePropsType<typeof getServerSideProps>> = (
-  props
-) => {
-  const { data: userProfile, status } = api.users.getProfileByUsername.useQuery(props.profileName);
-
-  if (status !== "success") {
-    // won't happen since the query has been prefetched
-    return <h1 className="text-3xl font-bold">Loading...</h1>;
+const Profile: NextPageWithAuthAndLayout<
+  InferGetServerSidePropsType<typeof getServerSideProps>
+> = ({ userProfile }) => {
+  if (!userProfile) {
+    return null;
   }
 
   return <h1 className="text-3xl font-bold">{userProfile.name}</h1>;
