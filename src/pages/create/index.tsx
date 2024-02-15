@@ -39,16 +39,16 @@ import { PlusIcon } from "lucide-react";
 import { DialogTrigger } from "~/components/ui/dialog";
 
 const formSchema = z.object({
-  description: z.string().max(300, {
-    message: "Description must be at most 300 characters.",
+  description: z.string().max(500, {
+    message: "Description must be at most 500 characters.",
   }),
   title: z
     .string()
     .min(2, {
       message: "Title must be at least 2 characters.",
     })
-    .max(48, {
-      message: "Title must be at most 48 characters.",
+    .max(64, {
+      message: "Title must be at most 64 characters.",
     }),
   isPrivate: z.boolean(),
 });

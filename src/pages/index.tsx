@@ -17,27 +17,27 @@ const Home: NextPageWithAuthAndLayout = () => {
       <div className="flex flex-col items-center justify-between gap-y-8 px-4 text-center md:gap-y-16">
         <h1 className="-mb-2 flex flex-wrap items-center justify-center overflow-hidden text-5.5xl font-extrabold tracking-[-0.04em] subpixel-antialiased xs:text-7xl md:text-7.5xl xl:flex-nowrap xl:gap-x-3 xl:text-8xl">
           <span
-            data-text="Quadratisch."
+            data-text="Create."
             className="hero-text-bg before:animate-[text-fade-bg-1_8s_infinite]"
           >
             <span className="text-fill-transparent relative animate-[text-fade-fg-1_8s_infinite] bg-gradient-to-r from-[#007cf0] to-[#00dfd8] bg-clip-text">
-              Quadratisch.
+              Create.
             </span>
           </span>
           <span
-            data-text="Praktisch."
+            data-text="Learn."
             className="hero-text-bg before:animate-[text-fade-bg-2_8s_infinite]"
           >
             <span className="text-fill-transparent relative animate-[text-fade-fg-2_8s_infinite] bg-gradient-to-r from-[#7928ca] to-[#ff0080] bg-clip-text">
-              Praktisch.
+              Learn.
             </span>
           </span>
           <span
-            data-text="Gut."
+            data-text="Connect."
             className="hero-text-bg before:animate-[text-fade-bg-3_8s_infinite]"
           >
             <span className="text-fill-transparent relative animate-[text-fade-fg-3_8s_infinite] bg-gradient-to-r from-[#ff4d4d] to-[#f9cb28] bg-clip-text">
-              Gut.
+              Connect.
             </span>
           </span>
         </h1>

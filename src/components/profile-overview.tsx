@@ -152,7 +152,7 @@ export const ProfileOverview = ({ basicUser }: ProfileOverviewProps) => {
           </DropdownMenuContent>
         </DropdownMenu>
       </div>
-      <div className="flex max-w-lg flex-col flex-wrap">
+      <div className="flex w-full flex-row flex-wrap gap-x-6 gap-y-4">
         {pagesWithTags && pagesWithTags.length > 0 ? (
           pagesWithTags.map((page) => {
             return <DocumentCard key={page.id} basicUser={basicUser} page={page} />;
