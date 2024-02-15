@@ -15,15 +15,13 @@ export const getServerSideProps = async (
 ) => {
   if (context.params && context.params.username) {
     const { username } = context.params;
-    // Perform user existence check
-    const profileExists = await ssr.users.getExistsByUsername.fetch(username);
-    if (profileExists) {
-      // Only prefetch and dehydrate if the user exists
-      await ssr.users.getProfileByUsername.prefetch(username);
+
+    const basicUser = await ssr.users.getBasicFieldsByUsername.fetch(username);
+    if (basicUser) {
       return {
         props: {
           trpcState: ssr.dehydrate(),
-          username,
+          basicUser,
         },
       };
     }
@@ -34,23 +32,16 @@ export const getServerSideProps = async (
 
 const ProfilePage: NextPageWithAuthAndLayout<
   InferGetServerSidePropsType<typeof getServerSideProps>
-> = ({ username }) => {
-  const { data: userProfile, status } = api.users.getProfileByUsername.useQuery(username);
-
-  if (status !== "success") {
-    // won't happen since the query has been prefetched
-    return <h1 className="text-3xl font-bold">Loading...</h1>;
-  }
-
+> = ({ basicUser }) => {
   return (
     <Tabs defaultValue="overview" className="flex h-screen w-full flex-col">
       <div className="flex w-full flex-col items-center space-y-12 border-b border-gray-200 bg-gray-950 pt-12 dark:border-gray-800">
         <div className="flex w-full max-w-lg flex-col items-center justify-center space-y-1">
           <Avatar className="mb-2 h-32 w-32">
-            <AvatarImage alt="Profile picture" src={userProfile.image} />
+            <AvatarImage alt="Profile picture" src={basicUser.image} />
           </Avatar>
-          <h1 className="text-2xl font-semibold">{userProfile.name}</h1>
-          <p className="text-xs font-light text-gray-400">{userProfile.username}</p>
+          <h1 className="text-2xl font-semibold">{basicUser.name}</h1>
+          <p className="text-xs font-light text-gray-400">{basicUser.username}</p>
         </div>
         <TabsList>
           <TabsTrigger value="overview">

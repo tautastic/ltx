@@ -13,25 +13,3 @@ export const UserSchema = z.object({
 });
 
 export type User = z.infer<typeof UserSchema>;
-
-export const UserProfileSchema = UserSchema.extend({
-  authoredPages: z
-    .lazy(() =>
-      PageSchema.omit({
-        authorId: true,
-        content: true,
-      })
-    )
-    .array(),
-  starredPages: z
-    .lazy(() =>
-      PageSchema.omit({
-        authorId: true,
-        content: true,
-      })
-    )
-    .array(),
-  authoredTags: z.lazy(() => TagSchema).array(),
-});
-
-export type UserProfile = z.infer<typeof UserProfileSchema>;
