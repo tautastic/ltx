@@ -9,7 +9,7 @@ import {
   CardHeader,
   CardTitle,
 } from "~/components/ui/card";
-import { Edit, MoreHorizontal, Star, TagIcon, Trash } from "lucide-react";
+import { Edit, MoreHorizontal, Star, TagIcon, Trash, XIcon } from "lucide-react";
 import { Badge } from "~/components/ui/badge";
 import {
   DropdownMenu,
@@ -18,6 +18,22 @@ import {
   DropdownMenuTrigger,
 } from "~/components/ui/dropdown-menu";
 import { SparkyStars } from "~/components/ui/sparky-stars";
+import api from "~/utils/api";
+import { toast } from "~/components/ui/use-toast";
+import { useQueryClient } from "@tanstack/react-query";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "~/components/ui/alert-dialog";
+import React from "react";
+import { useSession } from "next-auth/react";
 
 export interface DocumentCardProps {
   basicUser: User;
@@ -45,6 +61,28 @@ const CardTags = ({ tags }: { tags: TagList }) => {
 };
 
 export const DocumentCard = ({ basicUser, page }: DocumentCardProps) => {
+  const queryClient = useQueryClient();
+  const { data: session, status } = useSession();
+  const deletePageById = api.pages.deletePageById.useMutation();
+  const userIsAuthor = session?.user.id === page.authorId;
+
+  const handleDeletePage = async (id: string) => {
+    await deletePageById.mutateAsync(id, {
+      onSuccess: () => {
+        queryClient.invalidateQueries({ stale: true });
+        toast({
+          title: "Deleted page successfully.",
+        });
+      },
+      onError: () => {
+        toast({
+          title: "🚨 Uh oh! Something went wrong.",
+          description: "Error deleting page.",
+        });
+      },
+    });
+  };
+
   return (
     <Card className="flex min-w-[325px] max-w-[650px] flex-1 flex-col justify-between">
       <CardHeader>
@@ -55,22 +93,52 @@ export const DocumentCard = ({ basicUser, page }: DocumentCardProps) => {
         <CardTags tags={page.tags} />
       </CardContent>
       <CardFooter className="flex justify-end">
-        <DropdownMenu>
-          <DropdownMenuTrigger>
-            <MoreHorizontal className="h-4 w-4" />
-          </DropdownMenuTrigger>
-          <DropdownMenuContent className="w-[170px]">
-            <DropdownMenuItem className="group flex justify-between">
-              Add Favorite <SparkyStars />
-            </DropdownMenuItem>
-            <DropdownMenuItem className="group flex justify-between">
-              Edit <Edit className="h-4 w-4" />
-            </DropdownMenuItem>
-            <DropdownMenuItem className="group flex justify-between">
-              Delete <Trash className="h-4 w-4" />
-            </DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
+        <AlertDialog>
+          {status === "authenticated" && (
+            <DropdownMenu>
+              <DropdownMenuTrigger>
+                <MoreHorizontal className="h-4 w-4" />
+              </DropdownMenuTrigger>
+              <DropdownMenuContent className="w-[170px]">
+                <DropdownMenuItem className="group flex justify-between">
+                  Add Favorite <SparkyStars />
+                </DropdownMenuItem>
+                {userIsAuthor && (
+                  <>
+                    <DropdownMenuItem className="flex justify-between">
+                      Edit <Edit className="h-4 w-4" />
+                    </DropdownMenuItem>
+                    <DropdownMenuItem asChild>
+                      <AlertDialogTrigger
+                        type="button"
+                        title="Delete page"
+                        className="flex h-full w-full justify-between"
+                      >
+                        Delete <Trash className="h-4 w-4" />
+                      </AlertDialogTrigger>
+                    </DropdownMenuItem>
+                  </>
+                )}
+              </DropdownMenuContent>
+            </DropdownMenu>
+          )}
+          {userIsAuthor && (
+            <AlertDialogContent>
+              <AlertDialogHeader>
+                <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
+                <AlertDialogDescription>
+                  This action cannot be undone. This will permanently delete your page.
+                </AlertDialogDescription>
+              </AlertDialogHeader>
+              <AlertDialogFooter>
+                <AlertDialogCancel Size="sm">Cancel</AlertDialogCancel>
+                <AlertDialogAction Size="sm" onClick={() => handleDeletePage(page.id)}>
+                  Continue
+                </AlertDialogAction>
+              </AlertDialogFooter>
+            </AlertDialogContent>
+          )}
+        </AlertDialog>
       </CardFooter>
     </Card>
   );

@@ -116,6 +116,15 @@ const Create: NextPageWithAuthAndLayout = () => {
     await deleteTagByIdMutation.mutateAsync(id, {
       onSuccess: () => {
         queryClient.invalidateQueries({ stale: true });
+        toast({
+          title: "Deleted tag successfully.",
+        });
+      },
+      onError: () => {
+        toast({
+          title: "🚨 Uh oh! Something went wrong.",
+          description: "Error deleting tag.",
+        });
       },
     });
   };

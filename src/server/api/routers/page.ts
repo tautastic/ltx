@@ -5,6 +5,7 @@ import {
   PageSchema,
   type PageWithTagsList,
   PageWithTagsListSchema,
+  TagSchema,
 } from "~/schemas";
 
 export const pageRouter = createTRPCRouter({
@@ -39,6 +40,7 @@ export const pageRouter = createTRPCRouter({
 
       return PageWithTagsListSchema.parse(publicPages);
     }),
+
   createNewPage: protectedProcedure
     .input(CreateNewPageSchema)
     .mutation<Page>(async ({ ctx, input }) => {
@@ -56,4 +58,12 @@ export const pageRouter = createTRPCRouter({
 
       return PageSchema.parse(page);
     }),
+
+  deletePageById: protectedProcedure.input(PageSchema.shape.id).mutation(async ({ ctx, input }) => {
+    await ctx.prisma.page.delete({
+      where: {
+        id: input,
+      },
+    });
+  }),
 });
