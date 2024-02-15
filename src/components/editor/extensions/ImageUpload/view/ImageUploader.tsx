@@ -2,7 +2,7 @@ import { Spinner } from "~/components/editor/ui/Spinner";
 import { useDropZone, useFileUpload, useUploader } from "./hooks";
 import { Button } from "~/components/editor/ui/Button";
 import { Icon } from "~/components/editor/ui/Icon";
-import twcx from "~/utils/twcx";
+import { cn } from "~/utils";
 import { type ChangeEvent, useCallback } from "react";
 
 export const ImageUploader = ({ onUpload }: { onUpload: (url: string) => void }) => {
@@ -23,7 +23,7 @@ export const ImageUploader = ({ onUpload }: { onUpload: (url: string) => void })
     );
   }
 
-  const wrapperClass = twcx(
+  const wrapperClass = cn(
     "flex flex-col items-center justify-center px-8 py-10 rounded-lg bg-opacity-80",
     draggedInside && "bg-gray-100"
   );

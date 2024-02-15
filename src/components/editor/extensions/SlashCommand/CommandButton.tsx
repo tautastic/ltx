@@ -1,5 +1,5 @@
 import { forwardRef } from "react";
-import twcx from "~/utils/twcx";
+import { cn } from "~/utils";
 import { type icons } from "lucide-react";
 import { Icon } from "~/components/editor/ui/Icon";
 
@@ -13,7 +13,7 @@ export type CommandButtonProps = {
 
 export const CommandButton = forwardRef<HTMLButtonElement, CommandButtonProps>(
   ({ active, icon, onClick, title }, ref) => {
-    const wrapperClass = twcx(
+    const wrapperClass = cn(
       "flex text-gray-500 items-center text-xs font-semibold justify-start p-1.5 gap-2 rounded",
       !active && "bg-transparent hover:bg-gray-50 hover:text-black",
       active && "bg-gray-100 text-black hover:bg-gray-100"

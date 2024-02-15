@@ -3,14 +3,22 @@ import defaultTheme from "tailwindcss/defaultTheme";
 
 const config = {
   content: ["./src/pages/**/*.{js,ts,jsx,tsx}", "./src/components/**/*.{js,ts,jsx,tsx}"],
-  darkMode: "class",
+  darkMode: ["class"],
   safelist: ["ProseMirror"],
+  prefix: "",
   plugins: [
     require("@tailwindcss/forms"),
     require("@tailwindcss/typography"),
     require("tailwindcss-animate"),
   ],
   theme: {
+    container: {
+      center: true,
+      padding: "2rem",
+      screens: {
+        "2xl": "1400px",
+      },
+    },
     screens: {
       "xs": "540px",
       "sm": "640px",
@@ -158,10 +166,10 @@ const config = {
       keyframes: {
         "accordion-down": {
           from: { height: "0" },
-          to: { height: "--radix-accordion-content-height" },
+          to: { height: "var(--radix-accordion-content-height)" },
         },
         "accordion-up": {
-          from: { height: "--radix-accordion-content-height" },
+          from: { height: "var(--radix-accordion-content-height)" },
           to: { height: "0" },
         },
         "text-fade-fg-1": {

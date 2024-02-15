@@ -1,6 +1,6 @@
 import { TagIcon, XIcon } from "lucide-react";
 import React from "react";
-import twcx from "~/utils/twcx";
+import { cn } from "~/utils";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -62,7 +62,7 @@ export const Tag = ({
     <li className="h-10 flex-1 text-sm font-medium">
       <input onClick={onClick} type="checkbox" id={id} value={id} className="peer hidden" />
       <div
-        className={twcx(
+        className={cn(
           "flex justify-between gap-x-6 rounded border border-gray-200 dark:border-gray-800",
           !readonly && "opacity-60 peer-checked:border-blue-600 peer-checked:opacity-100"
         )}

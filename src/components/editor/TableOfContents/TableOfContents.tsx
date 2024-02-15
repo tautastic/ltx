@@ -3,7 +3,7 @@
 import { type Editor as CoreEditor } from "@tiptap/core";
 import { memo, useEffect, useState } from "react";
 import { type TableOfContentsStorage } from "@tiptap-pro/extension-table-of-contents";
-import twcx from "~/utils/twcx";
+import { cn } from "~/utils";
 
 export type TableOfContentsProps = {
   editor: CoreEditor;
@@ -42,7 +42,7 @@ export const TableOfContents = memo(({ editor, onItemClick }: TableOfContentsPro
               href={`#${item.id}`}
               style={{ marginLeft: `${1 * item.level - 1}rem` }}
               onClick={onItemClick}
-              className={twcx(
+              className={cn(
                 "block w-full truncate rounded bg-opacity-10 p-1 text-sm font-medium text-gray-500 transition-all hover:bg-black hover:bg-opacity-5 hover:text-gray-800 dark:text-gray-300",
                 item.isActive && "bg-gray-100 text-gray-800 dark:bg-gray-900 dark:text-gray-100"
               )}

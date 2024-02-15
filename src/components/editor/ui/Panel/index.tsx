@@ -1,5 +1,5 @@
 import { forwardRef, type HTMLAttributes } from "react";
-import twcx from "~/utils/twcx";
+import { cn } from "~/utils";
 import { Slot } from "@radix-ui/react-slot";
 import { Surface } from "../Surface";
 
@@ -11,7 +11,7 @@ export type PanelProps = {
 
 export const Panel = forwardRef<HTMLDivElement, PanelProps>(
   ({ asChild, className, children, spacing, noShadow, ...rest }, ref) => {
-    const panelClass = twcx("p-2", spacing === "small" && "p-[0.2rem]", className);
+    const panelClass = cn("p-2", spacing === "small" && "p-[0.2rem]", className);
 
     const Comp = asChild ? Slot : "div";
 
@@ -31,7 +31,7 @@ export const PanelDivider = forwardRef<
   HTMLDivElement,
   { asChild?: boolean } & HTMLAttributes<HTMLDivElement>
 >(({ asChild, className, children, ...rest }, ref) => {
-  const dividerClass = twcx("border-b border-b-black/10 mb-2 pb-2", className);
+  const dividerClass = cn("border-b border-b-black/10 mb-2 pb-2", className);
 
   const Comp = asChild ? Slot : "div";
 
@@ -48,7 +48,7 @@ export const PanelHeader = forwardRef<
   HTMLDivElement,
   { asChild?: boolean } & HTMLAttributes<HTMLDivElement>
 >(({ asChild, className, children, ...rest }, ref) => {
-  const headerClass = twcx("border-b border-b-black/10 text-sm mb-2 pb-2", className);
+  const headerClass = cn("border-b border-b-black/10 text-sm mb-2 pb-2", className);
 
   const Comp = asChild ? Slot : "div";
 
@@ -65,7 +65,7 @@ export const PanelSection = forwardRef<
   HTMLDivElement,
   { asChild?: boolean } & HTMLAttributes<HTMLDivElement>
 >(({ asChild, className, children, ...rest }, ref) => {
-  const sectionClass = twcx("mt-4 first:mt-1", className);
+  const sectionClass = cn("mt-4 first:mt-1", className);
 
   const Comp = asChild ? Slot : "div";
 
@@ -82,7 +82,7 @@ export const PanelHeadline = forwardRef<
   HTMLDivElement,
   { asChild?: boolean } & HTMLAttributes<HTMLDivElement>
 >(({ asChild, className, children, ...rest }, ref) => {
-  const headlineClass = twcx(
+  const headlineClass = cn(
     "text-black/80 dark:text-white/80 text-xs font-medium mb-2 ml-1.5",
     className
   );
@@ -102,7 +102,7 @@ export const PanelFooter = forwardRef<
   HTMLDivElement,
   { asChild?: boolean } & HTMLAttributes<HTMLDivElement>
 >(({ asChild, className, children, ...rest }, ref) => {
-  const footerClass = twcx("border-t border-black/10 text-sm mt-2 pt-2", className);
+  const footerClass = cn("border-t border-black/10 text-sm mt-2 pt-2", className);
 
   const Comp = asChild ? Slot : "div";
 

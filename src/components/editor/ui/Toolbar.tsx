@@ -1,6 +1,6 @@
 import React, { type ButtonHTMLAttributes, type HTMLProps, forwardRef } from "react";
 
-import twcx from "~/utils/twcx";
+import { cn } from "~/utils";
 import { Surface } from "./Surface";
 import { Button, type ButtonProps } from "./Button";
 import Tooltip from "./Tooltip";
@@ -12,7 +12,7 @@ export type ToolbarWrapperProps = {
 
 const ToolbarWrapper = forwardRef<HTMLDivElement, ToolbarWrapperProps>(
   ({ shouldShowContent = true, children, isVertical = false, className, ...rest }, ref) => {
-    const toolbarClassName = twcx(
+    const toolbarClassName = cn(
       "text-black inline-flex h-full leading-none gap-0.5",
       isVertical ? "flex-col p-2" : "flex-row p-1 items-center",
       className
@@ -36,7 +36,7 @@ export type ToolbarDividerProps = {
 
 const ToolbarDivider = forwardRef<HTMLDivElement, ToolbarDividerProps>(
   ({ horizontal, className, ...rest }, ref) => {
-    const dividerClassName = twcx(
+    const dividerClassName = cn(
       "bg-gray-200 dark:bg-gray-800",
       horizontal
         ? "w-full min-w-[1.5rem] h-[1px] my-1 first:mt-0 last:mt-0"
@@ -73,7 +73,7 @@ const ToolbarButton = forwardRef<HTMLButtonElement, ToolbarButtonProps>(
     },
     ref
   ) => {
-    const buttonClass = twcx("gap-1 min-w-[2rem] px-2 w-auto", className);
+    const buttonClass = cn("gap-1 min-w-[2rem] px-2 w-auto", className);
 
     const content = (
       <Button

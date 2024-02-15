@@ -1,4 +1,4 @@
-import twcx from "~/utils/twcx";
+import { cn } from "~/utils";
 import { icons } from "lucide-react";
 import { memo } from "react";
 
@@ -15,7 +15,7 @@ export const Icon = memo(({ name, className, strokeWidth }: IconProps) => {
     return null;
   }
 
-  return <IconComponent className={twcx("h-4 w-4", className)} strokeWidth={strokeWidth || 2.5} />;
+  return <IconComponent className={cn("h-4 w-4", className)} strokeWidth={strokeWidth || 2.5} />;
 });
 
 Icon.displayName = "Icon";

@@ -1,25 +1,23 @@
-import { forwardRef, type TextareaHTMLAttributes } from "react";
-import twcx from "~/utils/twcx";
+import * as React from "react";
 
-export type TextareaProps = TextareaHTMLAttributes<HTMLTextAreaElement>;
+import { cn } from "~/utils";
 
-const Textarea = forwardRef<HTMLTextAreaElement, TextareaProps>(({ className, ...props }, ref) => {
-  return (
-    <textarea
-      autoCapitalize="none"
-      aria-invalid="false"
-      autoComplete="off"
-      spellCheck="false"
-      autoCorrect="off"
-      className={twcx(
-        "flex min-h-[2.5rem] w-full rounded border border-gray-100 bg-transparent px-3 py-2 text-sm transition-colors duration-100 ease-in-out placeholder:text-gray-300 focus:border-gray-600 focus:outline-none focus:ring-0 disabled:cursor-not-allowed disabled:resize-none disabled:border-gray-200 disabled:bg-gray-100/30 disabled:text-gray-400 dark:border-gray-800 dark:placeholder:text-gray-800 dark:focus:border-gray-500 dark:disabled:border-gray-800 dark:disabled:bg-gray-900 dark:disabled:text-gray-800",
-        className
-      )}
-      ref={ref}
-      {...props}
-    />
-  );
-});
+export interface TextareaProps extends React.TextareaHTMLAttributes<HTMLTextAreaElement> {}
+
+const Textarea = React.forwardRef<HTMLTextAreaElement, TextareaProps>(
+  ({ className, ...props }, ref) => {
+    return (
+      <textarea
+        className={cn(
+          "flex min-h-[80px] w-full rounded-md border border-gray-200 bg-white px-3 py-2 text-sm ring-offset-white placeholder:text-gray-500 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gray-950 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 dark:border-gray-800 dark:bg-gray-950 dark:ring-offset-gray-950 dark:placeholder:text-gray-400 dark:focus-visible:ring-gray-300",
+          className
+        )}
+        ref={ref}
+        {...props}
+      />
+    );
+  }
+);
 Textarea.displayName = "Textarea";
 
 export { Textarea };

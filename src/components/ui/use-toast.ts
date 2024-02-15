@@ -7,10 +7,10 @@ const TOAST_LIMIT = 1;
 const TOAST_REMOVE_DELAY = 1000000;
 
 type ToasterToast = ToastProps & {
-  action?: ToastActionElement;
-  description?: React.ReactNode;
   id: string;
   title?: React.ReactNode;
+  description?: React.ReactNode;
+  action?: ToastActionElement;
 };
 
 const actionTypes = {
@@ -31,20 +31,20 @@ type ActionType = typeof actionTypes;
 
 type Action =
   | {
-      toast: ToasterToast;
       type: ActionType["ADD_TOAST"];
+      toast: ToasterToast;
     }
   | {
-      toast: Partial<ToasterToast>;
       type: ActionType["UPDATE_TOAST"];
+      toast: Partial<ToasterToast>;
     }
   | {
-      toastId?: ToasterToast["id"];
       type: ActionType["DISMISS_TOAST"];
+      toastId?: ToasterToast["id"];
     }
   | {
-      toastId?: ToasterToast["id"];
       type: ActionType["REMOVE_TOAST"];
+      toastId?: ToasterToast["id"];
     };
 
 interface State {
@@ -151,7 +151,7 @@ function toast({ ...props }: Toast) {
       ...props,
       id,
       open: true,
-      onOpenChange: (open: boolean) => {
+      onOpenChange: (open) => {
         if (!open) dismiss();
       },
     },

@@ -2,7 +2,7 @@ import { cva, type VariantProps } from "class-variance-authority";
 import { type InputHTMLAttributes, forwardRef, type ReactNode } from "react";
 import { Loader } from "lucide-react";
 
-import twcx from "~/utils/twcx";
+import { cn } from "~/utils";
 
 const inputVariants = cva(
   "order-1 inline-flex flex-grow items-center justify-center rounded border px-3 py-0 text-sm focus:outline-none focus:ring-0",
@@ -63,7 +63,7 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
           autoComplete="off"
           spellCheck="false"
           autoCorrect="off"
-          className={twcx(
+          className={cn(
             inputVariants({ className, Loading, Size, Type }),
             { "rounded-l-none": Prefix },
             { "rounded-r-none": Suffix }
@@ -73,12 +73,12 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
           {...props}
         />
         {Prefix && (
-          <span className={twcx(peerVariants({ Size }), "order-first rounded-l border-r-0")}>
+          <span className={cn(peerVariants({ Size }), "order-first rounded-l border-r-0")}>
             {Loading ? <Loader className="h-4 w-4 animate-spin" /> : Prefix}
           </span>
         )}
         {Suffix && (
-          <span className={twcx(peerVariants({ Size }), "order-last rounded-r border-l-0")}>
+          <span className={cn(peerVariants({ Size }), "order-last rounded-r border-l-0")}>
             {Suffix}
           </span>
         )}

@@ -2,14 +2,14 @@ import { useQueryClient } from "@tanstack/react-query";
 import React, { useCallback, useState } from "react";
 import api from "~/utils/api";
 import {
-  Dialog,
-  DialogAction,
-  DialogContent,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "~/components/ui/dialog";
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogContent,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "~/components/ui/alert-dialog";
 import { PlusIcon } from "lucide-react";
 import { Input } from "~/components/ui/input";
 import * as Popover from "@radix-ui/react-popover";
@@ -106,8 +106,8 @@ const CreateTagDialog = () => {
   };
 
   return (
-    <Dialog open={dialogOpen} onOpenChange={onDialogOpen}>
-      <DialogTrigger
+    <AlertDialog open={dialogOpen} onOpenChange={onDialogOpen}>
+      <AlertDialogTrigger
         type="button"
         title="Create tag"
         className="inline-flex w-full items-center justify-center px-2"
@@ -116,11 +116,11 @@ const CreateTagDialog = () => {
           textRendering={"geometricPrecision"}
           className="text-gray-700 dark:text-gray-400"
         />
-      </DialogTrigger>
-      <DialogContent>
-        <DialogHeader>
-          <DialogTitle>Create new Tag</DialogTitle>
-        </DialogHeader>
+      </AlertDialogTrigger>
+      <AlertDialogContent>
+        <AlertDialogHeader>
+          <AlertDialogTitle>Create new Tag</AlertDialogTitle>
+        </AlertDialogHeader>
         <Form {...form}>
           <form
             onSubmit={(e) => {
@@ -198,17 +198,17 @@ const CreateTagDialog = () => {
                 </>
               )}
             />
-            <DialogFooter>
-              <DialogAction>
+            <AlertDialogFooter>
+              <AlertDialogAction>
                 <Button type="submit" Size="sm">
                   Create
                 </Button>
-              </DialogAction>
-            </DialogFooter>
+              </AlertDialogAction>
+            </AlertDialogFooter>
           </form>
         </Form>
-      </DialogContent>
-    </Dialog>
+      </AlertDialogContent>
+    </AlertDialog>
   );
 };
 

@@ -1,4 +1,4 @@
-import twcx from "~/utils/twcx";
+import { cn } from "~/utils";
 import { useCallback } from "react";
 
 export type ToggleProps = {
@@ -11,7 +11,7 @@ export const Toggle = ({ onChange, active = false, size = "large" }: ToggleProps
   const state = active ? "checked" : "unchecked";
   const value = active ? "on" : "off";
 
-  const buttonClass = twcx(
+  const buttonClass = cn(
     "inline-flex cursor-pointer items-center rounded-full border-transparent transition-colors",
     !active ? "bg-gray-200 hover:bg-gray-300" : "bg-black",
     !active ? "dark:bg-gray-800 dark:hover:bg-gray-700" : "dark:bg-white",
@@ -19,13 +19,13 @@ export const Toggle = ({ onChange, active = false, size = "large" }: ToggleProps
     size === "large" && "h-5 w-9 px-0.5"
   );
 
-  const pinClass = twcx(
+  const pinClass = cn(
     "rounded-full pointer-events-none block transition-transform",
     "bg-white dark:bg-black",
     size === "small" && "h-2 w-2",
     size === "large" && "h-4 w-4",
     active
-      ? twcx(size === "small" ? "translate-x-3" : "", size === "large" ? "translate-x-4" : "")
+      ? cn(size === "small" ? "translate-x-3" : "", size === "large" ? "translate-x-4" : "")
       : "translate-x-0"
   );
 

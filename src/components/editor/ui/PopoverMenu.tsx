@@ -1,5 +1,5 @@
 import * as Popover from "@radix-ui/react-popover";
-import twcx from "~/utils/twcx";
+import { cn } from "~/utils";
 import { icons } from "lucide-react";
 import { forwardRef, type ReactNode } from "react";
 import { Surface } from "./Surface";
@@ -79,7 +79,7 @@ export const Item = ({
   label: string | ReactNode;
   onClick: () => void;
 }) => {
-  const className = twcx(
+  const className = cn(
     "flex items-center gap-2 p-1.5 text-sm font-medium text-gray-500 text-left bg-transparent w-full rounded",
     !isActive && !disabled,
     "hover:bg-gray-100 hover:text-gray-800 dark:hover:bg-gray-900 dark:hover:text-gray-200",

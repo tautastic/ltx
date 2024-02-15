@@ -1,4 +1,4 @@
-import twcx from "~/utils/twcx";
+import { cn } from "~/utils";
 import { type HTMLProps, forwardRef } from "react";
 
 export type SurfaceProps = HTMLProps<HTMLDivElement> & {
@@ -8,7 +8,7 @@ export type SurfaceProps = HTMLProps<HTMLDivElement> & {
 
 export const Surface = forwardRef<HTMLDivElement, SurfaceProps>(
   ({ children, className, withShadow = true, withBorder = true, ...props }, ref) => {
-    const surfaceClass = twcx(
+    const surfaceClass = cn(
       className,
       "bg-white rounded-lg dark:bg-black",
       withShadow ? "shadow-sm" : "",

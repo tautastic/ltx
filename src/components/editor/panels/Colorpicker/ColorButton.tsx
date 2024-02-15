@@ -1,4 +1,4 @@
-import twcx from "~/utils/twcx";
+import { cn } from "~/utils";
 import { memo, useCallback } from "react";
 
 export type ColorButtonProps = {
@@ -8,12 +8,12 @@ export type ColorButtonProps = {
 };
 
 export const ColorButton = memo(({ color, active, onColorChange }: ColorButtonProps) => {
-  const wrapperClassName = twcx(
+  const wrapperClassName = cn(
     "flex items-center justify-center px-1.5 py-1.5 rounded group",
     !active && "hover:bg-gray-100",
     active && "bg-gray-100"
   );
-  const bubbleClassName = twcx(
+  const bubbleClassName = cn(
     "w-4 h-4 rounded bg-slate-100 shadow-sm ring-offset-2 ring-current",
     !active && `hover:ring-1`,
     active && `ring-1`

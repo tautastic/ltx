@@ -1,7 +1,7 @@
 import { type ReactNode } from "react";
 import { Monitor, Moon, Sun } from "lucide-react";
 import { useTheme } from "next-themes";
-import twcx from "~/utils/twcx";
+import { cn } from "~/utils";
 
 interface ThemeSettings {
   icon: ReactNode;
@@ -46,7 +46,7 @@ const ThemeSwitch = () => {
               title={`Switch to ${value} mode`}
               htmlFor={`theme-switch-${value}-input`}
               aria-label={`Switch to ${value} mode`}
-              className={twcx(
+              className={cn(
                 "relative m-0 flex h-7 w-7 cursor-pointer items-center justify-center overflow-hidden rounded-full bg-none text-gray-500  hover:text-gray-800 peer-checked:text-gray-800 peer-focus:outline-none peer-focus-visible:text-gray-800 peer-focus-visible:ring-2 peer-focus-visible:ring-offset-[1px] dark:hover:text-gray-200 dark:peer-checked:bg-gray-800 dark:peer-checked:text-gray-200 dark:peer-focus-visible:text-gray-200 dark:peer-focus-visible:ring-offset-black",
                 {
                   "peer-checked:shadow-[0_1px_2px_0_rgba(0,_0,_0,_.2),_0_1px_3px_0_rgba(0,_0,_0,_.1)]":

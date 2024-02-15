@@ -1,10 +1,10 @@
 import { forwardRef, type SVGAttributes } from "react";
-import twcx from "~/utils/twcx";
+import { cn } from "~/utils";
 
 export const Discord = forwardRef<SVGSVGElement, SVGAttributes<SVGElement>>(
   ({ className, ...props }, ref) => (
     <svg
-      className={twcx("h-6 w-6", className)}
+      className={cn("h-6 w-6", className)}
       shapeRendering="geometricPrecision"
       aria-label="Discord"
       fill="currentColor"
@@ -22,7 +22,7 @@ Discord.displayName = "Discord";
 export const Github = forwardRef<SVGSVGElement, SVGAttributes<SVGElement>>(
   ({ className, ...props }, ref) => (
     <svg
-      className={twcx("h-6 w-6", className)}
+      className={cn("h-6 w-6", className)}
       shapeRendering="geometricPrecision"
       aria-label="Github"
       fill="currentColor"
@@ -40,7 +40,7 @@ Github.displayName = "Github";
 export const Google = forwardRef<SVGSVGElement, SVGAttributes<SVGElement>>(
   ({ className, ...props }, ref) => (
     <svg
-      className={twcx("h-6 w-6", className)}
+      className={cn("h-6 w-6", className)}
       shapeRendering="geometricPrecision"
       aria-label="Google"
       fill="currentColor"
@@ -58,7 +58,7 @@ Google.displayName = "Google";
 export const Spotify = forwardRef<SVGSVGElement, SVGAttributes<SVGElement>>(
   ({ className, ...props }, ref) => (
     <svg
-      className={twcx("h-6 w-6", className)}
+      className={cn("h-6 w-6", className)}
       shapeRendering="geometricPrecision"
       aria-label="Spotify"
       fill="currentColor"
@@ -76,7 +76,7 @@ Spotify.displayName = "Spotify";
 export const Twitch = forwardRef<SVGSVGElement, SVGAttributes<SVGElement>>(
   ({ className, ...props }, ref) => (
     <svg
-      className={twcx("h-6 w-6", className)}
+      className={cn("h-6 w-6", className)}
       shapeRendering="geometricPrecision"
       aria-label="Twitch"
       fill="currentColor"
@@ -94,7 +94,7 @@ Twitch.displayName = "Twitch";
 export const Ltx = forwardRef<SVGSVGElement, SVGAttributes<SVGElement>>(
   ({ className, ...props }, ref) => (
     <svg
-      className={twcx("h-6 w-6", className)}
+      className={cn("h-6 w-6", className)}
       shapeRendering="geometricPrecision"
       aria-label="LTX"
       fill="currentColor"

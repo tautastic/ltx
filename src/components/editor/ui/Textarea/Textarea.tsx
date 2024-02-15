@@ -1,11 +1,11 @@
 import { forwardRef, type TextareaHTMLAttributes } from "react";
-import twcx from "~/utils/twcx";
+import { cn } from "~/utils";
 
 export const Textarea = forwardRef<
   HTMLTextAreaElement,
   TextareaHTMLAttributes<HTMLTextAreaElement>
 >(({ className, ...rest }, ref) => {
-  const textAreaClassName = twcx(
+  const textAreaClassName = cn(
     "bg-black/5 border-0 rounded-lg caret-black block text-black text-sm font-medium h-[4.5rem] px-2 py-1 w-full",
     "dark:bg-white/10 dark:text-white dark:caret-white",
     "hover:bg-black/10",
