@@ -1,5 +1,5 @@
 import { Input } from "~/components/ui/input";
-import { ChevronDown, ChevronLeft, Edit, MoreVertical, PlusIcon, Search } from "lucide-react";
+import { ChevronDown, MoreVertical, PlusIcon, Search } from "lucide-react";
 import {
   Select,
   SelectContent,
@@ -24,10 +24,29 @@ import Link from "next/link";
 import { TagSelectDropdown } from "~/components/tag-select-dropdown";
 import useWindowSize from "~/lib/hooks/use-window-size";
 import CreateTagDialog from "~/components/create-tag-dialog";
+import { type Tag, type User } from "~/schemas";
+import api from "~/utils/api";
 
-export const ProfileOverview = () => {
+interface ProfileOverviewProps {
+  basicUser: User;
+}
+
+export const ProfileOverview = ({ basicUser }: ProfileOverviewProps) => {
   const [sortBy, setSortBy] = useState("activity");
   const { isMobile } = useWindowSize();
+  const { data } = api.tags.getTagListByAuthorId.useQuery(basicUser.id);
+
+  const tags = data ?? [];
+
+  const [checkedItems, setCheckedItems] = useState<Record<string, boolean>>(
+    tags.reduce(
+      (acc, tag: Tag) => {
+        acc[tag.id] = false;
+        return acc;
+      },
+      {} as Record<string, boolean>
+    )
+  );
 
   return (
     <div className="mx-auto max-w-screen-xl p-1 sm:p-3">
@@ -61,8 +80,14 @@ export const ProfileOverview = () => {
                       </DropdownMenuRadioGroup>
                     </DropdownMenuGroup>
                     <DropdownMenuSeparator />
-                    <DropdownMenuGroup>
-                      <TagSelectDropdown tags={[]} />
+                    <DropdownMenuGroup className="w-[150px]">
+                      <TagSelectDropdown
+                        tags={tags}
+                        checked={(tagId: string) => checkedItems[tagId]}
+                        onCheckedChange={(tagId: string) => (checked: boolean) =>
+                          setCheckedItems({ ...checkedItems, [tagId]: checked })
+                        }
+                      />
                     </DropdownMenuGroup>
                   </DropdownMenuContent>
                 </DropdownMenu>
@@ -94,8 +119,14 @@ export const ProfileOverview = () => {
                     Select Tags
                   </Button>
                 </DropdownMenuTrigger>
-                <DropdownMenuContent>
-                  <TagSelectDropdown tags={[]} />
+                <DropdownMenuContent className="w-[150px]">
+                  <TagSelectDropdown
+                    tags={tags}
+                    checked={(tagId: string) => checkedItems[tagId]}
+                    onCheckedChange={(tagId: string) => (checked: boolean) =>
+                      setCheckedItems({ ...checkedItems, [tagId]: checked })
+                    }
+                  />
                 </DropdownMenuContent>
               </DropdownMenu>
             </CreateTagDialog>

@@ -59,7 +59,7 @@ const ProfilePage: NextPageWithAuthAndLayout<
         </TabsList>
       </div>
       <TabsContent value="overview">
-        <ProfileOverview />
+        <ProfileOverview basicUser={basicUser} />
       </TabsContent>
       <TabsContent value="people">People</TabsContent>
       <TabsContent value="stars">Stars</TabsContent>
