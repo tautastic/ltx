@@ -26,6 +26,7 @@ import useWindowSize from "~/lib/hooks/use-window-size";
 import CreateTagDialog from "~/components/create-tag-dialog";
 import { type Tag, type User } from "~/schemas";
 import api from "~/utils/api";
+import { DocumentCard } from "~/components/document-card";
 
 interface ProfileOverviewProps {
   basicUser: User;
@@ -34,9 +35,8 @@ interface ProfileOverviewProps {
 export const ProfileOverview = ({ basicUser }: ProfileOverviewProps) => {
   const [sortBy, setSortBy] = useState("activity");
   const { isMobile } = useWindowSize();
-  const { data } = api.tags.getTagListByAuthorId.useQuery(basicUser.id);
-
-  const tags = data ?? [];
+  const tags = api.tags.getTagListByAuthorId.useQuery(basicUser.id).data ?? [];
+  const pagesWithTags = api.pages.getAllPagesByAuthorId.useQuery(basicUser.id).data ?? [];
 
   const [checkedItems, setCheckedItems] = useState<Record<string, boolean>>(
     tags.reduce(
@@ -49,7 +49,7 @@ export const ProfileOverview = ({ basicUser }: ProfileOverviewProps) => {
   );
 
   return (
-    <div className="mx-auto max-w-screen-xl p-1 sm:p-3">
+    <div className="mx-auto flex max-w-screen-xl flex-col space-y-6 p-1 sm:p-3">
       <div className="flex w-full flex-row justify-center space-x-3">
         <Input
           containerClassName="flex-1"
@@ -151,6 +151,15 @@ export const ProfileOverview = ({ basicUser }: ProfileOverviewProps) => {
             <DropdownMenuItem disabled>More coming soon...</DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
+      </div>
+      <div className="flex max-w-lg flex-col flex-wrap">
+        {pagesWithTags && pagesWithTags.length > 0 ? (
+          pagesWithTags.map((page) => {
+            return <DocumentCard key={page.id} basicUser={basicUser} page={page} />;
+          })
+        ) : (
+          <span>Empty</span>
+        )}
       </div>
     </div>
   );
