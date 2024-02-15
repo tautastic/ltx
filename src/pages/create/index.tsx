@@ -31,11 +31,12 @@ import { type SubmitHandler, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { useBlockEditor } from "~/lib/hooks/useBlockEditor";
-import { Checkbox } from "~/components/ui/checkbox";
 import { useToast } from "~/components/ui/use-toast";
 import { Label } from "~/components/ui/label";
 import { useRouter } from "next/router";
 import { Switch } from "~/components/ui/switch";
+import { PlusIcon } from "lucide-react";
+import { DialogTrigger } from "~/components/ui/dialog";
 
 const formSchema = z.object({
   description: z.string().max(300, {
@@ -197,7 +198,18 @@ const Create: NextPageWithAuthAndLayout = () => {
                           />
                         ))}
                       <li className="inline-flex h-10 rounded-md border border-gray-200 dark:border-gray-800">
-                        <CreateTagDialog />
+                        <CreateTagDialog>
+                          <DialogTrigger
+                            type="button"
+                            title="Create tag"
+                            className="inline-flex w-full items-center justify-center px-2"
+                          >
+                            <PlusIcon
+                              textRendering={"geometricPrecision"}
+                              className="text-gray-700 dark:text-gray-400"
+                            />
+                          </DialogTrigger>
+                        </CreateTagDialog>
                       </li>
                     </ul>
                   </div>

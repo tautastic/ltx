@@ -1,23 +1,20 @@
 import { useQueryClient } from "@tanstack/react-query";
-import React, { useCallback, useState } from "react";
+import { type ReactNode, useCallback, useState } from "react";
 import api from "~/utils/api";
 import {
   Dialog,
-  DialogClose,
   DialogContent,
   DialogFooter,
   DialogHeader,
   DialogTitle,
-  DialogTrigger,
 } from "~/components/ui/dialog";
-import { PlusIcon } from "lucide-react";
 import { Input } from "~/components/ui/input";
 import * as Popover from "@radix-ui/react-popover";
 import { ColorPicker } from "~/components/editor/panels";
 import { Label } from "~/components/ui/label";
 import { Tag } from "~/components/tag";
 import { Button } from "~/components/ui/button";
-import { type SubmitHandler, useForm, useFormContext } from "react-hook-form";
+import { type SubmitHandler, useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
@@ -47,7 +44,11 @@ const defaultValues = {
 
 type formSchemaType = z.infer<typeof formSchema>;
 
-const CreateTagDialog = () => {
+export interface CreateTagDialogProps {
+  children?: ReactNode;
+}
+
+const CreateTagDialog = ({ children }: CreateTagDialogProps) => {
   const queryClient = useQueryClient();
   const { toast } = useToast();
   const [dialogOpen, setDialogOpen] = useState(false);
@@ -107,16 +108,7 @@ const CreateTagDialog = () => {
 
   return (
     <Dialog open={dialogOpen} onOpenChange={onDialogOpen}>
-      <DialogTrigger
-        type="button"
-        title="Create tag"
-        className="inline-flex w-full items-center justify-center px-2"
-      >
-        <PlusIcon
-          textRendering={"geometricPrecision"}
-          className="text-gray-700 dark:text-gray-400"
-        />
-      </DialogTrigger>
+      {children}
       <DialogContent>
         <DialogHeader>
           <DialogTitle>Create new Tag</DialogTitle>
@@ -163,7 +155,7 @@ const CreateTagDialog = () => {
                           Size="default"
                           {...field}
                           Suffix={
-                            <Popover.Trigger>
+                            <Popover.Trigger className="px-3">
                               <div
                                 style={{
                                   color: field.value,

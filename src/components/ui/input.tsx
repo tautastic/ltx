@@ -31,7 +31,7 @@ const inputVariants = cva(
 );
 
 const peerVariants = cva(
-  "relative flex shrink-0 items-center border border-gray-100 bg-gray-50 px-3 text-gray-500 dark:border-gray-800 dark:bg-gray-900",
+  "relative flex shrink-0 items-center border border-gray-100 bg-gray-50 text-gray-500 dark:border-gray-800 dark:bg-gray-900",
   {
     variants: {
       Size: {
@@ -51,12 +51,13 @@ export interface InputProps
     VariantProps<typeof inputVariants> {
   Prefix?: ReactNode;
   Suffix?: ReactNode;
+  containerClassName?: string;
 }
 
 const Input = forwardRef<HTMLInputElement, InputProps>(
-  ({ className, Loading, Prefix, Size, Suffix, Type, ...props }, ref) => {
+  ({ className, containerClassName, Loading, Prefix, Size, Suffix, Type, ...props }, ref) => {
     return (
-      <div className="flex items-center text-sm">
+      <div className={cn("flex items-center text-sm", containerClassName)}>
         <input
           autoCapitalize="none"
           aria-invalid="false"
