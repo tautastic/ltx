@@ -30,7 +30,7 @@ export const ProfileOverview = () => {
   const { isMobile } = useWindowSize();
 
   return (
-    <div className="mx-auto max-w-screen-xl p-3">
+    <div className="mx-auto max-w-screen-xl p-1 sm:p-3">
       <div className="flex w-full flex-row justify-center space-x-3">
         <Input
           containerClassName="flex-1"
