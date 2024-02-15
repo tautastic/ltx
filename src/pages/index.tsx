@@ -15,13 +15,13 @@ const Home: NextPageWithAuthAndLayout = () => {
   return (
     <>
       <div className="flex flex-col items-center justify-between gap-y-8 px-4 text-center md:gap-y-16">
-        <h1 className="-mb-2 flex flex-wrap items-center justify-center overflow-hidden text-5.5xl font-extrabold tracking-[-0.04em] subpixel-antialiased xs:text-7xl md:text-7.5xl xl:flex-nowrap xl:gap-x-3 xl:text-8xl">
+        <h1 className="flex flex-wrap items-center justify-center overflow-hidden text-7xl font-extrabold tracking-[-0.04em] subpixel-antialiased xs:text-7xl md:text-7.5xl xl:flex-nowrap xl:gap-x-3 xl:text-8xl">
           <span
-            data-text="Create."
+            data-text="Write."
             className="hero-text-bg before:animate-[text-fade-bg-1_8s_infinite]"
           >
             <span className="text-fill-transparent relative animate-[text-fade-fg-1_8s_infinite] bg-gradient-to-r from-[#007cf0] to-[#00dfd8] bg-clip-text">
-              Create.
+              Write.
             </span>
           </span>
           <span
@@ -92,7 +92,7 @@ Home.getLayout = (page) => {
         <AuthDropdown />
       </Header>
       <Background />
-      <main className="flex min-h-screen flex-col items-center justify-start gap-y-16 px-2 py-24 invert-0 md:gap-y-14 md:py-32">
+      <main className="flex min-h-screen flex-col items-center justify-start gap-y-16 px-2 py-20 invert-0 md:gap-y-14 md:py-32">
         {page}
       </main>
       <Footer />
