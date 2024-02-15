@@ -1,5 +1,5 @@
 import { forwardRef, type SVGAttributes } from "react";
-import { cn } from "~/utils";
+import { cn } from "~/utils/cn";
 
 export const Discord = forwardRef<SVGSVGElement, SVGAttributes<SVGElement>>(
   ({ className, ...props }, ref) => (

@@ -2,7 +2,7 @@ import { cva, type VariantProps } from "class-variance-authority";
 import { type InputHTMLAttributes, forwardRef, type ReactNode } from "react";
 import { Loader } from "lucide-react";
 
-import { cn } from "~/utils";
+import { cn } from "~/utils/cn";
 
 const inputVariants = cva(
   "order-1 inline-flex flex-grow items-center justify-center rounded border px-3 py-0 text-sm focus:outline-none focus:ring-0",
@@ -19,7 +19,7 @@ const inputVariants = cva(
       },
       Type: {
         primary:
-          "border-gray-100 focus:border-gray-600 dark:border-gray-800 dark:bg-black dark:focus:border-gray-500 placeholder:text-gray-400 dark:placeholder:text-gray-700 disabled:border-gray-200 disabled:bg-gray-100/30 disabled:text-gray-400 dark:disabled:border-gray-800 dark:disabled:bg-gray-900 dark:disabled:text-gray-800",
+          "border-gray-100 bg-white dark:bg-gray-950 focus:border-gray-600 dark:border-gray-800 dark:focus:border-gray-500 placeholder:text-gray-400 dark:placeholder:text-gray-700 disabled:border-gray-200 disabled:bg-gray-100/30 disabled:text-gray-400 dark:disabled:border-gray-800 dark:disabled:bg-gray-900 dark:disabled:text-gray-800",
       },
     },
     defaultVariants: {

@@ -1,6 +1,6 @@
 import React, { type ButtonHTMLAttributes, type HTMLProps, forwardRef } from "react";
 
-import { cn } from "~/utils";
+import { cn } from "~/utils/cn";
 import { Surface } from "./Surface";
 import { Button, type ButtonProps } from "./Button";
 import Tooltip from "./Tooltip";

@@ -35,6 +35,7 @@ import { Checkbox } from "~/components/ui/checkbox";
 import { useToast } from "~/components/ui/use-toast";
 import { Label } from "~/components/ui/label";
 import { useRouter } from "next/router";
+import { Switch } from "~/components/ui/switch";
 
 const formSchema = z.object({
   description: z.string().max(300, {
@@ -142,7 +143,7 @@ const Create: NextPageWithAuthAndLayout = () => {
           >
             <Fieldset className="rounded-none border-x-0 border-b-0">
               <FieldsetContent>
-                <h4 className="mb-1 text-xl font-[600]">Save Document</h4>
+                <h4 className="mb-2 text-xl font-[600]">Save Document</h4>
                 <div className="flex flex-col gap-y-4">
                   <FormField
                     control={form.control}
@@ -181,9 +182,9 @@ const Create: NextPageWithAuthAndLayout = () => {
                       </FormItem>
                     )}
                   />
-                  <div>
+                  <div className="space-y-2">
                     <Label>Tags</Label>
-                    <ul className="mt-1 flex select-none flex-wrap items-center gap-4">
+                    <ul className="flex select-none flex-wrap items-center gap-4">
                       {tags &&
                         tags.map((tag) => (
                           <Tag
@@ -204,16 +205,16 @@ const Create: NextPageWithAuthAndLayout = () => {
                     control={form.control}
                     name="isPrivate"
                     render={({ field }) => (
-                      <FormItem className="flex flex-row items-start space-x-3 space-y-0 py-2">
-                        <FormControl>
-                          <Checkbox checked={field.value} onCheckedChange={field.onChange} />
-                        </FormControl>
-                        <div className="space-y-1 leading-none">
-                          <FormLabel>Private</FormLabel>
+                      <FormItem className="flex flex-row items-start justify-between space-y-2 rounded-lg border border-gray-200 p-4 dark:border-gray-800">
+                        <div className="space-y-0.5">
+                          <FormLabel className="text-base font-medium">Private</FormLabel>
                           <FormDescription>
                             Controls wether or not this Document can be seen by others.
                           </FormDescription>
                         </div>
+                        <FormControl>
+                          <Switch checked={field.value} onCheckedChange={field.onChange} />
+                        </FormControl>
                       </FormItem>
                     )}
                   />

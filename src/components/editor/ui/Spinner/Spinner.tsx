@@ -1,4 +1,4 @@
-import { cn } from "~/utils";
+import { cn } from "~/utils/cn";
 import { type HTMLProps, forwardRef } from "react";
 
 export const Spinner = forwardRef<HTMLDivElement, HTMLProps<HTMLDivElement>>(

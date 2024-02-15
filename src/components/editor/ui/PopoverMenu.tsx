@@ -1,5 +1,5 @@
 import * as Popover from "@radix-ui/react-popover";
-import { cn } from "~/utils";
+import { cn } from "~/utils/cn";
 import { icons } from "lucide-react";
 import { forwardRef, type ReactNode } from "react";
 import { Surface } from "./Surface";

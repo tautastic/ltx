@@ -1,4 +1,4 @@
-import { cn } from "~/utils";
+import { cn } from "~/utils/cn";
 import { type Node } from "@tiptap/pm/model";
 import { type Editor, NodeViewWrapper } from "@tiptap/react";
 import { useCallback, useRef } from "react";

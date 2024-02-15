@@ -1,5 +1,5 @@
 import type { FC, ForwardedRef, ReactNode } from "react";
-import { cn } from "~/utils";
+import { cn } from "~/utils/cn";
 import { forwardRef } from "react";
 
 const Fieldset = forwardRef(

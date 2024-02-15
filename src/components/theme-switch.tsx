@@ -1,7 +1,7 @@
 import { type ReactNode } from "react";
 import { Monitor, Moon, Sun } from "lucide-react";
 import { useTheme } from "next-themes";
-import { cn } from "~/utils";
+import { cn } from "~/utils/cn";
 
 interface ThemeSettings {
   icon: ReactNode;

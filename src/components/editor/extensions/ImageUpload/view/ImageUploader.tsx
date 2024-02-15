@@ -2,7 +2,7 @@ import { Spinner } from "~/components/editor/ui/Spinner";
 import { useDropZone, useFileUpload, useUploader } from "./hooks";
 import { Button } from "~/components/editor/ui/Button";
 import { Icon } from "~/components/editor/ui/Icon";
-import { cn } from "~/utils";
+import { cn } from "~/utils/cn";
 import { type ChangeEvent, useCallback } from "react";
 
 export const ImageUploader = ({ onUpload }: { onUpload: (url: string) => void }) => {

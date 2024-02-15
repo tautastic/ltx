@@ -2,7 +2,7 @@ import { type ButtonHTMLAttributes, forwardRef, type ReactNode } from "react";
 import { type VariantProps, cva } from "class-variance-authority";
 import { Loader } from "lucide-react";
 
-import { cn } from "~/utils";
+import { cn } from "~/utils/cn";
 
 const buttonVariants = cva(
   "inline-flex items-center gap-x-2 justify-center rounded border px-4 py-2 text-sm font-medium focus:outline-none disabled:border-gray-300 disabled:bg-gray-100 disabled:text-gray-500 dark:focus:ring-offset-black dark:disabled:border-gray-800 dark:disabled:bg-gray-800/40 dark:disabled:text-gray-600",

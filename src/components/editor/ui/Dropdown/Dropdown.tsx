@@ -1,4 +1,4 @@
-import { cn } from "~/utils";
+import { cn } from "~/utils/cn";
 import { type ReactNode } from "react";
 
 export const DropdownCategoryTitle = ({ children }: { children: React.ReactNode }) => {

@@ -1,23 +1,49 @@
-import * as React from "react";
+import { cva, type VariantProps } from "class-variance-authority";
+import { type TextareaHTMLAttributes, forwardRef } from "react";
+import { cn } from "~/utils/cn";
 
-import { cn } from "~/utils";
+interface TextareaProps
+  extends TextareaHTMLAttributes<HTMLTextAreaElement>,
+    VariantProps<typeof textareaVariants> {}
 
-export interface TextareaProps extends React.TextareaHTMLAttributes<HTMLTextAreaElement> {}
+const textareaVariants = cva(
+  "flex min-h-[2.5rem] w-full rounded border px-3 py-2 text-sm focus:outline-none focus:ring-0",
+  {
+    variants: {
+      Loading: {
+        true: "disabled:cursor-wait",
+        false: "transition duration-100 ease-in-out disabled:cursor-not-allowed",
+      },
+      Type: {
+        primary:
+          "border-gray-100 bg-white dark:bg-gray-950 focus:border-gray-600 dark:border-gray-800 dark:focus:border-gray-500 placeholder:text-gray-400 dark:placeholder:text-gray-700 disabled:border-gray-200 disabled:bg-gray-100/30 disabled:text-gray-400 dark:disabled:border-gray-800 dark:disabled:bg-gray-900 dark:disabled:text-gray-800",
+      },
+    },
+    defaultVariants: {
+      Loading: false,
+      Type: "primary",
+    },
+  }
+);
 
-const Textarea = React.forwardRef<HTMLTextAreaElement, TextareaProps>(
-  ({ className, ...props }, ref) => {
+const Textarea = forwardRef<HTMLTextAreaElement, TextareaProps>(
+  ({ className, Loading, Type, ...props }, ref) => {
     return (
       <textarea
-        className={cn(
-          "flex min-h-[80px] w-full rounded-md border border-gray-200 bg-white px-3 py-2 text-sm ring-offset-white placeholder:text-gray-500 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gray-950 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 dark:border-gray-800 dark:bg-gray-950 dark:ring-offset-gray-950 dark:placeholder:text-gray-400 dark:focus-visible:ring-gray-300",
-          className
-        )}
+        autoCapitalize="none"
+        aria-invalid="false"
+        autoComplete="off"
+        spellCheck="false"
+        autoCorrect="off"
+        className={cn(textareaVariants({ className, Loading, Type }))}
+        disabled={Loading || props.disabled}
         ref={ref}
         {...props}
       />
     );
   }
 );
+
 Textarea.displayName = "Textarea";
 
 export { Textarea };

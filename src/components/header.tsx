@@ -2,7 +2,7 @@ import { Ltx } from "~/components/ui/brand-icons";
 import useScroll from "~/lib/hooks/use-scroll";
 import { useRouter } from "next/router";
 import { type ReactNode } from "react";
-import { cn } from "~/utils";
+import { cn } from "~/utils/cn";
 import Link from "next/link";
 
 export interface HeaderProps {
@@ -18,7 +18,7 @@ const Header = ({ children, scrollThreshhold = 25 }: HeaderProps) => {
   return (
     <header
       className={cn(
-        "sticky top-0 z-[101] h-[64px] w-full border-b px-4 py-2 md:py-3",
+        "sticky top-0 z-10 h-[64px] w-full border-b px-4 py-2 md:py-3",
         scrolled || ignoreScrolled
           ? "border-gray-100 bg-white/80 backdrop-blur dark:border-gray-800 dark:bg-black/50"
           : "border-transparent bg-white dark:bg-black"

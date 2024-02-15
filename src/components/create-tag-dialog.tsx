@@ -2,14 +2,14 @@ import { useQueryClient } from "@tanstack/react-query";
 import React, { useCallback, useState } from "react";
 import api from "~/utils/api";
 import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogContent,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-  AlertDialogTrigger,
-} from "~/components/ui/alert-dialog";
+  Dialog,
+  DialogClose,
+  DialogContent,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "~/components/ui/dialog";
 import { PlusIcon } from "lucide-react";
 import { Input } from "~/components/ui/input";
 import * as Popover from "@radix-ui/react-popover";
@@ -17,7 +17,7 @@ import { ColorPicker } from "~/components/editor/panels";
 import { Label } from "~/components/ui/label";
 import { Tag } from "~/components/tag";
 import { Button } from "~/components/ui/button";
-import { type SubmitHandler, useForm } from "react-hook-form";
+import { type SubmitHandler, useForm, useFormContext } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
@@ -53,7 +53,7 @@ const CreateTagDialog = () => {
   const [dialogOpen, setDialogOpen] = useState(false);
   const newTagMutation = api.tags.createNewTag.useMutation();
 
-  const form = useForm<formSchemaType>({
+  const { watch, ...form } = useForm<formSchemaType>({
     resolver: zodResolver(formSchema),
     defaultValues,
   });
@@ -106,8 +106,8 @@ const CreateTagDialog = () => {
   };
 
   return (
-    <AlertDialog open={dialogOpen} onOpenChange={onDialogOpen}>
-      <AlertDialogTrigger
+    <Dialog open={dialogOpen} onOpenChange={onDialogOpen}>
+      <DialogTrigger
         type="button"
         title="Create tag"
         className="inline-flex w-full items-center justify-center px-2"
@@ -116,12 +116,12 @@ const CreateTagDialog = () => {
           textRendering={"geometricPrecision"}
           className="text-gray-700 dark:text-gray-400"
         />
-      </AlertDialogTrigger>
-      <AlertDialogContent>
-        <AlertDialogHeader>
-          <AlertDialogTitle>Create new Tag</AlertDialogTitle>
-        </AlertDialogHeader>
-        <Form {...form}>
+      </DialogTrigger>
+      <DialogContent>
+        <DialogHeader>
+          <DialogTitle>Create new Tag</DialogTitle>
+        </DialogHeader>
+        <Form {...form} watch={watch}>
           <form
             onSubmit={(e) => {
               e.stopPropagation();
@@ -191,24 +191,22 @@ const CreateTagDialog = () => {
                       placeholder="Name"
                       color={field.value}
                       id={"newTagId"}
-                      name={form.getValues("name")}
+                      name={watch("name")}
                       readonly={true}
                     />
                   </ul>
                 </>
               )}
             />
-            <AlertDialogFooter>
-              <AlertDialogAction>
-                <Button type="submit" Size="sm">
-                  Create
-                </Button>
-              </AlertDialogAction>
-            </AlertDialogFooter>
+            <DialogFooter>
+              <Button type="submit" Size="sm">
+                Create
+              </Button>
+            </DialogFooter>
           </form>
         </Form>
-      </AlertDialogContent>
-    </AlertDialog>
+      </DialogContent>
+    </Dialog>
   );
 };
 
