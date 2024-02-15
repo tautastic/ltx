@@ -9,7 +9,7 @@ import {
   CardHeader,
   CardTitle,
 } from "~/components/ui/card";
-import { MoreHorizontal, Star, TagIcon } from "lucide-react";
+import { Edit, MoreHorizontal, Star, TagIcon, Trash } from "lucide-react";
 import { Badge } from "~/components/ui/badge";
 import {
   DropdownMenu,
@@ -62,6 +62,12 @@ export const DocumentCard = ({ basicUser, page }: DocumentCardProps) => {
           <DropdownMenuContent className="w-[170px]">
             <DropdownMenuItem className="group flex justify-between">
               Add Favorite <SparkyStars />
+            </DropdownMenuItem>
+            <DropdownMenuItem className="group flex justify-between">
+              Edit <Edit className="h-4 w-4" />
+            </DropdownMenuItem>
+            <DropdownMenuItem className="group flex justify-between">
+              Delete <Trash className="h-4 w-4" />
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
