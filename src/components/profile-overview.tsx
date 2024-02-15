@@ -80,7 +80,7 @@ export const ProfileOverview = ({ basicUser }: ProfileOverviewProps) => {
                       </DropdownMenuRadioGroup>
                     </DropdownMenuGroup>
                     <DropdownMenuSeparator />
-                    <DropdownMenuGroup className="w-[150px]">
+                    <DropdownMenuGroup className="min-w-[150px]">
                       <TagSelectDropdown
                         tags={tags}
                         checked={(tagId: string) => checkedItems[tagId]}
@@ -152,7 +152,7 @@ export const ProfileOverview = ({ basicUser }: ProfileOverviewProps) => {
           </DropdownMenuContent>
         </DropdownMenu>
       </div>
-      <div className="flex w-full flex-row flex-wrap gap-x-6 gap-y-4">
+      <div className="flex w-full flex-row flex-wrap justify-around gap-x-6 gap-y-4">
         {pagesWithTags && pagesWithTags.length > 0 ? (
           pagesWithTags.map((page) => {
             return <DocumentCard key={page.id} basicUser={basicUser} page={page} />;

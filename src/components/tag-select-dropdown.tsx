@@ -29,7 +29,10 @@ export const TagSelectDropdown = ({ checked, onCheckedChange, tags }: TagSelectD
             checked={checked(tag.id)}
             onCheckedChange={onCheckedChange(tag.id)}
           >
-            <label htmlFor={tag.id} className="flex flex-1 cursor-pointer items-center gap-x-1.5">
+            <label
+              htmlFor={tag.id}
+              className="flex flex-1 cursor-pointer items-center gap-x-1.5 pr-4"
+            >
               <TagIcon textRendering={"geometricPrecision"} className="h-4 w-4" color={tag.color} />
               <p className="break-keep">{tag.name}</p>
             </label>

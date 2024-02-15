@@ -34,7 +34,7 @@ const ProfilePage: NextPageWithAuthAndLayout<
   InferGetServerSidePropsType<typeof getServerSideProps>
 > = ({ basicUser }) => {
   return (
-    <Tabs defaultValue="overview" className="flex h-screen w-full flex-col">
+    <Tabs defaultValue="overview" className="flex min-h-screen w-full flex-col">
       <div className="flex w-full flex-col items-center space-y-12 border-b border-gray-200 bg-gray-100 pt-12 dark:border-gray-800 dark:bg-gray-950">
         <div className="flex w-full max-w-lg flex-col items-center justify-center space-y-1">
           <Avatar className="mb-2 h-32 w-32">
@@ -74,7 +74,7 @@ ProfilePage.getLayout = (page) => {
       <Header scrollThreshhold={0}>
         <AuthDropdown />
       </Header>
-      <main className="flex min-h-screen flex-col items-center justify-start gap-y-16 pb-24 invert-0 md:gap-y-14 md:pb-32">
+      <main className="flex min-h-screen flex-col items-center justify-start gap-y-16 pb-24 invert-0 md:gap-y-14">
         {page}
       </main>
       <Footer />

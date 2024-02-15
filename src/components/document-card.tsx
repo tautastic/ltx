@@ -39,10 +39,10 @@ const CardTags = ({ tags }: { tags: TagList }) => {
 
 export const DocumentCard = ({ basicUser, page }: DocumentCardProps) => {
   return (
-    <Card className="flex w-[350px] flex-col justify-between">
+    <Card className="flex min-w-[325px] max-w-[650px] flex-1 flex-col justify-between">
       <CardHeader>
         <CardTitle className="line-clamp-2 leading-7">{page.title}</CardTitle>
-        <CardDescription className="line-clamp-4">{page.description}</CardDescription>
+        <CardDescription className="line-clamp-4 h-[80px]">{page.description}</CardDescription>
       </CardHeader>
       <CardContent>
         <CardTags tags={page.tags} />
