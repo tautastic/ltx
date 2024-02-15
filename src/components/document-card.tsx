@@ -9,8 +9,15 @@ import {
   CardHeader,
   CardTitle,
 } from "~/components/ui/card";
-import { TagIcon } from "lucide-react";
+import { MoreHorizontal, Star, TagIcon } from "lucide-react";
 import { Badge } from "~/components/ui/badge";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "~/components/ui/dropdown-menu";
+import { SparkyStars } from "~/components/ui/sparky-stars";
 
 export interface DocumentCardProps {
   basicUser: User;
@@ -44,12 +51,20 @@ export const DocumentCard = ({ basicUser, page }: DocumentCardProps) => {
         <CardTitle className="line-clamp-2 leading-7">{page.title}</CardTitle>
         <CardDescription className="line-clamp-4 h-[80px]">{page.description}</CardDescription>
       </CardHeader>
-      <CardContent>
+      <CardContent className="py-0">
         <CardTags tags={page.tags} />
       </CardContent>
-      <CardFooter className="flex justify-between">
-        <Button Type="secondary">Edit</Button>
-        <Button>Open</Button>
+      <CardFooter className="flex justify-end">
+        <DropdownMenu>
+          <DropdownMenuTrigger>
+            <MoreHorizontal className="h-4 w-4" />
+          </DropdownMenuTrigger>
+          <DropdownMenuContent className="w-[170px]">
+            <DropdownMenuItem className="group flex justify-between">
+              Add Favorite <SparkyStars />
+            </DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
       </CardFooter>
     </Card>
   );
