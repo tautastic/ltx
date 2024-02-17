@@ -23,7 +23,6 @@ import { type ReactNode, useCallback, useEffect, useMemo, useState } from "react
 import Link from "next/link";
 import { TagSelectDropdown } from "~/components/tag-select-dropdown";
 import useWindowSize from "~/lib/hooks/use-window-size";
-import CreateTagDialog from "~/components/create-tag-dialog";
 import { type PageWithTags, type PageWithTagsList, type TagList, type User } from "~/schemas";
 import api from "~/utils/api";
 import { DocumentCard } from "~/components/document-card";
@@ -116,31 +115,29 @@ const StatefulProfileOverview = ({
           }
           Suffix={
             isMobile && (
-              <CreateTagDialog>
-                <DropdownMenu>
-                  <DropdownMenuTrigger className="h-full px-3">
-                    <MoreVertical className="h-4 w-4" />
-                  </DropdownMenuTrigger>
-                  <DropdownMenuContent side="bottom" align="end">
-                    <DropdownMenuGroup>
-                      <DropdownMenuLabel className="bg-gray-50 text-center dark:bg-gray-900">
-                        Sort by
-                      </DropdownMenuLabel>
-                      <DropdownMenuSeparator />
-                      <DropdownMenuRadioGroup value={sortBy} onValueChange={setSortBy}>
-                        <DropdownMenuRadioItem value="activity">
-                          Sort by activity
-                        </DropdownMenuRadioItem>
-                        <DropdownMenuRadioItem value="name">Sort by name</DropdownMenuRadioItem>
-                      </DropdownMenuRadioGroup>
-                    </DropdownMenuGroup>
+              <DropdownMenu>
+                <DropdownMenuTrigger className="h-full px-3">
+                  <MoreVertical className="h-4 w-4" />
+                </DropdownMenuTrigger>
+                <DropdownMenuContent side="bottom" align="end">
+                  <DropdownMenuGroup>
+                    <DropdownMenuLabel className="bg-gray-50 text-center dark:bg-gray-900">
+                      Sort by
+                    </DropdownMenuLabel>
                     <DropdownMenuSeparator />
-                    <DropdownMenuGroup className="min-w-[150px]">
-                      {tagSelectDropdown}
-                    </DropdownMenuGroup>
-                  </DropdownMenuContent>
-                </DropdownMenu>
-              </CreateTagDialog>
+                    <DropdownMenuRadioGroup value={sortBy} onValueChange={setSortBy}>
+                      <DropdownMenuRadioItem value="activity">
+                        Sort by activity
+                      </DropdownMenuRadioItem>
+                      <DropdownMenuRadioItem value="name">Sort by name</DropdownMenuRadioItem>
+                    </DropdownMenuRadioGroup>
+                  </DropdownMenuGroup>
+                  <DropdownMenuSeparator />
+                  <DropdownMenuGroup className="min-w-[150px]">
+                    {tagSelectDropdown}
+                  </DropdownMenuGroup>
+                </DropdownMenuContent>
+              </DropdownMenu>
             )
           }
         ></Input>
@@ -161,18 +158,16 @@ const StatefulProfileOverview = ({
                 <SelectItem value="name">Sort by name</SelectItem>
               </SelectContent>
             </Select>
-            <CreateTagDialog>
-              <DropdownMenu>
-                <DropdownMenuTrigger asChild>
-                  <Button Type="secondary" Suffix={<ChevronDown className="h-4 w-4" />}>
-                    Select Tags
-                  </Button>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent className="min-w-[150px]">
-                  {tagSelectDropdown}
-                </DropdownMenuContent>
-              </DropdownMenu>
-            </CreateTagDialog>
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button Type="secondary" Suffix={<ChevronDown className="h-4 w-4" />}>
+                  Select Tags
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent className="min-w-[150px]">
+                {tagSelectDropdown}
+              </DropdownMenuContent>
+            </DropdownMenu>
           </>
         )}
         {isAuthor && (

@@ -6,7 +6,6 @@ import {
 } from "~/components/ui/dropdown-menu";
 import { type TagList } from "~/schemas";
 import { TagIcon } from "lucide-react";
-import { DialogTrigger } from "~/components/ui/dialog";
 import { type CheckedState } from "@radix-ui/react-checkbox";
 
 export interface TagSelectDropdownProps {
@@ -43,12 +42,6 @@ export const TagSelectDropdown = ({ checked, onCheckedChange, tags }: TagSelectD
           This user has no tags
         </DropdownMenuItem>
       )}
-      <DropdownMenuSeparator />
-      <DropdownMenuItem className="p-0">
-        <DialogTrigger type="button" title="Create tag" className="w-full py-3">
-          Create new tag
-        </DialogTrigger>
-      </DropdownMenuItem>
     </>
   );
 };
