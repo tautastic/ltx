@@ -29,6 +29,7 @@ import api from "~/utils/api";
 import { DocumentCard } from "~/components/document-card";
 import { useFuzzy } from "~/lib/hooks/use-fuzzy";
 import { Skeleton } from "~/components/ui/skeleton";
+import { useSession } from "next-auth/react";
 
 interface ProfileOverviewProps {
   basicUser: User;
@@ -43,10 +44,12 @@ const ProfileOverviewWrapper = ({ children }: { children?: ReactNode }) => {
 const StatefulProfileOverview = ({
   allPages,
   allTags,
+  isAuthor,
   isMobile,
 }: {
   allPages: PageWithTagsList;
   allTags: TagList;
+  isAuthor: boolean;
   isMobile: boolean;
 }) => {
   const [sortBy, setSortBy] = useState("activity");
@@ -172,25 +175,27 @@ const StatefulProfileOverview = ({
             </CreateTagDialog>
           </>
         )}
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            {isMobile ? (
-              <Button className="px-3">
-                <PlusIcon className="h-4 w-4" />
-              </Button>
-            ) : (
-              <Button Suffix={<ChevronDown className="h-4 w-4" />}>Add New...</Button>
-            )}
-          </DropdownMenuTrigger>
-          <DropdownMenuContent>
-            <Link href="/create">
-              <DropdownMenuItem>
-                <span>Document</span>
-              </DropdownMenuItem>
-            </Link>
-            <DropdownMenuItem disabled>More coming soon...</DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
+        {isAuthor && (
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              {isMobile ? (
+                <Button className="px-3">
+                  <PlusIcon className="h-4 w-4" />
+                </Button>
+              ) : (
+                <Button Suffix={<ChevronDown className="h-4 w-4" />}>Add New...</Button>
+              )}
+            </DropdownMenuTrigger>
+            <DropdownMenuContent>
+              <Link href="/create">
+                <DropdownMenuItem>
+                  <span>Document</span>
+                </DropdownMenuItem>
+              </Link>
+              <DropdownMenuItem disabled>More coming soon...</DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
+        )}
       </div>
       <div className="flex w-full flex-row flex-wrap justify-around gap-x-6 gap-y-4">
         {filteredPages && filteredPages.length > 0 ? (
@@ -219,6 +224,7 @@ const StatefulProfileOverview = ({
 
 export const ProfileOverview = ({ basicUser }: ProfileOverviewProps) => {
   const { isMobile } = useWindowSize();
+  const { data: session } = useSession();
   const { data: allTags, status: getAllTagsStatus } = api.tags.getTagListByAuthorId.useQuery(
     basicUser.id
   );
@@ -251,6 +257,13 @@ export const ProfileOverview = ({ basicUser }: ProfileOverviewProps) => {
   }
 
   if (getAllPagesStatus === "success" && getAllTagsStatus === "success") {
-    return <StatefulProfileOverview allPages={allPages} allTags={allTags} isMobile={isMobile} />;
+    return (
+      <StatefulProfileOverview
+        allPages={allPages}
+        allTags={allTags}
+        isAuthor={session?.user.id === basicUser.id}
+        isMobile={isMobile}
+      />
+    );
   }
 };
