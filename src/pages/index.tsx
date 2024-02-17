@@ -70,13 +70,13 @@ const Home: NextPageWithAuthAndLayout = () => {
       </div>
       <Fieldset
         ref={editorContainerRef}
-        className="m-auto w-full max-w-screen-sm opacity-0 md:max-w-[75ch] lg:max-w-[95ch]"
+        className="m-auto w-full max-w-screen-sm md:max-w-[75ch] lg:max-w-[95ch]"
       >
-        <FieldsetContent className="px-0">
+        <FieldsetContent className="min-h-[400px] px-0">
           <BlockEditor
-            containerRef={editorContainerRef}
             defaultValue={placeholders["de-stochastik"]}
             isHeaderVisible={false}
+            readonly={true}
           />
         </FieldsetContent>
       </Fieldset>

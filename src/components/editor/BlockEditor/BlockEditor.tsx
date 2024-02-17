@@ -3,7 +3,7 @@
 import { type Content, EditorContent } from "@tiptap/react";
 import React, { useEffect, useRef } from "react";
 
-import { LinkMenu } from "~/components/editor/menus";
+import { ContentItemMenu, LinkMenu } from "~/components/editor/menus";
 
 import { useBlockEditor } from "~/lib/hooks/useBlockEditor";
 
@@ -13,18 +13,17 @@ import { ColumnsMenu } from "~/components/editor/extensions/MultiColumn/menus";
 import { TableColumnMenu, TableRowMenu } from "~/components/editor/extensions/Table/menus";
 import { EditorHeader } from "./components/EditorHeader";
 import { TextMenu } from "../menus/TextMenu";
-import { ContentItemMenu } from "~/components/editor/menus";
 
 export interface BlockEditorProps {
-  containerRef?: React.RefObject<HTMLDivElement>;
   defaultValue?: Content;
   isHeaderVisible?: boolean;
+  readonly?: boolean;
 }
 
 export const BlockEditor = ({
-  containerRef,
   defaultValue,
   isHeaderVisible = true,
+  readonly = false,
 }: BlockEditorProps) => {
   const menuContainerRef = useRef<HTMLDivElement>(null);
   const { editor, characterCount, leftSidebar } = useBlockEditor();
@@ -38,15 +37,22 @@ export const BlockEditor = ({
       editor.chain().setContent(defaultValue).run();
     }
 
-    if (containerRef && containerRef.current !== null) {
-      containerRef.current.style.opacity = "1";
-    }
-
     return () => editor.chain().clearContent(true).run();
-  }, [containerRef, defaultValue, editor]);
+  }, [defaultValue, editor]);
 
   if (!editor) {
     return null;
+  }
+
+  if (readonly) {
+    editor.setEditable(false);
+    return (
+      <div className="flex h-full w-full" ref={menuContainerRef}>
+        <div className="relative flex h-full flex-1 flex-col">
+          <EditorContent className="flex-1 overflow-y-auto" editor={editor} />
+        </div>
+      </div>
+    );
   }
 
   return (

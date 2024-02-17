@@ -142,7 +142,7 @@ const Create: NextPageWithAuthAndLayout = () => {
         className="m-auto w-full max-w-screen-sm opacity-0 md:max-w-[75ch] lg:max-w-[95ch]"
       >
         <FieldsetContent className="min-h-[30ch] px-0">
-          <BlockEditor containerRef={editorContainerRef} isHeaderVisible={false} />
+          <BlockEditor isHeaderVisible={false} />
         </FieldsetContent>
         <Form {...form}>
           <form
