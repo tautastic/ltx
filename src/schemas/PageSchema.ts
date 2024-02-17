@@ -37,3 +37,10 @@ export const CreateNewPageSchema = z.object({
   }),
   selectedTagIds: z.string().cuid().array(),
 });
+
+export const BasicPageSchema = PageSchema.omit({
+  createdAt: true,
+  updatedAt: true,
+});
+
+export type BasicPage = z.infer<typeof BasicPageSchema>;

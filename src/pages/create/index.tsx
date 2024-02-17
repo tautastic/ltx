@@ -12,7 +12,7 @@ import {
   FieldsetFooter,
 } from "~/components/ui/fieldset";
 import { BlockEditor } from "~/components/editor/BlockEditor";
-import React, { useRef, useState } from "react";
+import React, { useState } from "react";
 import { Tag } from "~/components/tag";
 import api from "~/utils/api";
 import { useSession } from "next-auth/react";
@@ -64,10 +64,9 @@ type formSchemaType = z.infer<typeof formSchema>;
 const Create: NextPageWithAuthAndLayout = () => {
   const queryClient = useQueryClient();
   const router = useRouter();
-  const { editor } = useBlockEditor();
+  const { editor, characterCount } = useBlockEditor();
   const { toast } = useToast();
   const { data: session } = useSession();
-  const editorContainerRef = useRef<HTMLDivElement>(null);
   const deleteTagByIdMutation = api.tags.deleteTagById.useMutation();
   const newPageMutation = api.pages.createNewPage.useMutation();
   const [selectedTagIds, setSelectedTagIds] = useState<string[]>([]);
@@ -85,7 +84,7 @@ const Create: NextPageWithAuthAndLayout = () => {
           title: data.title,
           description: data.description,
           isPrivate: data.isPrivate,
-          content: JSON.stringify(editor?.getJSON()),
+          content: JSON.stringify(editor?.$doc.content.toJSON()),
         },
       });
 
@@ -139,7 +138,7 @@ const Create: NextPageWithAuthAndLayout = () => {
     <div className="flex w-full flex-col gap-y-10 sm:max-w-[70ch] md:max-w-[75ch] lg:max-w-[95ch] xl:max-w-[125ch]">
       <Fieldset className="m-auto w-full max-w-screen-sm md:max-w-[75ch] lg:max-w-[95ch] xl:max-w-[125ch]">
         <FieldsetContent className="mx-auto min-h-[25ch] px-0 md:min-h-[30ch] lg:min-h-[40ch]">
-          <BlockEditor isHeaderVisible={true} />
+          <BlockEditor characterCount={characterCount} editor={editor} isHeaderVisible={true} />
         </FieldsetContent>
         <Form {...form}>
           <form

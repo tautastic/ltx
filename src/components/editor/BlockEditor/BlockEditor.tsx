@@ -1,11 +1,9 @@
 "use client";
 
-import { type Content, EditorContent } from "@tiptap/react";
+import { type Content, type Editor, EditorContent } from "@tiptap/react";
 import React, { useEffect, useRef } from "react";
 
 import { ContentItemMenu, LinkMenu } from "~/components/editor/menus";
-
-import { useBlockEditor } from "~/lib/hooks/useBlockEditor";
 
 import ImageBlockMenu from "~/components/editor/extensions/ImageBlock/components/ImageBlockMenu";
 import { ColumnsMenu } from "~/components/editor/extensions/MultiColumn/menus";
@@ -14,18 +12,21 @@ import { EditorHeader } from "./components/EditorHeader";
 import { TextMenu } from "../menus/TextMenu";
 
 export interface BlockEditorProps {
+  characterCount: any;
   defaultValue?: Content;
+  editor: Editor | null;
   isHeaderVisible?: boolean;
   readonly?: boolean;
 }
 
 export const BlockEditor = ({
+  characterCount,
   defaultValue,
+  editor,
   isHeaderVisible = false,
   readonly = false,
 }: BlockEditorProps) => {
   const menuContainerRef = useRef<HTMLDivElement>(null);
-  const { editor, characterCount } = useBlockEditor();
 
   useEffect(() => {
     if (!editor) {

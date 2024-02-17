@@ -1,7 +1,6 @@
 import { type Editor, useEditor } from "@tiptap/react";
 
 import { ExtensionKit } from "~/components/editor/extensions/extension-kit";
-import { useSidebar } from "./useSidebar";
 
 declare global {
   interface Window {
@@ -10,8 +9,6 @@ declare global {
 }
 
 export const useBlockEditor = () => {
-  const leftSidebar = useSidebar();
-
   const editor = useEditor(
     {
       autofocus: true,
@@ -32,5 +29,5 @@ export const useBlockEditor = () => {
 
   const characterCount = editor?.storage.characterCount || { characters: () => 0, words: () => 0 };
 
-  return { editor, characterCount, leftSidebar };
+  return { editor, characterCount };
 };

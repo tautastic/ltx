@@ -1,6 +1,5 @@
 import { type NextPageWithAuthAndLayout, placeholders } from "~/lib/types";
 import AuthDropdown from "~/components/auth-dropdown";
-import React, { useRef } from "react";
 import Background from "~/components/background";
 import { Button } from "~/components/ui/button";
 import Footer from "~/components/footer";
@@ -9,9 +8,10 @@ import { Box, Star } from "lucide-react";
 import Link from "next/link";
 import { BlockEditor } from "~/components/editor/BlockEditor";
 import { Fieldset, FieldsetContent } from "~/components/ui/fieldset";
+import { useBlockEditor } from "~/lib/hooks/useBlockEditor";
 
 const Home: NextPageWithAuthAndLayout = () => {
-  const editorContainerRef = useRef<HTMLDivElement>(null);
+  const { editor, characterCount } = useBlockEditor();
   return (
     <>
       <div className="flex flex-col items-center justify-between gap-y-8 px-4 text-center md:gap-y-16">
@@ -68,13 +68,12 @@ const Home: NextPageWithAuthAndLayout = () => {
           </a>
         </div>
       </div>
-      <Fieldset
-        ref={editorContainerRef}
-        className="m-auto w-full max-w-screen-sm md:max-w-[75ch] lg:max-w-[95ch]"
-      >
+      <Fieldset className="m-auto w-full max-w-screen-sm md:max-w-[75ch] lg:max-w-[95ch]">
         <FieldsetContent className="min-h-[800px] px-0">
           <BlockEditor
+            characterCount={characterCount}
             defaultValue={placeholders["de-stochastik"]}
+            editor={editor}
             isHeaderVisible={false}
             readonly={true}
           />
