@@ -5,7 +5,6 @@ import {
   PageSchema,
   type PageWithTagsList,
   PageWithTagsListSchema,
-  TagSchema,
 } from "~/schemas";
 
 export const pageRouter = createTRPCRouter({

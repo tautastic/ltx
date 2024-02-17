@@ -24,9 +24,10 @@ import Link from "next/link";
 import { TagSelectDropdown } from "~/components/tag-select-dropdown";
 import useWindowSize from "~/lib/hooks/use-window-size";
 import CreateTagDialog from "~/components/create-tag-dialog";
-import { type Tag, type User } from "~/schemas";
+import { type PageWithTags, type Tag, type User } from "~/schemas";
 import api from "~/utils/api";
 import { DocumentCard } from "~/components/document-card";
+import { useFuzzy } from "~/lib/hooks/use-fuzzy";
 
 interface ProfileOverviewProps {
   basicUser: User;
@@ -35,11 +36,12 @@ interface ProfileOverviewProps {
 export const ProfileOverview = ({ basicUser }: ProfileOverviewProps) => {
   const [sortBy, setSortBy] = useState("activity");
   const { isMobile } = useWindowSize();
-  const tags = api.tags.getTagListByAuthorId.useQuery(basicUser.id).data ?? [];
-  const pagesWithTags = api.pages.getAllPagesByAuthorId.useQuery(basicUser.id).data ?? [];
 
-  const [checkedItems, setCheckedItems] = useState<Record<string, boolean>>(
-    tags.reduce(
+  const allTags = api.tags.getTagListByAuthorId.useQuery(basicUser.id).data ?? [];
+  const allPages = api.pages.getAllPagesByAuthorId.useQuery(basicUser.id).data ?? [];
+
+  const [selectedTags, setSelectedTags] = useState<Record<string, boolean>>(
+    allTags.reduce(
       (acc, tag: Tag) => {
         acc[tag.id] = false;
         return acc;
@@ -48,12 +50,17 @@ export const ProfileOverview = ({ basicUser }: ProfileOverviewProps) => {
     )
   );
 
+  const { result: filteredPages, setSearchTerm } = useFuzzy<PageWithTags>(allPages, {
+    keys: ["title", "description"],
+  });
+
   return (
     <div className="mx-auto flex max-w-screen-xl flex-col space-y-6 p-1 sm:p-3">
       <div className="flex w-full flex-row justify-center space-x-3">
         <Input
           containerClassName="flex-1"
           placeholder="Search Documents..."
+          onChange={(e) => setSearchTerm(e.target.value)}
           Prefix={
             <div className="px-3">
               <Search className="h-4 w-4" />
@@ -82,10 +89,10 @@ export const ProfileOverview = ({ basicUser }: ProfileOverviewProps) => {
                     <DropdownMenuSeparator />
                     <DropdownMenuGroup className="min-w-[150px]">
                       <TagSelectDropdown
-                        tags={tags}
-                        checked={(tagId: string) => checkedItems[tagId]}
+                        tags={allTags}
+                        checked={(tagId: string) => selectedTags[tagId]}
                         onCheckedChange={(tagId: string) => (checked: boolean) =>
-                          setCheckedItems({ ...checkedItems, [tagId]: checked })
+                          setSelectedTags({ ...selectedTags, [tagId]: checked })
                         }
                       />
                     </DropdownMenuGroup>
@@ -119,12 +126,12 @@ export const ProfileOverview = ({ basicUser }: ProfileOverviewProps) => {
                     Select Tags
                   </Button>
                 </DropdownMenuTrigger>
-                <DropdownMenuContent className="w-[150px]">
+                <DropdownMenuContent className="min-w-[150px]">
                   <TagSelectDropdown
-                    tags={tags}
-                    checked={(tagId: string) => checkedItems[tagId]}
+                    tags={allTags}
+                    checked={(tagId: string) => selectedTags[tagId]}
                     onCheckedChange={(tagId: string) => (checked: boolean) =>
-                      setCheckedItems({ ...checkedItems, [tagId]: checked })
+                      setSelectedTags({ ...selectedTags, [tagId]: checked })
                     }
                   />
                 </DropdownMenuContent>
@@ -153,8 +160,8 @@ export const ProfileOverview = ({ basicUser }: ProfileOverviewProps) => {
         </DropdownMenu>
       </div>
       <div className="flex w-full flex-row flex-wrap justify-around gap-x-6 gap-y-4">
-        {pagesWithTags && pagesWithTags.length > 0 ? (
-          pagesWithTags.map((page) => {
+        {filteredPages && filteredPages.length > 0 ? (
+          filteredPages.map((page) => {
             return <DocumentCard key={page.id} basicUser={basicUser} page={page} />;
           })
         ) : (

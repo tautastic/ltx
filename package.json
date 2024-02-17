@@ -78,6 +78,7 @@
     "@trpc/server": "^10.45.1",
     "@types/react": "^18.2.55",
     "clsx": "^2.1.0",
+    "fuse.js": "^7.0.0",
     "iframe-resizer": "^4.3.9",
     "lowlight": "^2.9.0",
     "lucide-react": "^0.330.0",
