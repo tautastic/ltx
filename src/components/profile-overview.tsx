@@ -11,20 +11,20 @@ import { Button } from "~/components/ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
-  DropdownMenuTrigger,
+  DropdownMenuGroup,
   DropdownMenuItem,
+  DropdownMenuLabel,
   DropdownMenuRadioGroup,
   DropdownMenuRadioItem,
-  DropdownMenuGroup,
-  DropdownMenuLabel,
   DropdownMenuSeparator,
+  DropdownMenuTrigger,
 } from "~/components/ui/dropdown-menu";
-import React, { useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import Link from "next/link";
 import { TagSelectDropdown } from "~/components/tag-select-dropdown";
 import useWindowSize from "~/lib/hooks/use-window-size";
 import CreateTagDialog from "~/components/create-tag-dialog";
-import { type PageWithTags, type Tag, type User } from "~/schemas";
+import { type PageWithTags, type User } from "~/schemas";
 import api from "~/utils/api";
 import { DocumentCard } from "~/components/document-card";
 import { useFuzzy } from "~/lib/hooks/use-fuzzy";
@@ -36,23 +36,55 @@ interface ProfileOverviewProps {
 export const ProfileOverview = ({ basicUser }: ProfileOverviewProps) => {
   const [sortBy, setSortBy] = useState("activity");
   const { isMobile } = useWindowSize();
-
   const allTags = api.tags.getTagListByAuthorId.useQuery(basicUser.id).data ?? [];
   const allPages = api.pages.getAllPagesByAuthorId.useQuery(basicUser.id).data ?? [];
+  const [filteredPages, setFilteredPages] = useState<PageWithTags[]>(allPages);
 
-  const [selectedTags, setSelectedTags] = useState<Record<string, boolean>>(
-    allTags.reduce(
-      (acc, tag: Tag) => {
-        acc[tag.id] = false;
-        return acc;
-      },
-      {} as Record<string, boolean>
-    )
+  const [selectedTagsId, setSelectedTagsId] = useState<string[]>([]);
+
+  const isInSelectedTags = useCallback(
+    (page: PageWithTags) =>
+      selectedTagsId.length < 1 ||
+      selectedTagsId.every((tagId) => page.tags.some((tag) => tag.id === tagId)),
+    [selectedTagsId]
   );
 
-  const { result: filteredPages, setSearchTerm } = useFuzzy<PageWithTags>(allPages, {
-    keys: ["title", "description"],
+  const sortFunction = useCallback(
+    (a: PageWithTags, b: PageWithTags) => {
+      if (sortBy === "name") {
+        return a.title.localeCompare(b.title);
+      }
+
+      return b.updatedAt.getTime() - a.updatedAt.getTime();
+    },
+    [sortBy]
+  );
+
+  const { result, searchTerm, setSearchTerm } = useFuzzy<PageWithTags>(allPages, {
+    keys: ["title", "description", "updatedAt"],
+    shouldSort: true,
+    ignoreFieldNorm: true,
   });
+
+  useEffect(() => {
+    setFilteredPages(result.filter(isInSelectedTags).toSorted(sortFunction));
+
+    return () => setFilteredPages([]);
+  }, [result, sortFunction, sortBy, isInSelectedTags]);
+
+  const tagSelectDropdown = (
+    <TagSelectDropdown
+      tags={allTags}
+      checked={(tagId: string) => selectedTagsId.includes(tagId)}
+      onCheckedChange={(tagId: string) => (checked: boolean) => {
+        if (checked) {
+          setSelectedTagsId([...selectedTagsId, tagId]);
+        } else {
+          setSelectedTagsId(selectedTagsId.filter((id) => id !== tagId));
+        }
+      }}
+    />
+  );
 
   return (
     <div className="mx-auto flex max-w-screen-xl flex-col space-y-6 p-1 sm:p-3">
@@ -88,13 +120,7 @@ export const ProfileOverview = ({ basicUser }: ProfileOverviewProps) => {
                     </DropdownMenuGroup>
                     <DropdownMenuSeparator />
                     <DropdownMenuGroup className="min-w-[150px]">
-                      <TagSelectDropdown
-                        tags={allTags}
-                        checked={(tagId: string) => selectedTags[tagId]}
-                        onCheckedChange={(tagId: string) => (checked: boolean) =>
-                          setSelectedTags({ ...selectedTags, [tagId]: checked })
-                        }
-                      />
+                      {tagSelectDropdown}
                     </DropdownMenuGroup>
                   </DropdownMenuContent>
                 </DropdownMenu>
@@ -127,13 +153,7 @@ export const ProfileOverview = ({ basicUser }: ProfileOverviewProps) => {
                   </Button>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent className="min-w-[150px]">
-                  <TagSelectDropdown
-                    tags={allTags}
-                    checked={(tagId: string) => selectedTags[tagId]}
-                    onCheckedChange={(tagId: string) => (checked: boolean) =>
-                      setSelectedTags({ ...selectedTags, [tagId]: checked })
-                    }
-                  />
+                  {tagSelectDropdown}
                 </DropdownMenuContent>
               </DropdownMenu>
             </CreateTagDialog>
@@ -165,7 +185,13 @@ export const ProfileOverview = ({ basicUser }: ProfileOverviewProps) => {
             return <DocumentCard key={page.id} basicUser={basicUser} page={page} />;
           })
         ) : (
-          <span>Empty</span>
+          <div className="my-auto flex h-[200px] w-full flex-col flex-wrap items-center justify-center gap-y-3">
+            <h2 className="text-lg md:text-xl">No Results Found</h2>
+            <br />
+            <p className="text-gray-600 dark:text-gray-500">
+              Your search for &quot;{searchTerm}&quot; did not return any results.
+            </p>
+          </div>
         )}
       </div>
     </div>

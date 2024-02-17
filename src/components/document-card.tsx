@@ -1,6 +1,4 @@
 import { type PageWithTags, type TagList, type User } from "~/schemas";
-
-import { Button } from "~/components/ui/button";
 import {
   Card,
   CardContent,
@@ -9,7 +7,7 @@ import {
   CardHeader,
   CardTitle,
 } from "~/components/ui/card";
-import { Edit, MoreHorizontal, Star, TagIcon, Trash, XIcon } from "lucide-react";
+import { Edit, MoreHorizontal, TagIcon, Trash } from "lucide-react";
 import { Badge } from "~/components/ui/badge";
 import {
   DropdownMenu,
@@ -47,7 +45,7 @@ const CardTags = ({ tags }: { tags: TagList }) => {
         tags.length > 0 &&
         tags.map((tag) => (
           <Badge
-            className="select-none border-transparent p-1 hover:bg-gray-900 hover:text-gray-50 dark:bg-gray-900 dark:text-gray-50 dark:hover:bg-gray-900 dark:hover:text-gray-50"
+            className="select-none border-transparent bg-gray-900 p-1 hover:bg-gray-800 hover:text-gray-50 dark:bg-gray-950 dark:text-gray-50 dark:hover:bg-gray-900 dark:hover:text-gray-50"
             key={tag.id}
           >
             <label htmlFor={tag.id} className="flex flex-1 scale-90 items-center gap-x-1.5">
