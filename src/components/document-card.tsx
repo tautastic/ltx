@@ -32,6 +32,7 @@ import {
 } from "~/components/ui/alert-dialog";
 import React from "react";
 import { useSession } from "next-auth/react";
+import Link from "next/link";
 
 export interface DocumentCardProps {
   page: PageWithTags;
@@ -82,10 +83,12 @@ export const DocumentCard = ({ page }: DocumentCardProps) => {
 
   return (
     <Card className="flex min-w-[325px] max-w-[650px] flex-1 flex-col justify-between">
-      <CardHeader>
-        <CardTitle className="line-clamp-2 leading-7">{page.title}</CardTitle>
-        <CardDescription className="line-clamp-4 h-[80px]">{page.description}</CardDescription>
-      </CardHeader>
+      <Link href={`/d/${page.id}`}>
+        <CardHeader>
+          <CardTitle className="line-clamp-2 leading-7">{page.title}</CardTitle>
+          <CardDescription className="line-clamp-4 h-[80px]">{page.description}</CardDescription>
+        </CardHeader>
+      </Link>
       <CardContent className="py-0">
         <CardTags tags={page.tags} />
       </CardContent>
