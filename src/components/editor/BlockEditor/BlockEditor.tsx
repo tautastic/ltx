@@ -7,7 +7,6 @@ import { ContentItemMenu, LinkMenu } from "~/components/editor/menus";
 
 import { useBlockEditor } from "~/lib/hooks/useBlockEditor";
 
-import { Sidebar } from "~/components/editor/Sidebar";
 import ImageBlockMenu from "~/components/editor/extensions/ImageBlock/components/ImageBlockMenu";
 import { ColumnsMenu } from "~/components/editor/extensions/MultiColumn/menus";
 import { TableColumnMenu, TableRowMenu } from "~/components/editor/extensions/Table/menus";
@@ -22,30 +21,31 @@ export interface BlockEditorProps {
 
 export const BlockEditor = ({
   defaultValue,
-  isHeaderVisible = true,
+  isHeaderVisible = false,
   readonly = false,
 }: BlockEditorProps) => {
   const menuContainerRef = useRef<HTMLDivElement>(null);
-  const { editor, characterCount, leftSidebar } = useBlockEditor();
+  const { editor, characterCount } = useBlockEditor();
 
   useEffect(() => {
     if (!editor) {
       return () => {};
     }
 
+    editor.setEditable(!readonly);
+
     if (defaultValue) {
       editor.chain().setContent(defaultValue).run();
     }
 
     return () => editor.chain().clearContent(true).run();
-  }, [defaultValue, editor]);
+  }, [defaultValue, editor, readonly]);
 
   if (!editor) {
     return null;
   }
 
   if (readonly) {
-    editor.setEditable(false);
     return (
       <div className="flex h-full w-full" ref={menuContainerRef}>
         <div className="relative flex h-full flex-1 flex-col">
@@ -57,17 +57,9 @@ export const BlockEditor = ({
 
   return (
     <div className="flex h-full w-full" ref={menuContainerRef}>
-      {isHeaderVisible && (
-        <Sidebar isOpen={leftSidebar.isOpen} onClose={leftSidebar.close} editor={editor} />
-      )}
       <div className="relative flex h-full flex-1 flex-col">
         {isHeaderVisible && (
-          <EditorHeader
-            characters={characterCount.characters()}
-            words={characterCount.words()}
-            isSidebarOpen={leftSidebar.isOpen}
-            toggleSidebar={leftSidebar.toggle}
-          />
+          <EditorHeader characters={characterCount.characters()} words={characterCount.words()} />
         )}
         <EditorContent className="flex-1 overflow-y-auto" editor={editor} />
         <ContentItemMenu editor={editor} />

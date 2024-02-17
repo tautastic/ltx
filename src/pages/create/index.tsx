@@ -136,13 +136,10 @@ const Create: NextPageWithAuthAndLayout = () => {
   const { data: tags } = api.tags.getTagListByAuthorId.useQuery(session?.user.id);
 
   return (
-    <div className="flex w-full flex-col gap-y-10 sm:max-w-[70ch] md:max-w-[75ch] lg:max-w-[95ch]">
-      <Fieldset
-        ref={editorContainerRef}
-        className="m-auto w-full max-w-screen-sm opacity-0 md:max-w-[75ch] lg:max-w-[95ch]"
-      >
-        <FieldsetContent className="min-h-[30ch] px-0">
-          <BlockEditor isHeaderVisible={false} />
+    <div className="flex w-full flex-col gap-y-10 sm:max-w-[70ch] md:max-w-[75ch] lg:max-w-[95ch] xl:max-w-[125ch]">
+      <Fieldset className="m-auto w-full max-w-screen-sm md:max-w-[75ch] lg:max-w-[95ch] xl:max-w-[125ch]">
+        <FieldsetContent className="mx-auto min-h-[25ch] px-0 md:min-h-[30ch] lg:min-h-[40ch]">
+          <BlockEditor isHeaderVisible={true} />
         </FieldsetContent>
         <Form {...form}>
           <form

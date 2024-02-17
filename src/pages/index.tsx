@@ -72,7 +72,7 @@ const Home: NextPageWithAuthAndLayout = () => {
         ref={editorContainerRef}
         className="m-auto w-full max-w-screen-sm md:max-w-[75ch] lg:max-w-[95ch]"
       >
-        <FieldsetContent className="min-h-[400px] px-0">
+        <FieldsetContent className="min-h-[800px] px-0">
           <BlockEditor
             defaultValue={placeholders["de-stochastik"]}
             isHeaderVisible={false}
