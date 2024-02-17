@@ -1,4 +1,4 @@
-import { type PageWithTags, type TagList, type User } from "~/schemas";
+import { type PageWithTags, type TagList } from "~/schemas";
 import {
   Card,
   CardContent,
@@ -34,7 +34,6 @@ import React from "react";
 import { useSession } from "next-auth/react";
 
 export interface DocumentCardProps {
-  basicUser: User;
   page: PageWithTags;
 }
 
@@ -58,7 +57,7 @@ const CardTags = ({ tags }: { tags: TagList }) => {
   );
 };
 
-export const DocumentCard = ({ basicUser, page }: DocumentCardProps) => {
+export const DocumentCard = ({ page }: DocumentCardProps) => {
   const queryClient = useQueryClient();
   const { data: session, status } = useSession();
   const deletePageById = api.pages.deletePageById.useMutation();

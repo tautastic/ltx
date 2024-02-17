@@ -19,28 +19,39 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "~/components/ui/dropdown-menu";
-import React, { useCallback, useEffect, useState } from "react";
+import { type ReactNode, useCallback, useEffect, useMemo, useState } from "react";
 import Link from "next/link";
 import { TagSelectDropdown } from "~/components/tag-select-dropdown";
 import useWindowSize from "~/lib/hooks/use-window-size";
 import CreateTagDialog from "~/components/create-tag-dialog";
-import { type PageWithTags, type User } from "~/schemas";
+import { type PageWithTags, type PageWithTagsList, type TagList, type User } from "~/schemas";
 import api from "~/utils/api";
 import { DocumentCard } from "~/components/document-card";
 import { useFuzzy } from "~/lib/hooks/use-fuzzy";
+import { Skeleton } from "~/components/ui/skeleton";
 
 interface ProfileOverviewProps {
   basicUser: User;
 }
 
-export const ProfileOverview = ({ basicUser }: ProfileOverviewProps) => {
-  const [sortBy, setSortBy] = useState("activity");
-  const { isMobile } = useWindowSize();
-  const allTags = api.tags.getTagListByAuthorId.useQuery(basicUser.id).data ?? [];
-  const allPages = api.pages.getAllPagesByAuthorId.useQuery(basicUser.id).data ?? [];
-  const [filteredPages, setFilteredPages] = useState<PageWithTags[]>(allPages);
+const ProfileOverviewWrapper = ({ children }: { children?: ReactNode }) => {
+  return (
+    <div className="mx-auto flex max-w-screen-xl flex-col space-y-6 p-1 sm:p-3">{children}</div>
+  );
+};
 
+const StatefulProfileOverview = ({
+  allPages,
+  allTags,
+  isMobile,
+}: {
+  allPages: PageWithTagsList;
+  allTags: TagList;
+  isMobile: boolean;
+}) => {
+  const [sortBy, setSortBy] = useState("activity");
   const [selectedTagsId, setSelectedTagsId] = useState<string[]>([]);
+  const [filteredPages, setFilteredPages] = useState<PageWithTagsList>([]);
 
   const isInSelectedTags = useCallback(
     (page: PageWithTags) =>
@@ -72,22 +83,24 @@ export const ProfileOverview = ({ basicUser }: ProfileOverviewProps) => {
     return () => setFilteredPages([]);
   }, [result, sortFunction, sortBy, isInSelectedTags]);
 
-  const tagSelectDropdown = (
-    <TagSelectDropdown
-      tags={allTags}
-      checked={(tagId: string) => selectedTagsId.includes(tagId)}
-      onCheckedChange={(tagId: string) => (checked: boolean) => {
-        if (checked) {
-          setSelectedTagsId([...selectedTagsId, tagId]);
-        } else {
-          setSelectedTagsId(selectedTagsId.filter((id) => id !== tagId));
-        }
-      }}
-    />
-  );
+  const tagSelectDropdown = useMemo(() => {
+    return (
+      <TagSelectDropdown
+        tags={allTags}
+        checked={(tagId: string) => selectedTagsId.includes(tagId)}
+        onCheckedChange={(tagId: string) => (checked: boolean) => {
+          if (checked) {
+            setSelectedTagsId([...selectedTagsId, tagId]);
+          } else {
+            setSelectedTagsId(selectedTagsId.filter((id) => id !== tagId));
+          }
+        }}
+      />
+    );
+  }, [allTags, selectedTagsId]);
 
   return (
-    <div className="mx-auto flex max-w-screen-xl flex-col space-y-6 p-1 sm:p-3">
+    <ProfileOverviewWrapper>
       <div className="flex w-full flex-row justify-center space-x-3">
         <Input
           containerClassName="flex-1"
@@ -182,18 +195,62 @@ export const ProfileOverview = ({ basicUser }: ProfileOverviewProps) => {
       <div className="flex w-full flex-row flex-wrap justify-around gap-x-6 gap-y-4">
         {filteredPages && filteredPages.length > 0 ? (
           filteredPages.map((page) => {
-            return <DocumentCard key={page.id} basicUser={basicUser} page={page} />;
+            return <DocumentCard key={page.id} page={page} />;
           })
         ) : (
-          <div className="my-auto flex h-[200px] w-full flex-col flex-wrap items-center justify-center gap-y-3">
+          <div className="my-auto flex h-[200px] w-full flex-col flex-wrap items-center justify-center gap-y-2">
             <h2 className="text-lg md:text-xl">No Results Found</h2>
             <br />
-            <p className="text-gray-600 dark:text-gray-500">
-              Your search for &quot;{searchTerm}&quot; did not return any results.
-            </p>
+            {searchTerm ? (
+              <p className="text-gray-600 dark:text-gray-500">
+                Your search for &quot;{searchTerm}&quot; did not return any results.
+              </p>
+            ) : (
+              <p className="text-gray-600 dark:text-gray-500">
+                Your search did not return any results.
+              </p>
+            )}
           </div>
         )}
       </div>
-    </div>
+    </ProfileOverviewWrapper>
   );
+};
+
+export const ProfileOverview = ({ basicUser }: ProfileOverviewProps) => {
+  const { isMobile } = useWindowSize();
+  const { data: allTags, status: getAllTagsStatus } = api.tags.getTagListByAuthorId.useQuery(
+    basicUser.id
+  );
+  const { data: allPages, status: getAllPagesStatus } = api.pages.getAllPagesByAuthorId.useQuery(
+    basicUser.id
+  );
+
+  if (getAllPagesStatus === "loading" || getAllTagsStatus === "loading") {
+    return (
+      <ProfileOverviewWrapper>
+        <div className="flex w-full flex-row justify-center space-x-3">
+          <Skeleton className="h-9 flex-1" />
+          {isMobile ? (
+            <Skeleton className="w-[170px]" />
+          ) : (
+            <>
+              <Skeleton className="w-[170px]" />
+              <Skeleton className="min-w-[130px]" />
+              <Skeleton className="min-w-[130px]" />
+            </>
+          )}
+        </div>
+        <div className="flex w-full flex-row flex-wrap justify-around gap-x-6 gap-y-4">
+          <Skeleton className="h-[260px] min-w-[325px] max-w-[650px] flex-1 rounded-xl" />
+          <Skeleton className="h-[260px] min-w-[325px] max-w-[650px] flex-1 rounded-xl" />
+          <Skeleton className="h-[260px] min-w-[325px] max-w-[650px] flex-1 rounded-xl" />
+        </div>
+      </ProfileOverviewWrapper>
+    );
+  }
+
+  if (getAllPagesStatus === "success" && getAllTagsStatus === "success") {
+    return <StatefulProfileOverview allPages={allPages} allTags={allTags} isMobile={isMobile} />;
+  }
 };
