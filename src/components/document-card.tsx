@@ -105,9 +105,11 @@ export const DocumentCard = ({ page }: DocumentCardProps) => {
                 </DropdownMenuItem>
                 {userIsAuthor && (
                   <>
-                    <DropdownMenuItem className="flex justify-between">
-                      Edit <Edit className="h-4 w-4" />
-                    </DropdownMenuItem>
+                    <Link href={`/edit/${page.id}`}>
+                      <DropdownMenuItem className="flex justify-between">
+                        Edit <Edit className="h-4 w-4" />
+                      </DropdownMenuItem>
+                    </Link>
                     <DropdownMenuItem asChild>
                       <AlertDialogTrigger
                         type="button"

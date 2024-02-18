@@ -69,9 +69,9 @@ const Home: NextPageWithAuthAndLayout = () => {
       <Fieldset className="m-auto w-full max-w-screen-sm md:max-w-[75ch] lg:max-w-[95ch]">
         <FieldsetContent className="min-h-[800px] px-0">
           <BlockEditor
-            defaultValue={placeholders["de-stochastik"]}
             isHeaderVisible={false}
             readonly={true}
+            defaultValue={placeholders["de-stochastik"]}
           />
         </FieldsetContent>
       </Fieldset>

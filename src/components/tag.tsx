@@ -1,5 +1,5 @@
 import { TagIcon, XIcon } from "lucide-react";
-import React from "react";
+import { type ChangeEventHandler } from "react";
 import { cn } from "~/utils/cn";
 import {
   AlertDialog,
@@ -15,9 +15,10 @@ import {
 
 export type TagProps = {
   color: string;
+  defaultChecked?: boolean;
   id: string;
   name: string;
-  onClick?: () => void;
+  onChange?: ChangeEventHandler<HTMLInputElement>;
   onDelete?: () => void;
   placeholder?: string;
   readonly?: boolean;
@@ -49,9 +50,10 @@ const DeleteAlert = ({ onDelete }: { onDelete?: () => void }) => {
 
 export const Tag = ({
   color,
+  defaultChecked = false,
   id,
   name,
-  onClick,
+  onChange,
   onDelete,
   placeholder,
   readonly = false,
@@ -60,7 +62,14 @@ export const Tag = ({
 
   return (
     <li className="h-10 flex-1 text-sm font-medium">
-      <input onClick={onClick} type="checkbox" id={id} value={id} className="peer hidden" />
+      <input
+        defaultChecked={defaultChecked}
+        onChange={onChange}
+        type="checkbox"
+        id={id}
+        value={id}
+        className="peer hidden"
+      />
       <div
         className={cn(
           "flex justify-between gap-x-6 rounded border border-gray-200 dark:border-gray-800",

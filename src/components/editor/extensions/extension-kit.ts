@@ -6,9 +6,13 @@ import {
   BlockquoteFigure,
   CharacterCount,
   Color,
+  Column,
+  Columns,
+  DivStyle,
   Document,
   Dropcursor,
   Emoji,
+  emojiSuggestion,
   Figcaption,
   FileHandler,
   Focus,
@@ -18,39 +22,34 @@ import {
   Highlight,
   HorizontalRule,
   ImageBlock,
-  Link,
   LineHeight,
+  Link,
   Margin,
   Placeholder,
   Selection,
   SlashCommand,
   StarterKit,
   Table,
-  TableOfContents,
   TableCell,
   TableHeader,
+  TableOfContents,
   TableRow,
+  TaskItem,
+  TaskList,
   TextAlign,
   TextStyle,
   TrailingNode,
   Typography,
   Underline,
-  emojiSuggestion,
-  Columns,
-  Column,
-  TaskItem,
-  TaskList,
-  DivStyle,
 } from "./index";
 import { CodeBlockLowlight } from "@tiptap/extension-code-block-lowlight";
-import { ImageUpload } from "./ImageUpload";
 import { TableOfContentsNode } from "./TableOfContentsNode";
 import { lowlight } from "lowlight";
 import { Mathematics } from "@tiptap-pro/extension-mathematics";
 
 import "katex/dist/katex.min.css";
 
-export const ExtensionKit = (userId?: string) => [
+export const ExtensionKit = () => [
   Mathematics,
   Document,
   Columns,
@@ -93,9 +92,6 @@ export const ExtensionKit = (userId?: string) => [
   CharacterCount.configure({ limit: 50000 }),
   TableOfContents,
   TableOfContentsNode,
-  ImageUpload.configure({
-    clientId: userId,
-  }),
   ImageBlock,
   FileHandler.configure({
     allowedMimeTypes: ["image/png", "image/jpeg", "image/gif", "image/webp"],

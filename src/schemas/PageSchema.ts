@@ -37,3 +37,7 @@ export const CreateNewPageSchema = z.object({
   }),
   selectedTagIds: z.string().cuid().array(),
 });
+
+export const UpdatePageSchema = CreateNewPageSchema.extend({
+  pageId: z.string().cuid(),
+});

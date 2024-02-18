@@ -12,6 +12,7 @@ import { Toaster } from "~/components/ui/toaster";
 import { type NextPageWithAuthAndLayout } from "~/lib/types";
 import api from "~/utils/api";
 import "~/styles/index.css";
+import { BlockEditorProvider } from "~/components/editor/BlockEditor/BlockEditorContext";
 
 type AppPropsWithAuthAndLayout = AppProps<{ session: Session | null }> & {
   Component: NextPageWithAuthAndLayout;
@@ -36,12 +37,14 @@ const MyApp = ({ Component, pageProps: { session, ...pageProps } }: AppPropsWith
       />
       <SessionProvider session={session} refetchOnWindowFocus={false}>
         <ThemeProvider defaultTheme="dark" attribute="class" disableTransitionOnChange>
-          <Toaster />
-          {Component.auth ? (
-            <Auth>{getLayout(<Component {...pageProps} />)}</Auth>
-          ) : (
-            getLayout(<Component {...pageProps} />)
-          )}
+          <BlockEditorProvider>
+            <Toaster />
+            {Component.auth ? (
+              <Auth>{getLayout(<Component {...pageProps} />)}</Auth>
+            ) : (
+              getLayout(<Component {...pageProps} />)
+            )}
+          </BlockEditorProvider>
         </ThemeProvider>
       </SessionProvider>
     </>
