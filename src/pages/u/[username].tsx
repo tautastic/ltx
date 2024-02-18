@@ -34,7 +34,7 @@ const ProfilePage: NextPageWithAuthAndLayout<
 > = ({ basicUser }) => {
   return (
     <Tabs defaultValue="overview" className="flex min-h-screen w-full flex-col">
-      <div className="flex w-full flex-col items-center space-y-12 border-b border-gray-200 bg-gray-50 pt-12 dark:border-gray-800 dark:bg-gray-950">
+      <div className="flex w-full flex-col items-center space-y-12 border-b border-gray-100 bg-gray-50 pt-12 dark:border-gray-800 dark:bg-gray-950">
         <div className="flex w-full max-w-lg flex-col items-center justify-center space-y-1">
           <Avatar className="mb-2 h-32 w-32">
             <AvatarImage alt="Profile picture" src={basicUser.image} />

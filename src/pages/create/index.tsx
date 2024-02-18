@@ -141,7 +141,7 @@ const Create: NextPageWithAuthAndLayout = () => {
             form.handleSubmit(onSubmit)(e);
           }}
         >
-          <Fieldset className="rounded-none border-x-0 border-b-0">
+          <Fieldset className="basis-[502px] rounded-none border-x-0 border-b-0">
             <FieldsetContent className="mx-auto w-full lg:w-8/12 lg:max-w-[110ch]">
               <h4 className="mb-2 text-xl font-[600]">Save Document</h4>
               <div className="flex flex-col gap-y-4">
