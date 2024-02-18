@@ -1,15 +1,12 @@
 import { memo } from "react";
-import { type EditorUser } from "../types";
-import Tooltip from "../../ui/Tooltip";
-import Image from "next/image";
+import AuthDropdown from "~/components/auth-dropdown";
 
 export type EditorInfoProps = {
   characters: number;
-  user?: EditorUser;
   words: number;
 };
 
-export const EditorInfo = memo(({ characters, user, words }: EditorInfoProps) => {
+export const EditorInfo = memo(({ characters, words }: EditorInfoProps) => {
   return (
     <div className="flex items-center">
       <div className="mr-4 flex flex-col justify-center border-r border-gray-200 pr-4 text-right dark:border-gray-800">
@@ -21,21 +18,7 @@ export const EditorInfo = memo(({ characters, user, words }: EditorInfoProps) =>
         </div>
       </div>
       <div className="flex flex-row items-center">
-        <div className="relative ml-3 flex flex-row items-center">
-          {user && (
-            <div key={user.clientId} className="-ml-3">
-              <Tooltip title={user.name}>
-                <Image
-                  className="h-8 w-8 rounded-full border border-white dark:border-black"
-                  src={`https://api.dicebear.com/7.x/notionists/svg?seed=${
-                    user.name
-                  }&backgroundColor=${user.color.replace("#", "")}`}
-                  alt="avatar"
-                />
-              </Tooltip>
-            </div>
-          )}
-        </div>
+        <AuthDropdown />
       </div>
     </div>
   );

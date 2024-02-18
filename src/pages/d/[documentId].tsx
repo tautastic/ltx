@@ -6,7 +6,6 @@ import Footer from "~/components/footer";
 import ssr from "~/utils/ssr";
 import { Fieldset, FieldsetContent } from "~/components/ui/fieldset";
 import { BlockEditor } from "~/components/editor/BlockEditor";
-import { useBlockEditor } from "~/lib/hooks/useBlockEditor";
 
 export const getServerSideProps = async (
   context: GetServerSidePropsContext<{ documentId: string }>
@@ -35,14 +34,11 @@ export const getServerSideProps = async (
 const DocumentViewPage: NextPageWithAuthAndLayout<
   InferGetServerSidePropsType<typeof getServerSideProps>
 > = ({ document }) => {
-  const { editor, characterCount } = useBlockEditor();
   return (
     <Fieldset className="m-auto w-full max-w-screen-sm sm:max-w-[70ch] md:max-w-[75ch] lg:max-w-[95ch] xl:max-w-[125ch]">
       <FieldsetContent className="min-h-[800px] px-0">
         <BlockEditor
-          characterCount={characterCount}
           defaultValue={JSON.parse(document.content)}
-          editor={editor}
           isHeaderVisible={false}
           readonly={true}
         />

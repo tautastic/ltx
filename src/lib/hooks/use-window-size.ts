@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
 
 const useWindowSize = () => {
   const isClient = typeof window === "object";
@@ -46,6 +46,7 @@ const useWindowSize = () => {
     resizing,
     isMobile: typeof windowSize?.width === "number" && windowSize?.width < 768,
     isDesktop: typeof windowSize?.width === "number" && windowSize?.width >= 768,
+    isLarge: typeof windowSize?.width === "number" && windowSize?.width >= 1024,
   };
 };
 

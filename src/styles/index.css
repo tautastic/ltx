@@ -14,7 +14,7 @@
 }
 
 .ProseMirror {
-  @apply z-0 py-6 pl-8 pr-6 caret-black outline-0 dark:caret-white md:px-14 lg:px-24 lg:py-10;
+  @apply z-0 py-6 pl-8 pr-6 caret-black focus-visible:outline-none dark:caret-white md:px-14 lg:px-24 lg:py-10;
 
   .selection {
     @apply inline;
