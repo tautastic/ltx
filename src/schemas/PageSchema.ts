@@ -3,8 +3,8 @@ import { TagSchema } from "~/schemas/TagSchema";
 
 export const PageSchema = z.object({
   id: z.string().cuid(),
-  createdAt: z.coerce.date(),
-  updatedAt: z.coerce.date(),
+  createdAt: z.coerce.string(),
+  updatedAt: z.coerce.string(),
   title: z.string(),
   description: z.string().optional(),
   content: z.string(),
@@ -37,10 +37,3 @@ export const CreateNewPageSchema = z.object({
   }),
   selectedTagIds: z.string().cuid().array(),
 });
-
-export const BasicPageSchema = PageSchema.omit({
-  createdAt: true,
-  updatedAt: true,
-});
-
-export type BasicPage = z.infer<typeof BasicPageSchema>;

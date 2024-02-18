@@ -1,7 +1,5 @@
 import { createTRPCRouter, protectedProcedure, publicProcedure } from "~/server/api/trpc";
 import {
-  BasicPage,
-  BasicPageSchema,
   CreateNewPageSchema,
   type Page,
   PageSchema,
@@ -11,27 +9,25 @@ import {
 import { TRPCError } from "@trpc/server";
 
 export const pageRouter = createTRPCRouter({
-  getPageById: publicProcedure
-    .input(PageSchema.shape.id)
-    .query<BasicPage>(async ({ ctx, input }) => {
-      const page = await ctx.prisma.page.findUnique({
-        where: {
-          id: input,
-        },
-      });
+  getPageById: publicProcedure.input(PageSchema.shape.id).query<Page>(async ({ ctx, input }) => {
+    const page = await ctx.prisma.page.findUnique({
+      where: {
+        id: input,
+      },
+    });
 
-      if (page) {
-        const sessionUserIsAuthor = ctx.session && ctx.session.user.id === page.authorId;
+    if (page) {
+      const sessionUserIsAuthor = ctx.session && ctx.session.user.id === page.authorId;
 
-        if (!page.isPrivate || sessionUserIsAuthor) {
-          return BasicPageSchema.parse(page);
-        }
+      if (!page.isPrivate || sessionUserIsAuthor) {
+        return PageSchema.parse(page);
       }
+    }
 
-      throw new TRPCError({
-        code: "NOT_FOUND",
-      });
-    }),
+    throw new TRPCError({
+      code: "NOT_FOUND",
+    });
+  }),
   getAllPagesByAuthorId: publicProcedure
     .input(PageSchema.shape.authorId)
     .query<PageWithTagsList>(async ({ ctx, input }) => {

@@ -68,7 +68,7 @@ const StatefulProfileOverview = ({
         return a.title.localeCompare(b.title);
       }
 
-      return b.updatedAt.getTime() - a.updatedAt.getTime();
+      return Date.parse(b.updatedAt) - Date.parse(a.updatedAt);
     },
     [sortBy]
   );

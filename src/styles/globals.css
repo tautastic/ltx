@@ -17,6 +17,12 @@
   .scrollbar-hide::-webkit-scrollbar {
     /* Safari and Chrome */
     display: none;
+    width: 0;
+    height: 0;
+  }
+
+  * {
+    @apply scrollbar-hide;
   }
 
   ::selection {
@@ -42,7 +48,7 @@
   }
 
   body {
-    @apply scrollbar-hide bg-white text-base subpixel-antialiased dark:bg-black;
+    @apply bg-white text-base subpixel-antialiased dark:bg-black;
   }
 
   a {
