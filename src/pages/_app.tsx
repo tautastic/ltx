@@ -13,6 +13,8 @@ import { type NextPageWithAuthAndLayout } from "~/lib/types";
 import api from "~/utils/api";
 import "~/styles/index.css";
 import { BlockEditorProvider } from "~/components/editor/BlockEditor/BlockEditorContext";
+import { SpeedInsights } from "@vercel/speed-insights/next";
+import { Analytics } from "@vercel/analytics/react";
 
 type AppPropsWithAuthAndLayout = AppProps<{ session: Session | null }> & {
   Component: NextPageWithAuthAndLayout;
@@ -47,6 +49,8 @@ const MyApp = ({ Component, pageProps: { session, ...pageProps } }: AppPropsWith
           </BlockEditorProvider>
         </ThemeProvider>
       </SessionProvider>
+      <SpeedInsights />
+      <Analytics />
     </>
   );
 };

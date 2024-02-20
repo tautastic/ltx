@@ -14,6 +14,7 @@ export const getServerSideProps = async (
 ) => {
   if (context.params && context.params.username) {
     const { username } = context.params;
+    context.res.setHeader("Cache-Control", "private, no-cache, max-age=0, must-revalidate");
 
     const basicUser = await ssr.users.getBasicFieldsByUsername.fetch(username);
     if (basicUser) {
