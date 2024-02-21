@@ -3,10 +3,10 @@ import {
   CreateNewPageSchema,
   type Page,
   PageSchema,
-  type PageWithTags,
-  type PageWithTagsList,
-  PageWithTagsListSchema,
-  PageWithTagsSchema,
+  type PageWithStarsAndTags,
+  type PageWithStarsAndTagsList,
+  PageWithStarsAndTagsListSchema,
+  PageWithStarsAndTagsSchema,
   UpdatePageSchema,
 } from "~/schemas";
 import { TRPCError } from "@trpc/server";
@@ -14,12 +14,17 @@ import { TRPCError } from "@trpc/server";
 export const pageRouter = createTRPCRouter({
   getPageById: publicProcedure
     .input(PageSchema.shape.id)
-    .query<PageWithTags>(async ({ ctx, input }) => {
+    .query<PageWithStarsAndTags>(async ({ ctx, input }) => {
       const page = await ctx.prisma.page.findUnique({
         where: {
           id: input,
         },
         include: {
+          starredBy: {
+            where: {
+              OR: [{ isPrivate: false }, { isPrivate: true, id: ctx.session?.user.id }],
+            },
+          },
           tags: true,
         },
       });
@@ -28,7 +33,7 @@ export const pageRouter = createTRPCRouter({
         const sessionUserIsAuthor = ctx.session && ctx.session.user.id === page.authorId;
 
         if (!page.isPrivate || sessionUserIsAuthor) {
-          return PageWithTagsSchema.parse(page);
+          return PageWithStarsAndTagsSchema.parse(page);
         }
       }
 
@@ -38,13 +43,18 @@ export const pageRouter = createTRPCRouter({
     }),
   getAllPagesByAuthorId: publicProcedure
     .input(PageSchema.shape.authorId)
-    .query<PageWithTagsList>(async ({ ctx, input }) => {
+    .query<PageWithStarsAndTagsList>(async ({ ctx, input }) => {
       const publicPages = await ctx.prisma.page.findMany({
         where: {
           authorId: input,
           isPrivate: false,
         },
         include: {
+          starredBy: {
+            where: {
+              OR: [{ isPrivate: false }, { isPrivate: true, id: ctx.session?.user.id }],
+            },
+          },
           tags: true,
         },
       });
@@ -56,16 +66,39 @@ export const pageRouter = createTRPCRouter({
             isPrivate: true,
           },
           include: {
+            starredBy: {
+              where: {
+                OR: [{ isPrivate: false }, { isPrivate: true, id: ctx.session?.user.id }],
+              },
+            },
             tags: true,
           },
         });
 
         const allPages = publicPages.concat(privatePages);
 
-        return PageWithTagsListSchema.parse(allPages);
+        return PageWithStarsAndTagsListSchema.parse(allPages);
       }
 
-      return PageWithTagsListSchema.parse(publicPages);
+      return PageWithStarsAndTagsListSchema.parse(publicPages);
+    }),
+
+  createNewPage: protectedProcedure
+    .input(CreateNewPageSchema)
+    .mutation<Page>(async ({ ctx, input }) => {
+      const page = await ctx.prisma.page.create({
+        data: {
+          authorId: ctx.session.user.id,
+          ...input.pageArgs,
+          tags: {
+            connect: input.selectedTagIds.map((id) => {
+              return { id };
+            }),
+          },
+        },
+      });
+
+      return PageSchema.parse(page);
     }),
 
   updatePage: protectedProcedure.input(UpdatePageSchema).mutation<Page>(async ({ ctx, input }) => {
@@ -88,17 +121,37 @@ export const pageRouter = createTRPCRouter({
     return PageSchema.parse(page);
   }),
 
-  createNewPage: protectedProcedure
-    .input(CreateNewPageSchema)
+  starPageById: protectedProcedure
+    .input(PageSchema.shape.id)
     .mutation<Page>(async ({ ctx, input }) => {
-      const page = await ctx.prisma.page.create({
+      const page = await ctx.prisma.page.update({
+        where: {
+          id: input,
+        },
         data: {
-          authorId: ctx.session.user.id,
-          ...input.pageArgs,
-          tags: {
-            connect: input.selectedTagIds.map((id) => {
-              return { id };
-            }),
+          starredBy: {
+            connect: {
+              id: ctx.session.user.id,
+            },
+          },
+        },
+      });
+
+      return PageSchema.parse(page);
+    }),
+
+  unstarPageById: protectedProcedure
+    .input(PageSchema.shape.id)
+    .mutation<Page>(async ({ ctx, input }) => {
+      const page = await ctx.prisma.page.update({
+        where: {
+          id: input,
+        },
+        data: {
+          starredBy: {
+            disconnect: {
+              id: ctx.session.user.id,
+            },
           },
         },
       });

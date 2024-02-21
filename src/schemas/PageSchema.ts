@@ -1,5 +1,6 @@
 import { z } from "zod";
 import { TagSchema } from "~/schemas/TagSchema";
+import { UserSchema } from "~/schemas/UserSchema";
 
 export const PageSchema = z.object({
   id: z.string().cuid(),
@@ -18,15 +19,16 @@ export const PageListSchema = PageSchema.array();
 
 export type PageList = z.infer<typeof PageListSchema>;
 
-export const PageWithTagsSchema = PageSchema.extend({
+export const PageWithStarsAndTagsSchema = PageSchema.extend({
+  starredBy: z.lazy(() => UserSchema).array(),
   tags: z.lazy(() => TagSchema).array(),
 });
 
-export type PageWithTags = z.infer<typeof PageWithTagsSchema>;
+export type PageWithStarsAndTags = z.infer<typeof PageWithStarsAndTagsSchema>;
 
-export const PageWithTagsListSchema = PageWithTagsSchema.array();
+export const PageWithStarsAndTagsListSchema = PageWithStarsAndTagsSchema.array();
 
-export type PageWithTagsList = z.infer<typeof PageWithTagsListSchema>;
+export type PageWithStarsAndTagsList = z.infer<typeof PageWithStarsAndTagsListSchema>;
 
 export const CreateNewPageSchema = z.object({
   pageArgs: z.object({

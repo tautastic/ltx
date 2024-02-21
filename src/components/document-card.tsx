@@ -1,4 +1,4 @@
-import { type PageWithTags, type TagList } from "~/schemas";
+import { type PageWithStarsAndTags, type TagList } from "~/schemas";
 import {
   Card,
   CardContent,
@@ -7,7 +7,7 @@ import {
   CardHeader,
   CardTitle,
 } from "~/components/ui/card";
-import { Edit, LinkIcon, MoreHorizontal, TagIcon, Trash } from "lucide-react";
+import { Edit, LinkIcon, MoreHorizontal, StarOff, TagIcon, Trash } from "lucide-react";
 import { Badge } from "~/components/ui/badge";
 import {
   DropdownMenu,
@@ -37,7 +37,7 @@ import useClipboard from "~/lib/hooks/use-clipboard";
 import { env } from "~/env.mjs";
 
 export interface DocumentCardProps {
-  page: PageWithTags;
+  page: PageWithStarsAndTags;
 }
 
 const CardTags = ({ tags }: { tags: TagList }) => {
@@ -65,6 +65,9 @@ export const DocumentCard = ({ page }: DocumentCardProps) => {
   const { data: session, status } = useSession();
   const { toast } = useToast();
   const deletePageById = api.pages.deletePageById.useMutation();
+  const starPageById = api.pages.starPageById.useMutation();
+  const unstarPageById = api.pages.unstarPageById.useMutation();
+  const pageIsStarred = page.starredBy.some((u) => u.id === session?.user.id);
   const userIsAuthor = session?.user.id === page.authorId;
   const documentUri = `/d/${page.id}`;
   const { copyToClipboard: copyDocumentUri } = useClipboard({
@@ -80,6 +83,40 @@ export const DocumentCard = ({ page }: DocumentCardProps) => {
       }),
     value: env.NEXT_PUBLIC_BASE_URL.concat(documentUri),
   });
+
+  const handleToggleStarPage = async (id: string) => {
+    if (pageIsStarred) {
+      await unstarPageById.mutateAsync(id, {
+        onSuccess: () => {
+          queryClient.invalidateQueries({ stale: true });
+          toast({
+            title: "Removed page from favorites successfully.",
+          });
+        },
+        onError: () => {
+          toast({
+            title: "🚨 Uh oh! Something went wrong.",
+            description: "Error removing page from favorites.",
+          });
+        },
+      });
+    } else {
+      await starPageById.mutateAsync(id, {
+        onSuccess: () => {
+          queryClient.invalidateQueries({ stale: true });
+          toast({
+            title: "Added page from favorites successfully.",
+          });
+        },
+        onError: () => {
+          toast({
+            title: "🚨 Uh oh! Something went wrong.",
+            description: "Error adding page from favorites.",
+          });
+        },
+      });
+    }
+  };
 
   const handleDeletePage = async (id: string) => {
     await deletePageById.mutateAsync(id, {
@@ -115,14 +152,26 @@ export const DocumentCard = ({ page }: DocumentCardProps) => {
             <DropdownMenuTrigger>
               <MoreHorizontal className="h-4 w-4" />
             </DropdownMenuTrigger>
-            <DropdownMenuContent className="w-[170px]">
+            <DropdownMenuContent className="w-[190px]">
               <DropdownMenuItem className="group flex justify-between" onClick={copyDocumentUri}>
                 Copy Link <LinkIcon className="h-4 w-4" />
               </DropdownMenuItem>
               {status === "authenticated" && (
                 <>
-                  <DropdownMenuItem className="group flex justify-between">
-                    Add Favorite <SparkyStars />
+                  <DropdownMenuItem
+                    className="group flex justify-between"
+                    onClick={() => handleToggleStarPage(page.id)}
+                  >
+                    {pageIsStarred ? (
+                      <>
+                        Add Favorite <SparkyStars />
+                      </>
+                    ) : (
+                      <>
+                        Remove Favorite
+                        <StarOff className="h-4 w-4" />
+                      </>
+                    )}
                   </DropdownMenuItem>
                   {userIsAuthor && (
                     <>

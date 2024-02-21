@@ -23,7 +23,12 @@ import { type ReactNode, useCallback, useEffect, useMemo, useState } from "react
 import Link from "next/link";
 import { TagSelectDropdown } from "~/components/tag-select-dropdown";
 import useWindowSize from "~/lib/hooks/use-window-size";
-import { type PageWithTags, type PageWithTagsList, type TagList, type User } from "~/schemas";
+import {
+  type PageWithStarsAndTags,
+  type PageWithStarsAndTagsList,
+  type TagList,
+  type User,
+} from "~/schemas";
 import api from "~/utils/api";
 import { DocumentCard } from "~/components/document-card";
 import { useFuzzy } from "~/lib/hooks/use-fuzzy";
@@ -46,24 +51,24 @@ const StatefulProfileOverview = ({
   isAuthor,
   isMobile,
 }: {
-  allPages: PageWithTagsList;
+  allPages: PageWithStarsAndTagsList;
   allTags: TagList;
   isAuthor: boolean;
   isMobile: boolean;
 }) => {
   const [sortBy, setSortBy] = useState("activity");
   const [selectedTagsId, setSelectedTagsId] = useState<string[]>([]);
-  const [filteredPages, setFilteredPages] = useState<PageWithTagsList>([]);
+  const [filteredPages, setFilteredPages] = useState<PageWithStarsAndTagsList>([]);
 
   const isInSelectedTags = useCallback(
-    (page: PageWithTags) =>
+    (page: PageWithStarsAndTags) =>
       selectedTagsId.length < 1 ||
       selectedTagsId.every((tagId) => page.tags.some((tag) => tag.id === tagId)),
     [selectedTagsId]
   );
 
   const sortFunction = useCallback(
-    (a: PageWithTags, b: PageWithTags) => {
+    (a: PageWithStarsAndTags, b: PageWithStarsAndTags) => {
       if (sortBy === "name") {
         return a.title.localeCompare(b.title);
       }
@@ -73,7 +78,7 @@ const StatefulProfileOverview = ({
     [sortBy]
   );
 
-  const { result, searchTerm, setSearchTerm } = useFuzzy<PageWithTags>(allPages, {
+  const { result, searchTerm, setSearchTerm } = useFuzzy<PageWithStarsAndTags>(allPages, {
     keys: ["title", "description", "updatedAt"],
     shouldSort: true,
     ignoreFieldNorm: true,
