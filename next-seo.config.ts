@@ -3,7 +3,7 @@ export default {
   title: "",
   titleTemplate: "LTX: %s",
   description:
-    "Quadratisch, Praktisch, Gut. LTX ist ein moderner und minimalistischer LaTeX Web Editor.",
+    "Write. Learn. Connect. LTX is an intuitive, efficient and minimalist LaTeX editor. Creating, saving and sharing LaTeX documents has never been so effortless.",
   defaultTitle: "LTX",
   additionalLinkTags: [
     {
