@@ -7,7 +7,8 @@ export default function manifest(): MetadataRoute.Manifest {
     name: "LTX",
     short_name: "LTX",
     lang: "en-US",
-    display: "minimal-ui",
+    display_override: ["minimal-ui"],
+    display: "standalone",
     theme_color: "#000000",
     background_color: "#000000",
     description:
@@ -29,10 +30,7 @@ export default function manifest(): MetadataRoute.Manifest {
     shortcuts: [
       {
         name: "Create new Document",
-        short_name: "Create",
-        description: "Open the editor to create a new Document",
         url: "/create",
-        icons: [{ src: "/img/square-pen.png", sizes: "24x24" }],
       },
     ],
   };
