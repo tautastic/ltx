@@ -115,6 +115,7 @@ export const ExtensionKit = () => [
     },
   }),
   Emoji.configure({
+    HTMLAttributes: { class: "h-5 w-5 inline-block" },
     enableEmoticons: true,
     suggestion: emojiSuggestion,
   }),

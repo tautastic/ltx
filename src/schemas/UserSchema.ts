@@ -1,7 +1,5 @@
 import { z } from "zod";
 
-import { PageSchema, TagSchema } from "~/schemas";
-
 export const UserSchema = z.object({
   id: z.string().cuid(),
   name: z.string().optional(),
@@ -13,3 +11,10 @@ export const UserSchema = z.object({
 });
 
 export type User = z.infer<typeof UserSchema>;
+
+export const UserWithFollowersSchema = UserSchema.extend({
+  following: z.lazy(() => UserSchema.array()),
+  followedBy: z.lazy(() => UserSchema.array()),
+});
+
+export type UserWithFollowers = z.infer<typeof UserWithFollowersSchema>;

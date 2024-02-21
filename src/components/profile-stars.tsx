@@ -25,7 +25,7 @@ import {
   type PageWithStarsAndTags,
   type PageWithStarsAndTagsList,
   type TagList,
-  type User,
+  type UserWithFollowers,
 } from "~/schemas";
 import api from "~/utils/api";
 import { DocumentCard } from "~/components/document-card";
@@ -33,7 +33,7 @@ import { useFuzzy } from "~/lib/hooks/use-fuzzy";
 import { Skeleton } from "~/components/ui/skeleton";
 
 interface ProfileStarsProps {
-  basicUser: User;
+  userWithFollowers: UserWithFollowers;
 }
 
 const ProfileStarsWrapper = ({ children }: { children?: ReactNode }) => {
@@ -196,13 +196,13 @@ const StatefulProfileStars = ({
   );
 };
 
-export const ProfileStars = ({ basicUser }: ProfileStarsProps) => {
+export const ProfileStars = ({ userWithFollowers }: ProfileStarsProps) => {
   const { isMobile } = useWindowSize();
   const { data: allTags, status: getAllTagsStatus } = api.tags.getTagListByAuthorId.useQuery(
-    basicUser.id
+    userWithFollowers.id
   );
   const { data: starredPages, status: getStarredPagesStatus } =
-    api.pages.getStarredPagesByAuthorId.useQuery(basicUser.id);
+    api.pages.getStarredPagesByAuthorId.useQuery(userWithFollowers.id);
 
   if (getStarredPagesStatus === "loading" || getAllTagsStatus === "loading") {
     return (

@@ -80,7 +80,7 @@ const CreateTagDialog = ({ children }: CreateTagDialogProps) => {
 
       if (res.id) {
         toast({
-          title: "Wuhuu 🎉",
+          title: "🎉 Wuhuu",
           description: "Tag created successfully.",
         });
       } else {

@@ -27,7 +27,7 @@ import {
   type PageWithStarsAndTags,
   type PageWithStarsAndTagsList,
   type TagList,
-  type User,
+  type UserWithFollowers,
 } from "~/schemas";
 import api from "~/utils/api";
 import { DocumentCard } from "~/components/document-card";
@@ -36,7 +36,7 @@ import { Skeleton } from "~/components/ui/skeleton";
 import { useSession } from "next-auth/react";
 
 interface ProfileOverviewProps {
-  basicUser: User;
+  userWithFollowers: UserWithFollowers;
 }
 
 const ProfileOverviewWrapper = ({ children }: { children?: ReactNode }) => {
@@ -222,14 +222,14 @@ const StatefulProfileOverview = ({
   );
 };
 
-export const ProfileOverview = ({ basicUser }: ProfileOverviewProps) => {
+export const ProfileOverview = ({ userWithFollowers }: ProfileOverviewProps) => {
   const { isMobile } = useWindowSize();
   const { data: session } = useSession();
   const { data: allTags, status: getAllTagsStatus } = api.tags.getTagListByAuthorId.useQuery(
-    basicUser.id
+    userWithFollowers.id
   );
   const { data: allPages, status: getAllPagesStatus } = api.pages.getAllPagesByAuthorId.useQuery(
-    basicUser.id
+    userWithFollowers.id
   );
 
   if (getAllPagesStatus === "loading" || getAllTagsStatus === "loading") {
@@ -261,7 +261,7 @@ export const ProfileOverview = ({ basicUser }: ProfileOverviewProps) => {
       <StatefulProfileOverview
         allPages={allPages}
         allTags={allTags}
-        isAuthor={session?.user.id === basicUser.id}
+        isAuthor={session?.user.id === userWithFollowers.id}
         isMobile={isMobile}
       />
     );
