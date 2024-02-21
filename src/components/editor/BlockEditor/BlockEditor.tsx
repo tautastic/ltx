@@ -50,16 +50,6 @@ export const BlockEditor = memo(
       return null;
     }
 
-    if (readonly) {
-      return (
-        <div className="flex w-full" ref={menuContainerRef}>
-          <div className="relative flex flex-1 flex-col">
-            <EditorContent className="flex-1 overflow-y-auto" editor={editor} />
-          </div>
-        </div>
-      );
-    }
-
     return (
       <div className="flex w-full" ref={menuContainerRef}>
         {isHeaderVisible && (
@@ -75,13 +65,17 @@ export const BlockEditor = memo(
             />
           )}
           <EditorContent className={cn("flex-1 overflow-y-auto", className)} editor={editor} />
-          <ContentItemMenu editor={editor} />
-          <LinkMenu editor={editor} appendTo={menuContainerRef} />
-          <TextMenu editor={editor} />
-          <ColumnsMenu editor={editor} appendTo={menuContainerRef} />
-          <TableRowMenu editor={editor} appendTo={menuContainerRef} />
-          <TableColumnMenu editor={editor} appendTo={menuContainerRef} />
-          <ImageBlockMenu editor={editor} appendTo={menuContainerRef} />
+          {!readonly && (
+            <>
+              <ContentItemMenu editor={editor} />
+              <LinkMenu editor={editor} appendTo={menuContainerRef} />
+              <TextMenu editor={editor} />
+              <ColumnsMenu editor={editor} appendTo={menuContainerRef} />
+              <TableRowMenu editor={editor} appendTo={menuContainerRef} />
+              <TableColumnMenu editor={editor} appendTo={menuContainerRef} />
+              <ImageBlockMenu editor={editor} appendTo={menuContainerRef} />
+            </>
+          )}
         </div>
       </div>
     );

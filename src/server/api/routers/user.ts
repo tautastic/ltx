@@ -1,5 +1,6 @@
 import { type User, UserSchema } from "~/schemas";
 import { createTRPCRouter, publicProcedure } from "~/server/api/trpc";
+import { TRPCError } from "@trpc/server";
 
 export const userRouter = createTRPCRouter({
   getBasicFieldsByUsername: publicProcedure
@@ -9,6 +10,16 @@ export const userRouter = createTRPCRouter({
         where: { username },
       });
 
-      return UserSchema.parse(user);
+      if (user) {
+        const sessionUserIsProfileOwner = ctx.session && ctx.session.user.id === user.id;
+
+        if (!user.isPrivate || sessionUserIsProfileOwner) {
+          return UserSchema.parse(user);
+        }
+      }
+
+      throw new TRPCError({
+        code: "NOT_FOUND",
+      });
     }),
 });

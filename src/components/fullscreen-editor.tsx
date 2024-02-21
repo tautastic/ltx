@@ -48,12 +48,12 @@ export interface FullscreenEditorProps {
   defaultCheckedTagsId?: string[];
   defaultValues?: Partial<editorFormSchemaType>;
   onSubmit: (selectedTagIds: string[]) => SubmitHandler<editorFormSchemaType>;
+  readonly?: boolean;
 }
 
-export const FullscreenEditor = memo(
+const EditableFullscreenEditor = memo(
   ({
     authorId,
-    children,
     defaultCheckedTagsId = [],
     defaultValues = {
       description: "",
@@ -61,7 +61,7 @@ export const FullscreenEditor = memo(
       isPrivate: false,
     },
     onSubmit,
-  }: FullscreenEditorProps) => {
+  }: Omit<Omit<FullscreenEditorProps, "children">, "readonly">) => {
     const queryClient = useQueryClient();
     const { toast } = useToast();
     const deleteTagByIdMutation = api.tags.deleteTagById.useMutation();
@@ -101,119 +101,143 @@ export const FullscreenEditor = memo(
     const { data: tags } = api.tags.getTagListByAuthorId.useQuery(authorId);
 
     return (
+      <Form {...form}>
+        <form
+          onSubmit={(e) => {
+            e.stopPropagation();
+            form.handleSubmit(onSubmit(selectedTagIds))(e);
+            form.reset(defaultValues);
+            setSelectedTagIds([]);
+          }}
+        >
+          <Fieldset className="basis-[502px] rounded-none border-x-0 border-b-0">
+            <FieldsetContent className="mx-auto w-full lg:w-8/12 lg:max-w-[110ch]">
+              <h4 className="mb-2 text-xl font-[600]">Save Document</h4>
+              <div className="flex flex-col gap-y-4">
+                <FormField
+                  control={form.control}
+                  name="title"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Title</FormLabel>
+                      <FormControl>
+                        <Input
+                          type="text"
+                          aria-label="Title"
+                          Size="default"
+                          placeholder="Title"
+                          {...field}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="description"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Description</FormLabel>
+                      <FormControl>
+                        <Textarea
+                          aria-label="Description"
+                          placeholder="Description"
+                          rows={5}
+                          {...field}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <div className="space-y-2">
+                  <Label>Tags</Label>
+                  <ul className="flex select-none flex-wrap items-center gap-4">
+                    {tags?.map((tag) => (
+                      <Tag
+                        onChange={() => {
+                          if (selectedTagIds.includes(tag.id)) {
+                            setSelectedTagIds(selectedTagIds.filter((id) => id !== tag.id));
+                          } else {
+                            setSelectedTagIds([...selectedTagIds, tag.id]);
+                          }
+                        }}
+                        onDelete={() => handleDeleteTag(tag.id)}
+                        defaultChecked={isTagSelected(tag.id)}
+                        key={tag.id}
+                        {...tag}
+                      />
+                    ))}
+                    <li className="inline-flex h-10 rounded-md border border-gray-200 dark:border-gray-800">
+                      <CreateTagDialog>
+                        <DialogTrigger
+                          type="button"
+                          title="Create tag"
+                          className="inline-flex w-full items-center justify-center px-2"
+                        >
+                          <PlusIcon
+                            textRendering={"geometricPrecision"}
+                            className="text-gray-700 dark:text-gray-400"
+                          />
+                        </DialogTrigger>
+                      </CreateTagDialog>
+                    </li>
+                  </ul>
+                </div>
+                <FormField
+                  control={form.control}
+                  name="isPrivate"
+                  render={({ field }) => (
+                    <FormItem className="flex flex-row items-start justify-between space-y-2 rounded-lg border border-gray-200 p-4 dark:border-gray-800">
+                      <div className="space-y-0.5">
+                        <FormLabel className="text-base font-medium">Private</FormLabel>
+                        <FormDescription>
+                          Controls wether or not this Document can be seen by others.
+                        </FormDescription>
+                      </div>
+                      <FormControl>
+                        <Switch checked={field.value} onCheckedChange={field.onChange} />
+                      </FormControl>
+                    </FormItem>
+                  )}
+                />
+                <Button type="submit" className="w-full self-end sm:max-w-32">
+                  Save
+                </Button>
+              </div>
+            </FieldsetContent>
+          </Fieldset>
+        </form>
+      </Form>
+    );
+  }
+);
+
+EditableFullscreenEditor.displayName = "EditableFullscreenEditor";
+
+export const FullscreenEditor = memo(
+  ({
+    authorId,
+    children,
+    defaultCheckedTagsId,
+    defaultValues,
+    onSubmit,
+    readonly,
+  }: Partial<FullscreenEditorProps>) => {
+    return (
       <Fieldset className="flex w-full flex-1 flex-col items-stretch border-0">
-        <FieldsetContent className="flex min-h-[30ch] w-full items-stretch bg-gray-50 p-0 dark:bg-gray-950 sm:min-h-[40ch]">
+        <FieldsetContent className="flex min-h-[30ch] w-full flex-1 items-stretch bg-gray-50 p-0 dark:bg-gray-950 sm:min-h-[40ch]">
           {children}
         </FieldsetContent>
-        <Form {...form}>
-          <form
-            onSubmit={(e) => {
-              e.stopPropagation();
-              form.handleSubmit(onSubmit(selectedTagIds))(e);
-              form.reset(defaultValues);
-              setSelectedTagIds([]);
-            }}
-          >
-            <Fieldset className="basis-[502px] rounded-none border-x-0 border-b-0">
-              <FieldsetContent className="mx-auto w-full lg:w-8/12 lg:max-w-[110ch]">
-                <h4 className="mb-2 text-xl font-[600]">Save Document</h4>
-                <div className="flex flex-col gap-y-4">
-                  <FormField
-                    control={form.control}
-                    name="title"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Title</FormLabel>
-                        <FormControl>
-                          <Input
-                            type="text"
-                            aria-label="Title"
-                            Size="default"
-                            placeholder="Title"
-                            {...field}
-                          />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                  <FormField
-                    control={form.control}
-                    name="description"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Description</FormLabel>
-                        <FormControl>
-                          <Textarea
-                            aria-label="Description"
-                            placeholder="Description"
-                            rows={5}
-                            {...field}
-                          />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                  <div className="space-y-2">
-                    <Label>Tags</Label>
-                    <ul className="flex select-none flex-wrap items-center gap-4">
-                      {tags?.map((tag) => (
-                        <Tag
-                          onChange={() => {
-                            if (selectedTagIds.includes(tag.id)) {
-                              setSelectedTagIds(selectedTagIds.filter((id) => id !== tag.id));
-                            } else {
-                              setSelectedTagIds([...selectedTagIds, tag.id]);
-                            }
-                          }}
-                          onDelete={() => handleDeleteTag(tag.id)}
-                          defaultChecked={isTagSelected(tag.id)}
-                          key={tag.id}
-                          {...tag}
-                        />
-                      ))}
-                      <li className="inline-flex h-10 rounded-md border border-gray-200 dark:border-gray-800">
-                        <CreateTagDialog>
-                          <DialogTrigger
-                            type="button"
-                            title="Create tag"
-                            className="inline-flex w-full items-center justify-center px-2"
-                          >
-                            <PlusIcon
-                              textRendering={"geometricPrecision"}
-                              className="text-gray-700 dark:text-gray-400"
-                            />
-                          </DialogTrigger>
-                        </CreateTagDialog>
-                      </li>
-                    </ul>
-                  </div>
-                  <FormField
-                    control={form.control}
-                    name="isPrivate"
-                    render={({ field }) => (
-                      <FormItem className="flex flex-row items-start justify-between space-y-2 rounded-lg border border-gray-200 p-4 dark:border-gray-800">
-                        <div className="space-y-0.5">
-                          <FormLabel className="text-base font-medium">Private</FormLabel>
-                          <FormDescription>
-                            Controls wether or not this Document can be seen by others.
-                          </FormDescription>
-                        </div>
-                        <FormControl>
-                          <Switch checked={field.value} onCheckedChange={field.onChange} />
-                        </FormControl>
-                      </FormItem>
-                    )}
-                  />
-                  <Button type="submit" className="w-full self-end sm:max-w-32">
-                    Save
-                  </Button>
-                </div>
-              </FieldsetContent>
-            </Fieldset>
-          </form>
-        </Form>
+        {authorId && onSubmit && !readonly && (
+          <EditableFullscreenEditor
+            authorId={authorId}
+            defaultCheckedTagsId={defaultCheckedTagsId}
+            defaultValues={defaultValues}
+            onSubmit={onSubmit}
+          />
+        )}
       </Fieldset>
     );
   }

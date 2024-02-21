@@ -20,11 +20,6 @@
     @apply inline;
   }
 
-  .selection,
-  *::selection {
-    @apply bg-black/10 dark:bg-white/20;
-  }
-
   & > .react-renderer {
     @apply my-12 first:mt-0 last:mb-0;
   }
