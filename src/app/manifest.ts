@@ -7,7 +7,7 @@ export default function manifest(): MetadataRoute.Manifest {
     name: "LTX",
     short_name: "LTX",
     lang: "en-US",
-    display: "standalone",
+    display: "minimal-ui",
     theme_color: "#000000",
     background_color: "#000000",
     description:
