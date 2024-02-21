@@ -90,7 +90,7 @@ export const pageRouter = createTRPCRouter({
       const starredPages = await ctx.prisma.page.findMany({
         where: {
           starredBy: {
-            none: {
+            some: {
               id: input,
             },
           },

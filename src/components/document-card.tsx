@@ -67,7 +67,7 @@ export const DocumentCard = ({ page }: DocumentCardProps) => {
   const deletePageById = api.pages.deletePageById.useMutation();
   const starPageById = api.pages.starPageById.useMutation();
   const unstarPageById = api.pages.unstarPageById.useMutation();
-  const pageIsStarred = page.starredBy.some((u) => u.id === session?.user.id);
+  const pageIsStarred = session ? page.starredBy.map((u) => u.id).includes(session.user.id) : false;
   const userIsAuthor = session?.user.id === page.authorId;
   const documentUri = `/d/${page.id}`;
   const { copyToClipboard: copyDocumentUri } = useClipboard({
@@ -164,12 +164,12 @@ export const DocumentCard = ({ page }: DocumentCardProps) => {
                   >
                     {pageIsStarred ? (
                       <>
-                        Add Favorite <SparkyStars />
+                        Remove Favorite
+                        <StarOff className="h-4 w-4" />
                       </>
                     ) : (
                       <>
-                        Remove Favorite
-                        <StarOff className="h-4 w-4" />
+                        Add Favorite <SparkyStars />
                       </>
                     )}
                   </DropdownMenuItem>
