@@ -41,6 +41,7 @@ export const pageRouter = createTRPCRouter({
         code: "NOT_FOUND",
       });
     }),
+
   getAllPagesByAuthorId: publicProcedure
     .input(PageSchema.shape.authorId)
     .query<PageWithStarsAndTagsList>(async ({ ctx, input }) => {
@@ -81,6 +82,26 @@ export const pageRouter = createTRPCRouter({
       }
 
       return PageWithStarsAndTagsListSchema.parse(publicPages);
+    }),
+
+  getStarredPagesByAuthorId: publicProcedure
+    .input(PageSchema.shape.authorId)
+    .query<PageWithStarsAndTagsList>(async ({ ctx, input }) => {
+      const starredPages = await ctx.prisma.page.findMany({
+        where: {
+          starredBy: {
+            none: {
+              id: input,
+            },
+          },
+        },
+        include: {
+          starredBy: true,
+          tags: true,
+        },
+      });
+
+      return PageWithStarsAndTagsListSchema.parse(starredPages);
     }),
 
   createNewPage: protectedProcedure

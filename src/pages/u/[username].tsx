@@ -8,6 +8,7 @@ import { Avatar, AvatarImage } from "~/components/ui/avatar";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "~/components/ui/tabs";
 import { ProfileOverview } from "~/components/profile-overview";
 import { Book, Star, Users } from "lucide-react";
+import { ProfileStars } from "~/components/profile-stars";
 
 export const getServerSideProps = async (
   context: GetServerSidePropsContext<{ username: string }>
@@ -62,7 +63,9 @@ const ProfilePage: NextPageWithAuthAndLayout<
         <ProfileOverview basicUser={basicUser} />
       </TabsContent>
       <TabsContent value="people">People</TabsContent>
-      <TabsContent value="stars">Stars</TabsContent>
+      <TabsContent value="stars">
+        <ProfileStars basicUser={basicUser} />
+      </TabsContent>
     </Tabs>
   );
 };
