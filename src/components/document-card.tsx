@@ -7,7 +7,7 @@ import {
   CardHeader,
   CardTitle,
 } from "~/components/ui/card";
-import { Edit, MoreHorizontal, TagIcon, Trash } from "lucide-react";
+import { Edit, LinkIcon, MoreHorizontal, TagIcon, Trash } from "lucide-react";
 import { Badge } from "~/components/ui/badge";
 import {
   DropdownMenu,
@@ -17,7 +17,7 @@ import {
 } from "~/components/ui/dropdown-menu";
 import { SparkyStars } from "~/components/ui/sparky-stars";
 import api from "~/utils/api";
-import { toast } from "~/components/ui/use-toast";
+import { useToast } from "~/components/ui/use-toast";
 import { useQueryClient } from "@tanstack/react-query";
 import {
   AlertDialog,
@@ -33,6 +33,8 @@ import {
 import React from "react";
 import { useSession } from "next-auth/react";
 import Link from "next/link";
+import useClipboard from "~/lib/hooks/use-clipboard";
+import { env } from "~/env.mjs";
 
 export interface DocumentCardProps {
   page: PageWithTags;
@@ -61,8 +63,23 @@ const CardTags = ({ tags }: { tags: TagList }) => {
 export const DocumentCard = ({ page }: DocumentCardProps) => {
   const queryClient = useQueryClient();
   const { data: session, status } = useSession();
+  const { toast } = useToast();
   const deletePageById = api.pages.deletePageById.useMutation();
   const userIsAuthor = session?.user.id === page.authorId;
+  const documentUri = `/d/${page.id}`;
+  const { copyToClipboard: copyDocumentUri } = useClipboard({
+    onError: () =>
+      toast({
+        title: "🚨 Uh oh! Something went wrong.",
+        description: "Could not copy link.",
+      }),
+    onSuccess: () =>
+      toast({
+        title: "🎉 Wuhuu",
+        description: "Link copied successfully.",
+      }),
+    value: env.NEXT_PUBLIC_BASE_URL.concat(documentUri),
+  });
 
   const handleDeletePage = async (id: string) => {
     await deletePageById.mutateAsync(id, {
@@ -83,7 +100,7 @@ export const DocumentCard = ({ page }: DocumentCardProps) => {
 
   return (
     <Card className="flex min-w-[325px] max-w-[650px] flex-1 flex-col justify-between">
-      <Link href={`/d/${page.id}`}>
+      <Link href={documentUri}>
         <CardHeader>
           <CardTitle className="line-clamp-2 leading-7">{page.title}</CardTitle>
           <CardDescription className="line-clamp-4 h-[80px]">{page.description}</CardDescription>
@@ -94,36 +111,41 @@ export const DocumentCard = ({ page }: DocumentCardProps) => {
       </CardContent>
       <CardFooter className="flex justify-end">
         <AlertDialog>
-          {status === "authenticated" && (
-            <DropdownMenu>
-              <DropdownMenuTrigger>
-                <MoreHorizontal className="h-4 w-4" />
-              </DropdownMenuTrigger>
-              <DropdownMenuContent className="w-[170px]">
-                <DropdownMenuItem className="group flex justify-between">
-                  Add Favorite <SparkyStars />
-                </DropdownMenuItem>
-                {userIsAuthor && (
-                  <>
-                    <Link href={`/edit/${page.id}`}>
-                      <DropdownMenuItem className="flex justify-between">
-                        Edit <Edit className="h-4 w-4" />
+          <DropdownMenu>
+            <DropdownMenuTrigger>
+              <MoreHorizontal className="h-4 w-4" />
+            </DropdownMenuTrigger>
+            <DropdownMenuContent className="w-[170px]">
+              <DropdownMenuItem className="group flex justify-between" onClick={copyDocumentUri}>
+                Copy Link <LinkIcon className="h-4 w-4" />
+              </DropdownMenuItem>
+              {status === "authenticated" && (
+                <>
+                  <DropdownMenuItem className="group flex justify-between">
+                    Add Favorite <SparkyStars />
+                  </DropdownMenuItem>
+                  {userIsAuthor && (
+                    <>
+                      <Link href={`/edit/${page.id}`}>
+                        <DropdownMenuItem className="flex justify-between">
+                          Edit <Edit className="h-4 w-4" />
+                        </DropdownMenuItem>
+                      </Link>
+                      <DropdownMenuItem asChild>
+                        <AlertDialogTrigger
+                          type="button"
+                          title="Delete page"
+                          className="flex h-full w-full justify-between"
+                        >
+                          Delete <Trash className="h-4 w-4" />
+                        </AlertDialogTrigger>
                       </DropdownMenuItem>
-                    </Link>
-                    <DropdownMenuItem asChild>
-                      <AlertDialogTrigger
-                        type="button"
-                        title="Delete page"
-                        className="flex h-full w-full justify-between"
-                      >
-                        Delete <Trash className="h-4 w-4" />
-                      </AlertDialogTrigger>
-                    </DropdownMenuItem>
-                  </>
-                )}
-              </DropdownMenuContent>
-            </DropdownMenu>
-          )}
+                    </>
+                  )}
+                </>
+              )}
+            </DropdownMenuContent>
+          </DropdownMenu>
           {userIsAuthor && (
             <AlertDialogContent>
               <AlertDialogHeader>
