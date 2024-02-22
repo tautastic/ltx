@@ -189,7 +189,7 @@ const EditableFullscreenEditor = memo(
                   control={form.control}
                   name="isPrivate"
                   render={({ field }) => (
-                    <FormItem className="flex flex-row items-start justify-between space-y-2 rounded-lg border border-gray-200 p-4 dark:border-gray-800">
+                    <FormItem className="flex flex-row items-center justify-between gap-x-2 space-y-2 rounded-lg border border-gray-200 p-4 dark:border-gray-800">
                       <div className="space-y-0.5">
                         <FormLabel className="text-base font-medium">Private</FormLabel>
                         <FormDescription>

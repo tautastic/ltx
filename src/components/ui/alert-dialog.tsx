@@ -1,9 +1,9 @@
 import * as React from "react";
+import { type ElementRef, forwardRef } from "react";
 import * as AlertDialogPrimitive from "@radix-ui/react-alert-dialog";
 
 import { cn } from "~/utils/cn";
 import { Button, type ButtonProps } from "~/components/ui/button";
-import { type ElementRef, forwardRef } from "react";
 
 const AlertDialog = AlertDialogPrimitive.Root;
 
@@ -51,7 +51,10 @@ AlertDialogHeader.displayName = "AlertDialogHeader";
 
 const AlertDialogFooter = ({ className, ...props }: React.HTMLAttributes<HTMLDivElement>) => (
   <div
-    className={cn("flex flex-col-reverse sm:flex-row sm:justify-end sm:space-x-2", className)}
+    className={cn(
+      "flex flex-col-reverse gap-y-4 sm:flex-row sm:justify-end sm:gap-y-0 sm:space-x-2",
+      className
+    )}
     {...props}
   />
 );
