@@ -21,12 +21,7 @@ import {
 import { type ReactNode, useCallback, useEffect, useMemo, useState } from "react";
 import { TagSelectDropdown } from "~/components/tag-select-dropdown";
 import useWindowSize from "~/lib/hooks/use-window-size";
-import {
-  type PageWithStarsAndTags,
-  type PageWithStarsAndTagsList,
-  type TagList,
-  type UserWithFollowers,
-} from "~/schemas";
+import { type Page, type PageList, type TagList, type UserWithFollowers } from "~/schemas";
 import api from "~/utils/api";
 import { DocumentCard } from "~/components/document-card";
 import { useFuzzy } from "~/lib/hooks/use-fuzzy";
@@ -47,23 +42,23 @@ const StatefulProfileStars = ({
   allTags,
   isMobile,
 }: {
-  allPages: PageWithStarsAndTagsList;
+  allPages: PageList;
   allTags: TagList;
   isMobile: boolean;
 }) => {
   const [sortBy, setSortBy] = useState("activity");
   const [selectedTagsId, setSelectedTagsId] = useState<string[]>([]);
-  const [filteredPages, setFilteredPages] = useState<PageWithStarsAndTagsList>([]);
+  const [filteredPages, setFilteredPages] = useState<PageList>([]);
 
   const isInSelectedTags = useCallback(
-    (page: PageWithStarsAndTags) =>
+    (page: Page) =>
       selectedTagsId.length < 1 ||
       selectedTagsId.every((tagId) => page.tags.some((tag) => tag.id === tagId)),
     [selectedTagsId]
   );
 
   const sortFunction = useCallback(
-    (a: PageWithStarsAndTags, b: PageWithStarsAndTags) => {
+    (a: Page, b: Page) => {
       if (sortBy === "name") {
         return a.title.localeCompare(b.title);
       }
@@ -73,7 +68,7 @@ const StatefulProfileStars = ({
     [sortBy]
   );
 
-  const { result, searchTerm, setSearchTerm } = useFuzzy<PageWithStarsAndTags>(allPages, {
+  const { result, searchTerm, setSearchTerm } = useFuzzy<Page>(allPages, {
     keys: ["title", "description", "updatedAt"],
     shouldSort: true,
     ignoreFieldNorm: true,
@@ -198,13 +193,19 @@ const StatefulProfileStars = ({
 
 export const ProfileStars = ({ userWithFollowers }: ProfileStarsProps) => {
   const { isMobile } = useWindowSize();
-  const { data: allTags, status: getAllTagsStatus } = api.tags.getTagListByAuthorId.useQuery(
-    userWithFollowers.id
-  );
   const { data: starredPages, status: getStarredPagesStatus } =
     api.pages.getStarredPagesByAuthorId.useQuery(userWithFollowers.id);
 
-  if (getStarredPagesStatus === "loading" || getAllTagsStatus === "loading") {
+  const allTags = useMemo(() => {
+    if (starredPages) {
+      return starredPages
+        .flatMap((p) => p.tags)
+        .filter((tag, index, tags) => tags.findIndex((t) => t.id === tag.id) === index);
+    }
+    return [];
+  }, [starredPages]);
+
+  if (getStarredPagesStatus === "loading") {
     return (
       <ProfileStarsWrapper>
         <div className="flex w-full flex-row justify-center space-x-3">
@@ -228,7 +229,7 @@ export const ProfileStars = ({ userWithFollowers }: ProfileStarsProps) => {
     );
   }
 
-  if (getStarredPagesStatus === "success" && getAllTagsStatus === "success") {
+  if (getStarredPagesStatus === "success") {
     return <StatefulProfileStars allPages={starredPages} allTags={allTags} isMobile={isMobile} />;
   }
 };

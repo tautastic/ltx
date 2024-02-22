@@ -23,12 +23,7 @@ import { type ReactNode, useCallback, useEffect, useMemo, useState } from "react
 import Link from "next/link";
 import { TagSelectDropdown } from "~/components/tag-select-dropdown";
 import useWindowSize from "~/lib/hooks/use-window-size";
-import {
-  type PageWithStarsAndTags,
-  type PageWithStarsAndTagsList,
-  type TagList,
-  type UserWithFollowers,
-} from "~/schemas";
+import { type Page, type PageList, type TagList, type UserWithFollowers } from "~/schemas";
 import api from "~/utils/api";
 import { DocumentCard } from "~/components/document-card";
 import { useFuzzy } from "~/lib/hooks/use-fuzzy";
@@ -51,24 +46,24 @@ const StatefulProfileOverview = ({
   isAuthor,
   isMobile,
 }: {
-  allPages: PageWithStarsAndTagsList;
+  allPages: PageList;
   allTags: TagList;
   isAuthor: boolean;
   isMobile: boolean;
 }) => {
   const [sortBy, setSortBy] = useState("activity");
   const [selectedTagsId, setSelectedTagsId] = useState<string[]>([]);
-  const [filteredPages, setFilteredPages] = useState<PageWithStarsAndTagsList>([]);
+  const [filteredPages, setFilteredPages] = useState<PageList>([]);
 
   const isInSelectedTags = useCallback(
-    (page: PageWithStarsAndTags) =>
+    (page: Page) =>
       selectedTagsId.length < 1 ||
       selectedTagsId.every((tagId) => page.tags.some((tag) => tag.id === tagId)),
     [selectedTagsId]
   );
 
   const sortFunction = useCallback(
-    (a: PageWithStarsAndTags, b: PageWithStarsAndTags) => {
+    (a: Page, b: Page) => {
       if (sortBy === "name") {
         return a.title.localeCompare(b.title);
       }
@@ -78,7 +73,7 @@ const StatefulProfileOverview = ({
     [sortBy]
   );
 
-  const { result, searchTerm, setSearchTerm } = useFuzzy<PageWithStarsAndTags>(allPages, {
+  const { result, searchTerm, setSearchTerm } = useFuzzy<Page>(allPages, {
     keys: ["title", "description", "updatedAt"],
     shouldSort: true,
     ignoreFieldNorm: true,
@@ -225,14 +220,20 @@ const StatefulProfileOverview = ({
 export const ProfileOverview = ({ userWithFollowers }: ProfileOverviewProps) => {
   const { isMobile } = useWindowSize();
   const { data: session } = useSession();
-  const { data: allTags, status: getAllTagsStatus } = api.tags.getTagListByAuthorId.useQuery(
-    userWithFollowers.id
-  );
   const { data: allPages, status: getAllPagesStatus } = api.pages.getAllPagesByAuthorId.useQuery(
     userWithFollowers.id
   );
 
-  if (getAllPagesStatus === "loading" || getAllTagsStatus === "loading") {
+  const allTags = useMemo(() => {
+    if (allPages) {
+      return allPages
+        .flatMap((p) => p.tags)
+        .filter((tag, index, tags) => tags.findIndex((t) => t.id === tag.id) === index);
+    }
+    return [];
+  }, [allPages]);
+
+  if (getAllPagesStatus === "loading") {
     return (
       <ProfileOverviewWrapper>
         <div className="flex w-full flex-row justify-center space-x-3">
@@ -256,7 +257,7 @@ export const ProfileOverview = ({ userWithFollowers }: ProfileOverviewProps) => 
     );
   }
 
-  if (getAllPagesStatus === "success" && getAllTagsStatus === "success") {
+  if (getAllPagesStatus === "success") {
     return (
       <StatefulProfileOverview
         allPages={allPages}

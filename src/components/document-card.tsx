@@ -1,4 +1,4 @@
-import { type PageWithStarsAndTags, type TagList } from "~/schemas";
+import { type Page, type TagList } from "~/schemas";
 import {
   Card,
   CardContent,
@@ -37,7 +37,7 @@ import useClipboard from "~/lib/hooks/use-clipboard";
 import { env } from "~/env.mjs";
 
 export interface DocumentCardProps {
-  page: PageWithStarsAndTags;
+  page: Page;
 }
 
 const CardTags = ({ tags }: { tags: TagList }) => {
@@ -70,6 +70,7 @@ export const DocumentCard = ({ page }: DocumentCardProps) => {
   const pageIsStarred = session ? page.starredBy.map((u) => u.id).includes(session.user.id) : false;
   const userIsAuthor = session?.user.id === page.authorId;
   const documentUri = `/d/${page.id}`;
+  const authorUri = `/u/${page.author.username}`;
   const { copyToClipboard: copyDocumentUri } = useClipboard({
     onError: () =>
       toast({
@@ -90,7 +91,8 @@ export const DocumentCard = ({ page }: DocumentCardProps) => {
         onSuccess: () => {
           queryClient.invalidateQueries({ stale: true });
           toast({
-            title: "Removed page from favorites successfully.",
+            title: "🎉 Wuhuu",
+            description: "Removed page from favorites successfully.",
           });
         },
         onError: () => {
@@ -105,7 +107,8 @@ export const DocumentCard = ({ page }: DocumentCardProps) => {
         onSuccess: () => {
           queryClient.invalidateQueries({ stale: true });
           toast({
-            title: "Added page from favorites successfully.",
+            title: "🎉 Wuhuu",
+            description: "Added page to favorites successfully.",
           });
         },
         onError: () => {
@@ -123,7 +126,8 @@ export const DocumentCard = ({ page }: DocumentCardProps) => {
       onSuccess: () => {
         queryClient.invalidateQueries({ stale: true });
         toast({
-          title: "Deleted page successfully.",
+          title: "🎉 Wuhuu",
+          description: "Deleted page successfully.",
         });
       },
       onError: () => {
@@ -137,12 +141,15 @@ export const DocumentCard = ({ page }: DocumentCardProps) => {
 
   return (
     <Card className="flex min-w-[325px] max-w-[650px] flex-1 flex-col justify-between">
-      <Link href={documentUri}>
-        <CardHeader>
+      <CardHeader>
+        <Link href={authorUri}>
+          <CardDescription className="font-mono text-xs">{authorUri}</CardDescription>
+        </Link>
+        <Link href={documentUri} className="flex flex-col gap-y-1">
           <CardTitle className="line-clamp-2 leading-7">{page.title}</CardTitle>
           <CardDescription className="line-clamp-4 h-[80px]">{page.description}</CardDescription>
-        </CardHeader>
-      </Link>
+        </Link>
+      </CardHeader>
       <CardContent className="py-0">
         <CardTags tags={page.tags} />
       </CardContent>

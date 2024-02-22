@@ -108,6 +108,7 @@ const ProfilePage: NextPageWithAuthAndLayout<
       return (
         <Button
           className="mt-4 px-6"
+          Type="secondary"
           Prefix={<UserRoundMinus className="h-4 w-4" />}
           onClick={() => handleToggleFollowUser(userWithFollowers.id)}
         >

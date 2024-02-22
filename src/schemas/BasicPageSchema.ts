@@ -2,7 +2,7 @@ import { z } from "zod";
 import { TagSchema } from "~/schemas/TagSchema";
 import { UserSchema } from "~/schemas/UserSchema";
 
-export const PageSchema = z.object({
+export const BasicPageSchema = z.object({
   id: z.string().cuid(),
   createdAt: z.coerce.string(),
   updatedAt: z.coerce.string(),
@@ -13,22 +13,23 @@ export const PageSchema = z.object({
   isPrivate: z.boolean(),
 });
 
+export type BasicPage = z.infer<typeof BasicPageSchema>;
+
+export const BasicPageListSchema = BasicPageSchema.array();
+
+export type BasicPageList = z.infer<typeof BasicPageListSchema>;
+
+export const PageSchema = BasicPageSchema.extend({
+  author: z.lazy(() => UserSchema),
+  starredBy: z.lazy(() => UserSchema).array(),
+  tags: z.lazy(() => TagSchema).array(),
+});
+
 export type Page = z.infer<typeof PageSchema>;
 
 export const PageListSchema = PageSchema.array();
 
 export type PageList = z.infer<typeof PageListSchema>;
-
-export const PageWithStarsAndTagsSchema = PageSchema.extend({
-  starredBy: z.lazy(() => UserSchema).array(),
-  tags: z.lazy(() => TagSchema).array(),
-});
-
-export type PageWithStarsAndTags = z.infer<typeof PageWithStarsAndTagsSchema>;
-
-export const PageWithStarsAndTagsListSchema = PageWithStarsAndTagsSchema.array();
-
-export type PageWithStarsAndTagsList = z.infer<typeof PageWithStarsAndTagsListSchema>;
 
 export const CreateNewPageSchema = z.object({
   pageArgs: z.object({

@@ -1,56 +1,66 @@
 import { createTRPCRouter, protectedProcedure, publicProcedure } from "~/server/api/trpc";
 import {
+  type BasicPage,
+  BasicPageSchema,
   CreateNewPageSchema,
   type Page,
+  type PageList,
+  PageListSchema,
   PageSchema,
-  type PageWithStarsAndTags,
-  type PageWithStarsAndTagsList,
-  PageWithStarsAndTagsListSchema,
-  PageWithStarsAndTagsSchema,
   UpdatePageSchema,
 } from "~/schemas";
 import { TRPCError } from "@trpc/server";
 
 export const pageRouter = createTRPCRouter({
-  getPageById: publicProcedure
-    .input(PageSchema.shape.id)
-    .query<PageWithStarsAndTags>(async ({ ctx, input }) => {
-      const page = await ctx.prisma.page.findUnique({
-        where: {
-          id: input,
-        },
-        include: {
-          starredBy: {
-            where: {
-              OR: [{ isPrivate: false }, { isPrivate: true, id: ctx.session?.user.id }],
-            },
+  getPageById: publicProcedure.input(PageSchema.shape.id).query<Page>(async ({ ctx, input }) => {
+    const page = await ctx.prisma.page.findUnique({
+      where: {
+        id: input,
+        author: {
+          is: {
+            OR: [{ isPrivate: false }, { isPrivate: true, id: ctx.session?.user.id }],
           },
-          tags: true,
         },
-      });
+      },
+      include: {
+        author: true,
+        starredBy: {
+          where: {
+            OR: [{ isPrivate: false }, { isPrivate: true, id: ctx.session?.user.id }],
+          },
+        },
+        tags: true,
+      },
+    });
 
-      if (page) {
-        const sessionUserIsAuthor = ctx.session && ctx.session.user.id === page.authorId;
+    if (page) {
+      const sessionUserIsAuthor = ctx.session && ctx.session.user.id === page.authorId;
 
-        if (!page.isPrivate || sessionUserIsAuthor) {
-          return PageWithStarsAndTagsSchema.parse(page);
-        }
+      if ((!page.isPrivate && !page.author.isPrivate) || sessionUserIsAuthor) {
+        return PageSchema.parse(page);
       }
+    }
 
-      throw new TRPCError({
-        code: "NOT_FOUND",
-      });
-    }),
+    throw new TRPCError({
+      code: "NOT_FOUND",
+    });
+  }),
 
   getAllPagesByAuthorId: publicProcedure
-    .input(PageSchema.shape.authorId)
-    .query<PageWithStarsAndTagsList>(async ({ ctx, input }) => {
+    .input(BasicPageSchema.shape.authorId)
+    .query<PageList>(async ({ ctx, input }) => {
       const publicPages = await ctx.prisma.page.findMany({
         where: {
           authorId: input,
           isPrivate: false,
+          author: {
+            is: {
+              OR: [{ isPrivate: false }, { isPrivate: true, id: ctx.session?.user.id }],
+            },
+          },
         },
         include: {
+          author: true,
           starredBy: {
             where: {
               OR: [{ isPrivate: false }, { isPrivate: true, id: ctx.session?.user.id }],
@@ -65,8 +75,14 @@ export const pageRouter = createTRPCRouter({
           where: {
             authorId: input,
             isPrivate: true,
+            author: {
+              is: {
+                OR: [{ isPrivate: false }, { isPrivate: true, id: ctx.session?.user.id }],
+              },
+            },
           },
           include: {
+            author: true,
             starredBy: {
               where: {
                 OR: [{ isPrivate: false }, { isPrivate: true, id: ctx.session?.user.id }],
@@ -78,17 +94,22 @@ export const pageRouter = createTRPCRouter({
 
         const allPages = publicPages.concat(privatePages);
 
-        return PageWithStarsAndTagsListSchema.parse(allPages);
+        return PageListSchema.parse(allPages);
       }
 
-      return PageWithStarsAndTagsListSchema.parse(publicPages);
+      return PageListSchema.parse(publicPages);
     }),
 
   getStarredPagesByAuthorId: publicProcedure
-    .input(PageSchema.shape.authorId)
-    .query<PageWithStarsAndTagsList>(async ({ ctx, input }) => {
+    .input(BasicPageSchema.shape.authorId)
+    .query<PageList>(async ({ ctx, input }) => {
       const starredPages = await ctx.prisma.page.findMany({
         where: {
+          author: {
+            is: {
+              OR: [{ isPrivate: false }, { isPrivate: true, id: ctx.session?.user.id }],
+            },
+          },
           starredBy: {
             some: {
               id: input,
@@ -96,17 +117,18 @@ export const pageRouter = createTRPCRouter({
           },
         },
         include: {
+          author: true,
           starredBy: true,
           tags: true,
         },
       });
 
-      return PageWithStarsAndTagsListSchema.parse(starredPages);
+      return PageListSchema.parse(starredPages);
     }),
 
   createNewPage: protectedProcedure
     .input(CreateNewPageSchema)
-    .mutation<Page>(async ({ ctx, input }) => {
+    .mutation<BasicPage>(async ({ ctx, input }) => {
       const page = await ctx.prisma.page.create({
         data: {
           authorId: ctx.session.user.id,
@@ -119,32 +141,34 @@ export const pageRouter = createTRPCRouter({
         },
       });
 
-      return PageSchema.parse(page);
+      return BasicPageSchema.parse(page);
     }),
 
-  updatePage: protectedProcedure.input(UpdatePageSchema).mutation<Page>(async ({ ctx, input }) => {
-    const page = await ctx.prisma.page.update({
-      where: {
-        authorId: ctx.session.user.id,
-        id: input.pageId,
-      },
-      data: {
-        authorId: ctx.session.user.id,
-        ...input.pageArgs,
-        tags: {
-          connect: input.selectedTagIds.map((id) => {
-            return { id };
-          }),
+  updatePage: protectedProcedure
+    .input(UpdatePageSchema)
+    .mutation<BasicPage>(async ({ ctx, input }) => {
+      const page = await ctx.prisma.page.update({
+        where: {
+          authorId: ctx.session.user.id,
+          id: input.pageId,
         },
-      },
-    });
+        data: {
+          authorId: ctx.session.user.id,
+          ...input.pageArgs,
+          tags: {
+            connect: input.selectedTagIds.map((id) => {
+              return { id };
+            }),
+          },
+        },
+      });
 
-    return PageSchema.parse(page);
-  }),
+      return BasicPageSchema.parse(page);
+    }),
 
   starPageById: protectedProcedure
-    .input(PageSchema.shape.id)
-    .mutation<Page>(async ({ ctx, input }) => {
+    .input(BasicPageSchema.shape.id)
+    .mutation<BasicPage>(async ({ ctx, input }) => {
       const page = await ctx.prisma.page.update({
         where: {
           id: input,
@@ -158,12 +182,12 @@ export const pageRouter = createTRPCRouter({
         },
       });
 
-      return PageSchema.parse(page);
+      return BasicPageSchema.parse(page);
     }),
 
   unstarPageById: protectedProcedure
-    .input(PageSchema.shape.id)
-    .mutation<Page>(async ({ ctx, input }) => {
+    .input(BasicPageSchema.shape.id)
+    .mutation<BasicPage>(async ({ ctx, input }) => {
       const page = await ctx.prisma.page.update({
         where: {
           id: input,
@@ -177,14 +201,16 @@ export const pageRouter = createTRPCRouter({
         },
       });
 
-      return PageSchema.parse(page);
+      return BasicPageSchema.parse(page);
     }),
 
-  deletePageById: protectedProcedure.input(PageSchema.shape.id).mutation(async ({ ctx, input }) => {
-    await ctx.prisma.page.delete({
-      where: {
-        id: input,
-      },
-    });
-  }),
+  deletePageById: protectedProcedure
+    .input(BasicPageSchema.shape.id)
+    .mutation(async ({ ctx, input }) => {
+      await ctx.prisma.page.delete({
+        where: {
+          id: input,
+        },
+      });
+    }),
 });
