@@ -28,15 +28,19 @@ import Link from "next/link";
 import { DocumentCard } from "~/components/document-card";
 
 export const ProfileOverviewWrapper = ({
+  allPages,
   pagesStatus,
   ...props
 }: {
+  allPages?: PageList;
+  isAuthor?: boolean;
+  isMobile: boolean;
   pagesStatus: "error" | "success" | "loading";
-} & StatefulProfileOverviewProps) => {
-  if (props.allPages && pagesStatus === "success") {
+}) => {
+  if (allPages && pagesStatus === "success") {
     return (
       <div className="mx-auto flex max-w-screen-xl flex-col space-y-6 p-1 sm:p-3">
-        <StatefulProfileOverview {...props} />
+        <StatefulProfileOverview allPages={allPages} {...props} />
       </div>
     );
   }
@@ -64,17 +68,15 @@ export const ProfileOverviewWrapper = ({
   );
 };
 
-export interface StatefulProfileOverviewProps {
-  allPages: PageList;
-  isAuthor?: boolean;
-  isMobile: boolean;
-}
-
 const StatefulProfileOverview = ({
   allPages,
   isAuthor = false,
   isMobile,
-}: StatefulProfileOverviewProps) => {
+}: {
+  allPages: PageList;
+  isAuthor?: boolean;
+  isMobile: boolean;
+}) => {
   const [sortBy, setSortBy] = useState("activity");
   const [selectedTagsId, setSelectedTagsId] = useState<string[]>([]);
   const [filteredPages, setFilteredPages] = useState<PageList>([]);

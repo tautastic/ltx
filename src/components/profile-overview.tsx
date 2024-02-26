@@ -1,5 +1,5 @@
 import useWindowSize from "~/lib/hooks/use-window-size";
-import { type PageList, type UserWithFollowers } from "~/schemas";
+import { type UserWithFollowers } from "~/schemas";
 import api from "~/utils/api";
 import { useSession } from "next-auth/react";
 import { ProfileOverviewWrapper } from "~/components/profile-overview-wrapper";
@@ -17,10 +17,10 @@ export const ProfileOverview = ({ userWithFollowers }: ProfileOverviewProps) => 
 
   return (
     <ProfileOverviewWrapper
-      allPages={allPages as PageList}
+      allPages={allPages}
       isAuthor={session?.user.id === userWithFollowers.id}
       isMobile={isMobile}
       pagesStatus={getAllPagesStatus}
-    ></ProfileOverviewWrapper>
+    />
   );
 };

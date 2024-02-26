@@ -1,5 +1,5 @@
 import useWindowSize from "~/lib/hooks/use-window-size";
-import { type PageList, type UserWithFollowers } from "~/schemas";
+import { type UserWithFollowers } from "~/schemas";
 import api from "~/utils/api";
 import { ProfileOverviewWrapper } from "~/components/profile-overview-wrapper";
 
@@ -14,9 +14,9 @@ export const ProfileStars = ({ userWithFollowers }: ProfileStarsProps) => {
 
   return (
     <ProfileOverviewWrapper
-      allPages={starredPages as PageList}
+      allPages={starredPages}
       isMobile={isMobile}
       pagesStatus={getStarredPagesStatus}
-    ></ProfileOverviewWrapper>
+    />
   );
 };
