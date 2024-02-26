@@ -12,6 +12,10 @@ export const UserSchema = z.object({
 
 export type User = z.infer<typeof UserSchema>;
 
+export const UserListSchema = UserSchema.array();
+
+export type UserList = z.infer<typeof UserListSchema>;
+
 export const UserWithFollowersSchema = UserSchema.extend({
   following: z.lazy(() => UserSchema.array()),
   followedBy: z.lazy(() => UserSchema.array()),

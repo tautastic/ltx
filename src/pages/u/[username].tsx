@@ -15,6 +15,7 @@ import api from "~/utils/api";
 import { useQueryClient } from "@tanstack/react-query";
 import { useToast } from "~/components/ui/use-toast";
 import { useCallback, useMemo } from "react";
+import { ProfilePeople } from "~/components/profile-people";
 
 export const getServerSideProps = async (
   context: GetServerSidePropsContext<{ username: string }>
@@ -51,6 +52,7 @@ const ProfilePage: NextPageWithAuthAndLayout<
   const { data: userWithFollowers } = api.users.getUserAndFollowersByUsername.useQuery(
     basicUser.username
   );
+
   const canFollowOrUnfollow = status === "authenticated" && session?.user.id !== basicUser.id;
   const userIsFollowed =
     session && userWithFollowers
@@ -161,7 +163,9 @@ const ProfilePage: NextPageWithAuthAndLayout<
       <TabsContent value="overview">
         <ProfileOverview userWithFollowers={userWithFollowers} />
       </TabsContent>
-      <TabsContent value="people">People</TabsContent>
+      <TabsContent value="people">
+        <ProfilePeople userWithFollowers={userWithFollowers} />
+      </TabsContent>
       <TabsContent value="stars">
         <ProfileStars userWithFollowers={userWithFollowers} />
       </TabsContent>
