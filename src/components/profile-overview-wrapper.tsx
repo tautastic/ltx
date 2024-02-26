@@ -1,5 +1,5 @@
 import { Skeleton } from "~/components/ui/skeleton";
-import { Page, PageList } from "~/schemas";
+import { type Page, type PageList } from "~/schemas";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { useFuzzy } from "~/lib/hooks/use-fuzzy";
 import { TagSelectDropdown } from "~/components/tag-select-dropdown";

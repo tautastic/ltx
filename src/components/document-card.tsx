@@ -141,7 +141,7 @@ export const DocumentCard = ({ page }: DocumentCardProps) => {
 
   return (
     <Card className="flex min-w-[325px] max-w-[650px] flex-1 flex-col justify-between">
-      <CardHeader>
+      <CardHeader className="flex flex-col gap-y-2">
         <Link href={authorUri}>
           <CardDescription className="font-mono text-xs">{authorUri}</CardDescription>
         </Link>
