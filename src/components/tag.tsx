@@ -79,9 +79,9 @@ export const Tag = ({
         <label htmlFor={id} className="flex flex-1 cursor-pointer items-center gap-x-1.5 py-2 pl-3">
           <TagIcon textRendering={"geometricPrecision"} className="h-4 w-4" color={color} />
           {showPlaceholder ? (
-            <p className="break-keep opacity-60">{placeholder}</p>
+            <p className="line-clamp-1 break-keep opacity-60 md:line-clamp-2">{placeholder}</p>
           ) : (
-            <p className="break-keep">{name}</p>
+            <p className="line-clamp-1 break-keep md:line-clamp-2">{name}</p>
           )}
         </label>
         {!readonly && <DeleteAlert onDelete={onDelete} />}
