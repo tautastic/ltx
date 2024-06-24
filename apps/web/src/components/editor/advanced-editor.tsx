@@ -29,10 +29,11 @@ const extensions = [...defaultExtensions, slashCommand];
 interface EditorProp {
   isHeaderVisible?: boolean;
   initialValue?: JSONContent;
-  onChange: (value: JSONContent) => void;
+  onChange?: (value: JSONContent) => void;
   className?: string;
+  readonly?: boolean;
 }
-const Editor = ({ isHeaderVisible = false, initialValue, onChange, className }: EditorProp) => {
+const Editor = ({ isHeaderVisible = false, initialValue, onChange, className, readonly = false }: EditorProp) => {
   const [openNode, setOpenNode] = useState(false);
   const [openColor, setOpenColor] = useState(false);
   const [openLink, setOpenLink] = useState(false);
@@ -42,6 +43,7 @@ const Editor = ({ isHeaderVisible = false, initialValue, onChange, className }: 
       <div className="relative flex flex-1 flex-col">
         <EditorContent
           {...(initialValue && { initialContent: initialValue })}
+          editable={!readonly}
           className="relative flex flex-1 flex-col"
           extensions={extensions}
           editorProps={{
@@ -59,7 +61,9 @@ const Editor = ({ isHeaderVisible = false, initialValue, onChange, className }: 
             },
           }}
           onUpdate={({ editor }) => {
-            onChange(editor.getJSON());
+            if (onChange) {
+              onChange(editor.getJSON());
+            }
           }}
           slotBefore={isHeaderVisible && <EditorHeader />}
           slotAfter={<ImageResizer />}

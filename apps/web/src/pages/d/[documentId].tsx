@@ -35,7 +35,7 @@ const DocumentViewPage: NextPageWithAuthAndLayout<InferGetServerSidePropsType<ty
 
   return (
     <FullscreenEditorWrapper readonly={true}>
-      <Editor isHeaderVisible={true} initialValue={value} onChange={() => {}} />
+      <Editor readonly={true} isHeaderVisible={true} initialValue={value} />
     </FullscreenEditorWrapper>
   );
 };

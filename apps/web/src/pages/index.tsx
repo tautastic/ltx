@@ -63,7 +63,7 @@ const Home: NextPageWithAuthAndLayout = () => {
       </div>
       <Fieldset className="m-auto w-full max-w-screen-sm md:max-w-[75ch] lg:max-w-[95ch]">
         <FieldsetContent className="min-h-[800px] p-4">
-          <Editor initialValue={value} onChange={() => {}} />
+          <Editor readonly={true} initialValue={value} onChange={() => {}} />
         </FieldsetContent>
       </Fieldset>
     </>

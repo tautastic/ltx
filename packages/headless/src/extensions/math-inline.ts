@@ -72,40 +72,49 @@ const MathInline = Node.create({
   },
 
   addNodeView() {
-    return ({ node }) => {
+    return ({ node, editor }) => {
       const dom = document.createElement("span");
       dom.className = "Tiptap-mathematics-render Tiptap-mathematics-render--editable";
       dom.setAttribute("data-editor-open", "false");
       dom.contentEditable = "false";
 
-      const input = document.createElement("span");
-      input.className = "Tiptap-mathematics-editor";
-      input.contentEditable = "true";
+      let input: HTMLSpanElement | undefined;
+
+      if (editor.isEditable) {
+        input = document.createElement("span");
+        input.className = "Tiptap-mathematics-editor";
+        input.contentEditable = "true";
+        input.addEventListener("keydown", (e) => {
+          if (e.key === "Enter") {
+            hideEditor();
+            return;
+          }
+        });
+      }
 
       const renderMath = (latex: string | undefined = node.attrs.latex) => {
         dom.setAttribute("latex", latex);
-        input.textContent = latex;
         dom.innerHTML = buildSvgOutput(latex);
-        dom.appendChild(input);
+        if (input) {
+          input.textContent = latex;
+          dom.appendChild(input);
+        }
       };
 
       const showEditor = () => {
-        dom.setAttribute("data-editor-open", "true");
-        input.focus();
-        input.textContent = node.attrs.latex;
+        if (input) {
+          dom.setAttribute("data-editor-open", "true");
+          input.focus();
+          input.textContent = node.attrs.latex;
+        }
       };
 
       const hideEditor = () => {
-        dom.setAttribute("data-editor-open", "false");
-        renderMath(input.textContent ?? "");
-      };
-
-      input.addEventListener("keydown", (e) => {
-        if (e.key === "Enter") {
-          hideEditor();
-          return;
+        if (input) {
+          dom.setAttribute("data-editor-open", "false");
+          renderMath(input?.textContent ?? "");
         }
-      });
+      };
 
       renderMath();
 
