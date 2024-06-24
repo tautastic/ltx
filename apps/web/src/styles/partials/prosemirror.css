@@ -1,0 +1,125 @@
+.ProseMirror .is-editor-empty:first-child:not(.Tiptap-mathematics-render):not(.Tiptap-mathematics-editor)::before,
+.ProseMirror .is-empty:not(.Tiptap-mathematics-render):not(.Tiptap-mathematics-editor)::before {
+  @apply content-[attr(data-placeholder)] float-left text-gray-100 dark:text-gray-800 pointer-events-none h-0;
+}
+
+/* Custom image styles */
+
+.ProseMirror img {
+  @apply transition-[filter] duration-100 ease-in-out hover:cursor-pointer hover:opacity-90;
+}
+
+.ProseMirror img.ProseMirror-selectednode {
+  @apply opacity-90;
+  outline: 3px solid #5abbf7;
+}
+
+.img-placeholder {
+  @apply relative;
+}
+
+.img-placeholder::before {
+  @apply content-[''] box-border absolute top-1/2 left-1/2 w-[36px] h-[36px] rounded-[50%] border-[3px]
+  border-solid border-gray-200 dark:border-gray-800 border-t-gray-800 dark:border-t-gray-200 animate-spin;
+}
+
+ul[data-type="taskList"] li > label {
+  @apply select-none mr-[0.5rem] sm:mr-[0.2rem];
+}
+
+ul[data-type="taskList"] li > label input[type="checkbox"] {
+  @apply appearance-none bg-gray-50 dark:bg-gray-950 m-0 mr-[0.3rem] cursor-pointer w-[1.2em] h-[1.2em] relative
+  top-[5px] border-2 border-solid border-gray-200 dark:border-gray-800 grid place-content-center hover:bg-gray-100
+  active:bg-gray-100 dark:hover:bg-gray-850 dark:active:bg-gray-850 checked:before:scale-100 text-blue-500;
+
+  &::before {
+    content: "";
+    width: 0.65em;
+    height: 0.65em;
+    transform: scale(0);
+    transition: 120ms transform ease-in-out;
+    box-shadow: inset 1em 1em;
+    transform-origin: center;
+    clip-path: polygon(14% 44%, 0% 65%, 50% 100%, 100% 16%, 80% 0%, 43% 62%);
+  }
+}
+
+ul[data-type="taskList"] li[data-checked="true"] > div > p {
+  @apply line-through decoration-1;
+}
+
+div:has(> #tiptap-editor) {
+  @apply flex-1 overflow-y-auto mx-auto w-full lg:w-10/12 lg:max-w-[105ch] py-6;
+}
+
+/* Overwrite tippy-box original max-width */
+
+.tippy-box {
+  max-width: 400px !important;
+}
+
+.ProseMirror:not(.dragging) .ProseMirror-selectednode {
+  @apply bg-blue-800;
+  outline: none !important;
+  transition: background-color 0.2s;
+  box-shadow: none;
+}
+
+/* Custom Youtube Video CSS */
+iframe {
+  border-radius: 0.5rem;
+  min-width: 200px;
+  min-height: 200px;
+  display: block;
+  outline: 0 solid transparent;
+}
+
+div[data-youtube-video] > iframe {
+  cursor: move;
+  aspect-ratio: 16 / 9;
+  width: 100%;
+  height: auto;
+}
+
+.ProseMirror-selectednode iframe {
+  transition: outline 0.15s;
+  outline: 6px solid #fbbf24;
+}
+
+@media only screen and (max-width: 480px) {
+  div[data-youtube-video] > iframe {
+    max-height: 50px;
+  }
+}
+
+@media only screen and (max-width: 720px) {
+  div[data-youtube-video] > iframe {
+    max-height: 100px;
+  }
+}
+
+.tiptap .Tiptap-mathematics-render {
+  @apply py-0 px-1;
+}
+
+.tiptap .Tiptap-mathematics-render--editable {
+  @apply cursor-pointer transition-[background] duration-200;
+}
+
+.tiptap .Tiptap-mathematics-editor,
+.tiptap .Tiptap-mathematics-render {
+  @apply rounded-[0.25rem] inline-block;
+}
+
+.tiptap .Tiptap-mathematics-render--editable[data-editor-open='true'] .Tiptap-mathematics-editor {
+  @apply inline-block bg-gray-100 dark:bg-gray-850 text-black dark:text-white font-mono p-2 leading-none focus-visible:outline-none;
+}
+
+.tiptap .Tiptap-mathematics-render--editable[data-editor-open='true'] svg,
+.tiptap .Tiptap-mathematics-render--editable[data-editor-open='false'] .Tiptap-mathematics-editor {
+  @apply hidden;
+}
+
+.tiptap .Tiptap-mathematics-render--editable[data-editor-open='false'] svg {
+  @apply inline-block;
+}

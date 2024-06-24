@@ -1,0 +1,65 @@
+{
+  "$schema": "https://turbo.build/schema.json",
+  "tasks": {
+    "topo": {
+      "dependsOn": [
+        "^topo"
+      ]
+    },
+    "build": {
+      "dependsOn": [
+        "^build"
+      ],
+      "env": [
+        "DATABASE_URL",
+        "TURSO_AUTH_TOKEN",
+        "NEXT_PUBLIC_BASE_URL",
+        "NEXTAUTH_SECRET",
+        "NEXTAUTH_URL",
+        "DISCORD_ID",
+        "DISCORD_SECRET",
+        "GITHUB_ID",
+        "GITHUB_SECRET",
+        "GOOGLE_ID",
+        "GOOGLE_SECRET",
+        "SPOTIFY_ID",
+        "SPOTIFY_SECRET",
+        "TWITCH_ID",
+        "TWITCH_SECRET"
+      ],
+      "outputs": [
+        "dist/**",
+        ".next/**",
+        "!.next/cache/**"
+      ]
+    },
+    "lint": {
+      "dependsOn": [
+        "^topo"
+      ]
+    },
+    "format": {
+      "dependsOn": [
+        "^topo"
+      ]
+    },
+    "lint:fix": {
+      "dependsOn": [
+        "^topo"
+      ]
+    },
+    "format:fix": {
+      "dependsOn": [
+        "^topo"
+      ]
+    },
+    "check-types": {},
+    "dev": {
+      "cache": false,
+      "persistent": true
+    },
+    "clean": {
+      "cache": false
+    }
+  }
+}

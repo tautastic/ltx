@@ -1,0 +1,102 @@
+{
+  "name": "ltx-editor",
+  "version": "0.8.0",
+  "description": "Notion-style WYSIWYG editor",
+  "license": "MIT",
+  "type": "module",
+  "main": "dist/index.cjs",
+  "module": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "files": [
+    "dist"
+  ],
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "require": "./dist/index.cjs"
+    },
+    "./extensions": {
+      "types": "./dist/extensions.d.ts",
+      "import": "./dist/extensions.js",
+      "require": "./dist/extensions.cjs"
+    },
+    "./plugins": {
+      "types": "./dist/plugins.d.ts",
+      "import": "./dist/plugins.js",
+      "require": "./dist/plugins.cjs"
+    },
+    "./utils": {
+      "types": "./dist/utils.d.ts",
+      "import": "./dist/utils.js",
+      "require": "./dist/utils.cjs"
+    }
+  },
+  "scripts": {
+    "dev": "tsup --watch",
+    "check-types": "tsc --noEmit",
+    "build": "tsup",
+    "lint": "biome lint ./src",
+    "format": "biome format ./src "
+  },
+  "sideEffects": false,
+  "peerDependencies": {
+    "react": "^18.0.0",
+    "react-dom": "^18.0.0"
+  },
+  "dependencies": {
+    "@radix-ui/react-slot": "^1.0.2",
+    "@tiptap/core": "^2.4.0",
+    "@tiptap/extension-character-count": "^2.4.0",
+    "@tiptap/extension-code-block-lowlight": "^2.4.0",
+    "@tiptap/extension-color": "^2.4.0",
+    "@tiptap/extension-highlight": "^2.4.0",
+    "@tiptap/extension-horizontal-rule": "^2.4.0",
+    "@tiptap/extension-image": "^2.4.0",
+    "@tiptap/extension-link": "^2.4.0",
+    "@tiptap/extension-placeholder": "2.0.3",
+    "@tiptap/extension-task-item": "^2.4.0",
+    "@tiptap/extension-task-list": "^2.4.0",
+    "@tiptap/extension-text-style": "^2.4.0",
+    "@tiptap/extension-underline": "^2.4.0",
+    "@tiptap/extension-youtube": "^2.4.0",
+    "@tiptap/pm": "^2.4.0",
+    "@tiptap/react": "^2.4.0",
+    "@tiptap/starter-kit": "^2.4.0",
+    "@tiptap/suggestion": "^2.4.0",
+    "@types/node": "18.15.3",
+    "cmdk": "^1.0.0",
+    "jotai": "^2.8.3",
+    "mathjax-full": "^3.2.2",
+    "react-markdown": "^9.0.1",
+    "react-moveable": "^0.56.0",
+    "tippy.js": "^6.3.7",
+    "tiptap-markdown": "^0.8.10",
+    "tunnel-rat": "^0.1.2"
+  },
+  "devDependencies": {
+    "@biomejs/biome": "^1.8.2",
+    "@types/react": "^18.2.55",
+    "@types/react-dom": "18.2.19",
+    "tsconfig": "workspace:*",
+    "tsup": "^8.1.0",
+    "typescript": "~5.4.0"
+  },
+  "author": "Ahmed Sami",
+  "homepage": "https://ltx.ahmedsami.xyz",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/tautastic/ltx.git"
+  },
+  "bugs": {
+    "url": "https://github.com/tautastic/ltx/issues"
+  },
+  "keywords": [
+    "ltx",
+    "latex",
+    "editor",
+    "markdown",
+    "nextjs",
+    "react"
+  ]
+}

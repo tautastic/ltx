@@ -1,0 +1,71 @@
+.ProseMirror {
+  p {
+    @apply text-base first:mt-0 last:mb-0 md:text-md md:leading-relaxed;
+  }
+
+  & > p {
+    @apply first:mt-0 last:mb-0;
+  }
+
+  h1 {
+    @apply text-2xl md:text-3xl;
+  }
+
+  h2 {
+    @apply text-xl md:text-2xl;
+  }
+
+  h3 {
+    @apply text-lg md:text-xl;
+  }
+
+  h4 {
+    @apply text-base md:text-lg;
+  }
+
+  h5 {
+    @apply text-sm md:text-base;
+  }
+
+  h6 {
+    @apply text-xs md:text-sm;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    @apply font-bold first:mt-0 last:mb-0;
+  }
+
+  a.link {
+    @apply font-extrabold text-blue-500 dark:text-blue-400;
+  }
+
+  mark {
+    @apply rounded-sm bg-red-500 decoration-clone px-0 py-1 text-inherit dark:bg-red-400;
+  }
+
+  & img {
+    @apply h-auto w-full max-w-full;
+  }
+
+  [data-type="horizontalRule"] {
+    @apply my-2 py-4 transition-all duration-100 ease-in-out;
+
+    &.ProseMirror-selectednode {
+      @apply bg-black/5 dark:bg-white/10;
+
+      hr {
+        @apply border-t-black/30 dark:border-t-white/30;
+      }
+    }
+
+    hr {
+      @apply border-0 border-t border-black/20 bg-black/80;
+      @apply dark:border-white/20 dark:bg-white/80;
+    }
+  }
+}
