@@ -36,7 +36,7 @@ export const getServerSideProps = async (context: GetServerSidePropsContext<{ do
 const DocumentEditPage: NextPageWithAuthAndLayout<InferGetServerSidePropsType<typeof getServerSideProps>> = ({
   document,
 }) => {
-  const [value, setValue] = useState<JSONContent>(JSON.parse(document.content));
+  const [value, setValue] = useState<JSONContent | undefined>(document.content ? JSON.parse(document.content) : undefined);
   const router = useRouter();
   const { toast } = useToast();
   const { data: session } = useSession();
@@ -52,7 +52,7 @@ const DocumentEditPage: NextPageWithAuthAndLayout<InferGetServerSidePropsType<ty
             title: data.title,
             description: data.description,
             isPrivate: data.isPrivate,
-            content: JSON.stringify(value),
+            content: value ? JSON.stringify(value) : "",
           },
         });
 

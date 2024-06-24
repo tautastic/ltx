@@ -14,7 +14,7 @@ const Create: NextPageWithAuthAndLayout = () => {
   const { toast } = useToast();
   const { data: session } = useSession();
   const newPageMutation = api.pages.createNewPage.useMutation();
-  const [value, setValue] = useState<JSONContent>();
+  const [value, setValue] = useState<JSONContent | undefined>(undefined);
 
   const onSubmit: (selectedTagIds: string[]) => SubmitHandler<editorFormSchemaType> =
     (selectedTagIds: string[]) => async (data) => {
@@ -25,7 +25,7 @@ const Create: NextPageWithAuthAndLayout = () => {
             title: data.title,
             description: data.description,
             isPrivate: data.isPrivate,
-            content: JSON.stringify(value),
+            content: value ? JSON.stringify(value) : "",
           },
         });
 
