@@ -106,6 +106,10 @@ div[data-youtube-video] > iframe {
   @apply cursor-pointer transition-[background] duration-200;
 }
 
+.tiptap div.Tiptap-mathematics-render {
+  @apply flex items-center justify-center my-2;
+}
+
 .tiptap .Tiptap-mathematics-editor,
 .tiptap .Tiptap-mathematics-render {
   @apply rounded-[0.25rem] inline-block;

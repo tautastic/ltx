@@ -1,5 +1,5 @@
 import * as React from "react";
-import {Content} from "@radix-ui/react-tooltip";
+import { Content } from "@radix-ui/react-tooltip";
 
 import { cn } from "~/utils/cn";
 

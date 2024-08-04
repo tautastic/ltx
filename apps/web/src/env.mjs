@@ -9,10 +9,7 @@ const server = z.object({
   TURSO_AUTH_TOKEN: z.string(),
   NODE_ENV: z.enum(["development", "test", "production"]),
   NEXTAUTH_SECRET: process.env.NODE_ENV === "production" ? z.string().min(1) : z.string().min(1).optional(),
-  NEXTAUTH_URL: z.preprocess(
-    (str) => process.env.VERCEL_URL ?? str,
-    z.string().min(1),
-  ),
+  NEXTAUTH_URL: z.preprocess((str) => process.env.VERCEL_URL ?? str, z.string().min(1)),
 
   DISCORD_ID: z.string(),
   DISCORD_SECRET: z.string(),
