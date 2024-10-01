@@ -41,7 +41,7 @@ export const EditorContent = forwardRef<HTMLDivElement, EditorContentProps>(
 
     return (
       <div ref={ref} className={className}>
-        <EditorProvider {...rest} content={initialContent} extensions={extensions}>
+        <EditorProvider {...rest} content={initialContent} extensions={extensions} immediatelyRender={false}>
           {children}
         </EditorProvider>
       </div>
