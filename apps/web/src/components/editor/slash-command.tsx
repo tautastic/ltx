@@ -8,10 +8,11 @@ import {
   List,
   ListOrdered,
   MessageSquarePlus,
+  SquareSigma,
   Text,
   TextQuote,
-  Youtube,
 } from "lucide-react";
+import { Youtube } from "~/components/ui/brand-icons";
 import { createSuggestionItems } from "ltx-editor/extensions";
 import { Command, renderItems } from "ltx-editor/extensions";
 import { uploadFn } from "./image-upload";
@@ -69,6 +70,15 @@ export const suggestionItems = createSuggestionItems([
     icon: <Heading3 size={18} />,
     command: ({ editor, range }) => {
       editor.chain().focus().deleteRange(range).setNode("heading", { level: 3 }).run();
+    },
+  },
+  {
+    title: "Inline Math",
+    description: "Inline mathematics.",
+    searchTerms: ["math", "latex", "inline"],
+    icon: <SquareSigma size={18} />,
+    command: ({ editor, range }) => {
+      editor.chain().focus().deleteRange(range).toggleMathInline().run();
     },
   },
   {
@@ -131,7 +141,7 @@ export const suggestionItems = createSuggestionItems([
     title: "Youtube",
     description: "Embed a Youtube video.",
     searchTerms: ["video", "youtube", "embed"],
-    icon: <Youtube size={18} />,
+    icon: <Youtube />,
     command: ({ editor, range }) => {
       const videoLink = prompt("Please enter Youtube Video Link");
       const ytregex = new RegExp(

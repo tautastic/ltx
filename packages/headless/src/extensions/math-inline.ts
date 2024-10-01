@@ -7,11 +7,23 @@ import { SVG } from "mathjax-full/js/output/svg";
 import { liteAdaptor } from "mathjax-full/js/adaptors/liteAdaptor";
 import { RegisterHTMLHandler } from "mathjax-full/js/handlers/html";
 import { buildSvgOutput } from "../utils/math-utils";
+import { NodeSelection } from "@tiptap/pm/state";
 import type { MarkdownNodeSpec } from "tiptap-markdown";
 
 const adaptor = liteAdaptor();
 RegisterHTMLHandler(adaptor);
 const html = mathjax.document("", { InputJax: new TeX({ packages: ["base", "ams"] }), OutputJax: new SVG() });
+
+declare module "@tiptap/core" {
+  interface Commands<ReturnType> {
+    mathInline: {
+      /**
+       * Toggle inline math
+       */
+      toggleMathInline: () => ReturnType;
+    };
+  }
+}
 
 const MathInline = Node.create({
   name: "MathInline",
@@ -126,6 +138,30 @@ const MathInline = Node.create({
         },
       },
     ];
+  },
+
+  addCommands() {
+    return {
+      toggleMathInline:
+        () =>
+        ({ commands, state, dispatch }) => {
+          if (!dispatch) {
+            return false;
+          }
+          const { selection, tr } = state;
+
+          if (selection.$from.node().type === this.type) {
+            commands.clearNodes();
+          } else {
+            const node = this.type.create({ latex: "" });
+            tr.replaceSelectionWith(node);
+            tr.setSelection(new NodeSelection(tr.doc.resolve(selection.from)));
+            dispatch(tr);
+          }
+
+          return true;
+        },
+    };
   },
 });
 

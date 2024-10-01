@@ -1,4 +1,5 @@
-.ProseMirror .is-editor-empty:first-child:not(blockquote, .Tiptap-mathematics-render, .Tiptap-mathematics-editor)::before,
+.ProseMirror
+  .is-editor-empty:first-child:not(blockquote, .Tiptap-mathematics-render, .Tiptap-mathematics-editor)::before,
 .ProseMirror .is-empty:not(blockquote, .Tiptap-mathematics-render, .Tiptap-mathematics-editor)::before {
   @apply content-[attr(data-placeholder)] float-left text-gray-100 dark:text-gray-800 pointer-events-none h-0;
 }
