@@ -7,7 +7,7 @@ export const ThemeSelect = () => {
     <div className="flex h-8 items-stretch rounded border border-gray-100 dark:border-gray-800">
       <label
         id="themeSelectLabel"
-        for={"themeSelect"}
+        htmlFor={"themeSelect"}
         className="flex select-none items-center space-x-1 whitespace-nowrap rounded-l rounded-r-none border-r border-gray-100 bg-gray-50 px-2.5 text-[14px] font-semibold dark:border-gray-800 dark:bg-gray-950"
       >
         <span>Theme</span>
