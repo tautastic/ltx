@@ -64,7 +64,7 @@
     "@tiptap/react": "^2.8.0",
     "@tiptap/starter-kit": "^2.8.0",
     "@tiptap/suggestion": "^2.8.0",
-    "@types/node": "18.15.3",
+    "@types/node": "^22.7.4",
     "cmdk": "^1.0.0",
     "jotai": "^2.10.0",
     "mathjax-full": "^3.2.2",

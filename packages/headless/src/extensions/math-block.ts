@@ -8,7 +8,6 @@ import { liteAdaptor } from "mathjax-full/js/adaptors/liteAdaptor";
 import { RegisterHTMLHandler } from "mathjax-full/js/handlers/html";
 import { buildSvgOutput } from "../utils/math-utils";
 import type { MarkdownNodeSpec } from "tiptap-markdown";
-import Placeholder from "./placeholder";
 
 const adaptor = liteAdaptor();
 RegisterHTMLHandler(adaptor);
@@ -121,10 +120,11 @@ const MathBlock = Node.create({
           const start = range.from;
           const end = range.to;
           const content = match[2];
+          const contentLength = content?.length ?? 0;
           const replacement = this.type.create({ latex: content }, [state.schema.text(content ?? "")]);
           const paragraph = state.schema.nodes.paragraph;
           if (paragraph) {
-            state.tr.replaceRangeWith(start, end, replacement).insert(start + 1, paragraph.create());
+            state.tr.replaceRangeWith(start, end, replacement).insert(start + contentLength, paragraph.create());
           }
         },
       },

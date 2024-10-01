@@ -74,7 +74,7 @@ export const suggestionItems = createSuggestionItems([
   },
   {
     title: "Inline Math",
-    description: "Inline mathematics.",
+    description: "Write inline mathematics.",
     searchTerms: ["math", "latex", "inline"],
     icon: <SquareSigma size={18} />,
     command: ({ editor, range }) => {

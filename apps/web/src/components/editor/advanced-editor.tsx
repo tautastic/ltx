@@ -1,4 +1,5 @@
 "use client";
+
 import { useState } from "react";
 import {
   EditorRoot,
@@ -69,7 +70,12 @@ const Editor = ({ isHeaderVisible = false, initialValue, onChange, className, re
           slotAfter={<ImageResizer />}
         >
           <EditorCommand className="z-[1001] select-none h-auto max-h-[330px] overflow-y-auto rounded-md border border-gray-100 bg-white text-black shadow-md animate-in data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2 dark:border-gray-800 dark:bg-black dark:text-white">
-            <EditorCommandEmpty className="px-2 text-gray-600 dark:text-gray-400">No results</EditorCommandEmpty>
+            <EditorCommandEmpty className="px-3 py-2 text-center">
+              <div>
+                <p className="text-sm font-medium">No Results</p>
+                <p className="text-xs text-gray-600 dark:text-gray-400">Your search did not return any results.</p>
+              </div>
+            </EditorCommandEmpty>
             <EditorCommandList>
               {suggestionItems.map((item) => (
                 <EditorCommandItem
@@ -96,6 +102,7 @@ const Editor = ({ isHeaderVisible = false, initialValue, onChange, className, re
             tippyOptions={{
               placement: "top",
             }}
+            pluginKey="node-selector"
             className="flex w-fit max-w-[90vw] overflow-hidden rounded-md border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-950 shadow-xl"
           >
             <Separator orientation="vertical" />
