@@ -9,6 +9,7 @@ export const Discord = forwardRef<SVGSVGElement, SVGAttributes<SVGElement>>(({ c
     fill="currentColor"
     viewBox="0 0 24 24"
     stroke="none"
+    role={"img"}
     ref={ref}
     {...props}
   >
@@ -25,6 +26,7 @@ export const Github = forwardRef<SVGSVGElement, SVGAttributes<SVGElement>>(({ cl
     fill="currentColor"
     viewBox="0 0 24 24"
     stroke="none"
+    role={"img"}
     ref={ref}
     {...props}
   >
@@ -41,6 +43,7 @@ export const Google = forwardRef<SVGSVGElement, SVGAttributes<SVGElement>>(({ cl
     fill="currentColor"
     viewBox="0 0 24 24"
     stroke="none"
+    role={"img"}
     ref={ref}
     {...props}
   >
@@ -57,6 +60,7 @@ export const Spotify = forwardRef<SVGSVGElement, SVGAttributes<SVGElement>>(({ c
     fill="currentColor"
     viewBox="0 0 24 24"
     stroke="none"
+    role={"img"}
     ref={ref}
     {...props}
   >
@@ -73,6 +77,7 @@ export const Twitch = forwardRef<SVGSVGElement, SVGAttributes<SVGElement>>(({ cl
     fill="currentColor"
     viewBox="0 0 24 24"
     stroke="none"
+    role={"img"}
     ref={ref}
     {...props}
   >
@@ -90,6 +95,7 @@ export const Ltx = forwardRef<SVGSVGElement, SVGAttributes<SVGElement>>(({ class
     viewBox="0 0 1436 705"
     stroke="currentColor"
     strokeWidth="0"
+    role={"img"}
     ref={ref}
     {...props}
   >
