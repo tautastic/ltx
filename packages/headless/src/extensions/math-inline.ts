@@ -23,8 +23,12 @@ const MathInline = Node.create({
     return {
       latex: {
         default: "",
-        parseHTML: (element) => element.getAttribute("latex"),
-        renderHTML: (attributes) => ({ latex: attributes.latex }),
+        parseHTML: (element) => {
+          return element.getAttribute("latex");
+        },
+        renderHTML: (attributes) => {
+          return { latex: attributes.latex };
+        },
       },
     };
   },
@@ -68,7 +72,8 @@ const MathInline = Node.create({
         });
       }
 
-      const renderMath = (latex: string | undefined = node.attrs.latex) => {
+      const renderMath = () => {
+        const latex = node.attrs.latex;
         dom.setAttribute("latex", latex);
         dom.innerHTML = buildSvgOutput(html, adaptor, latex, false);
         if (input) {
@@ -81,14 +86,16 @@ const MathInline = Node.create({
         if (input) {
           dom.setAttribute("data-editor-open", "true");
           input.focus();
-          input.textContent = node.attrs.latex;
+          input.textContent = dom.getAttribute("latex");
         }
       };
 
       const hideEditor = () => {
         if (input) {
           dom.setAttribute("data-editor-open", "false");
-          renderMath(input?.textContent ?? "");
+          // @ts-expect-error
+          node.attrs.latex = input.textContent ?? "";
+          renderMath();
         }
       };
 
@@ -99,12 +106,6 @@ const MathInline = Node.create({
         stopEvent: () => true,
         selectNode: showEditor,
         deselectNode: hideEditor,
-        update: (updatedNode) => {
-          if (updatedNode.attrs.latex !== node.attrs.latex) {
-            renderMath(updatedNode.attrs.latex);
-          }
-          return true;
-        },
       };
     };
   },
