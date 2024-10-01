@@ -7,7 +7,7 @@ const Placeholder = PlaceholderCore.configure({
     }
     return "Press '/' for commands";
   },
-  includeChildren: true,
+  includeChildren: false,
 });
 
 export default Placeholder;
