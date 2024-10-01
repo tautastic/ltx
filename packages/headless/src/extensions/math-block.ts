@@ -118,12 +118,14 @@ const MathBlock = Node.create({
       {
         find: /(?:^|\s)((?:\$\$)([^$]+)(?:\$\$))(?:$|\s)/,
         handler: ({ state, range, match }) => {
-          const { tr } = state;
           const start = range.from;
           const end = range.to;
           const content = match[2];
           const replacement = this.type.create({latex: content}, [state.schema.text(content ?? "")]);
-          tr.replaceRangeWith(start, end, replacement).insert(start+1, state.schema.nodes.paragraph.create());
+          const paragraph = state.schema.nodes.paragraph;
+          if (paragraph) {
+            state.tr.replaceRangeWith(start, end, replacement).insert(start+1, paragraph.create());
+          }
         },
       },
     ];
