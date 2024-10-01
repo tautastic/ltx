@@ -13,6 +13,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "~/components/ui/form";
 import { TRPCClientError } from "@trpc/client";
 import { useToast } from "~/components/ui/use-toast";
+import { HexColorPicker } from "react-colorful";
 
 const formSchema = z.object({
   color: z.string().regex(/^#(?:[0-9a-f]{3}){1,2}$/i, {
@@ -147,7 +148,9 @@ const CreateTagDialog = ({ children }: CreateTagDialogProps) => {
                             </Popover.Trigger>
                           }
                         />
-                        <Popover.Content className={"z-10"} sideOffset={10} />
+                        <Popover.Content className={"z-10"} sideOffset={10}>
+                          <HexColorPicker className="w-full" color={field.value} onChange={field.onChange} />
+                        </Popover.Content>
                       </Popover.Root>
                     </FormControl>
                     <FormMessage />
