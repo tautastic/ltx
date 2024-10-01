@@ -1,3 +1,5 @@
 import { createStore } from "jotai";
 
-export const ltxStore = createStore();
+type Store = ReturnType<typeof createStore>;
+
+export const ltxStore: Store = createStore();
