@@ -99,7 +99,7 @@ div[data-youtube-video] > iframe {
 }
 
 .tiptap .Tiptap-mathematics-render {
-  @apply py-0 px-1;
+  @apply py-0 px-1 cursor-default;
 }
 
 .tiptap .Tiptap-mathematics-render--editable {
@@ -124,6 +124,6 @@ div[data-youtube-video] > iframe {
   @apply hidden;
 }
 
-.tiptap .Tiptap-mathematics-render--editable[data-editor-open='false'] svg {
+.tiptap .Tiptap-mathematics-render[data-editor-open='false'] svg {
   @apply inline-block;
 }

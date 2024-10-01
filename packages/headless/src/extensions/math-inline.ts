@@ -56,7 +56,7 @@ const MathInline = Node.create({
   addNodeView() {
     return ({ node, editor }) => {
       const dom = document.createElement("span");
-      dom.className = "Tiptap-mathematics-render Tiptap-mathematics-render--editable";
+      dom.className = "Tiptap-mathematics-render";
       dom.setAttribute("data-editor-open", "false");
       dom.contentEditable = "false";
 
@@ -64,6 +64,7 @@ const MathInline = Node.create({
 
       if (editor.isEditable) {
         input = document.createElement("span");
+        dom.className = "Tiptap-mathematics-render Tiptap-mathematics-render--editable";
         input.className = "Tiptap-mathematics-editor";
         input.contentEditable = "true";
         input.addEventListener("keydown", (e) => {

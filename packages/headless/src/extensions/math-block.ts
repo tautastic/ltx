@@ -55,13 +55,14 @@ const MathBlock = Node.create({
   addNodeView() {
     return ({ node, editor }) => {
       const dom = document.createElement("div");
-      dom.className = "Tiptap-mathematics-render Tiptap-mathematics-render--editable";
+      dom.className = "Tiptap-mathematics-render";
       dom.setAttribute("data-editor-open", "false");
       dom.contentEditable = "false";
 
       let input: HTMLDivElement | undefined;
 
       if (editor.isEditable) {
+        dom.className = "Tiptap-mathematics-render Tiptap-mathematics-render--editable";
         input = document.createElement("div");
         input.className = "Tiptap-mathematics-editor";
         input.contentEditable = "true";

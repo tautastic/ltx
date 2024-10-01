@@ -219,7 +219,7 @@ export const exampleLatex = {
                 {
                   type: "MathInline",
                   attrs: {
-                    latex: "\\emptyset",
+                    latex: "\\mathcal{A}",
                   },
                 },
                 {
@@ -450,5 +450,11 @@ export const exampleLatex = {
         },
       ],
     },
+    {
+      "type": "MathBlock",
+      "attrs": {
+        "latex": "\\tag*{$\\blacksquare$}"
+      }
+    }
   ],
 };
