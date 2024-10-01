@@ -1,3 +1,5 @@
+import "mathjax-full/js/input/tex/base/BaseConfiguration";
+import "mathjax-full/js/input/tex/ams/AmsConfiguration";
 import { Node } from "@tiptap/core";
 import { mathjax } from "mathjax-full/js/mathjax";
 import { TeX } from "mathjax-full/js/input/tex";
