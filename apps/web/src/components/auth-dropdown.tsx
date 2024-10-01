@@ -49,7 +49,7 @@ const AuthDropdown = () => {
         <DropdownMenuContent className="w-56 select-none">
           {session?.user?.name && (
             <DropdownMenuGroup>
-              <Link prefetch={true} href={`/u/${session?.user?.username}`}>
+              <Link href={`/u/${session?.user?.username}`}>
                 <DropdownMenuLabel className="bg-gray-50 text-center dark:bg-gray-950">
                   <span>
                     Signed in as <b>{session.user.name}</b>
