@@ -1,4 +1,4 @@
-import { type AvailableProviders } from "next-auth";
+import type { AvailableProviders } from "next-auth";
 import { signIn } from "next-auth/react";
 import { useState } from "react";
 import AuthDropdown from "~/components/auth-dropdown";
@@ -6,7 +6,7 @@ import Footer from "~/components/footer";
 import Header from "~/components/header";
 import { Discord, Github, Google, Spotify, Twitch } from "~/components/ui/brand-icons";
 import { Button } from "~/components/ui/button";
-import { type NextPageWithAuthAndLayout } from "~/lib/types";
+import type { NextPageWithAuthAndLayout } from "~/lib/types";
 
 const Signin: NextPageWithAuthAndLayout = () => {
   const [loading, setLoading] = useState({

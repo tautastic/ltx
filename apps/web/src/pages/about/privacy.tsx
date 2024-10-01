@@ -1,7 +1,7 @@
 import AuthDropdown from "~/components/auth-dropdown";
 import Footer from "~/components/footer";
 import Header from "~/components/header";
-import { type NextPageWithAuthAndLayout } from "~/lib/types";
+import type { NextPageWithAuthAndLayout } from "~/lib/types";
 
 const Privacy: NextPageWithAuthAndLayout = () => {
   return (

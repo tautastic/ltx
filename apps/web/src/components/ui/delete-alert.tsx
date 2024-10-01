@@ -10,7 +10,6 @@ import {
   AlertDialogTrigger,
 } from "~/components/ui/alert-dialog";
 import { XIcon } from "lucide-react";
-import React from "react";
 
 export const DeleteAlert = ({
   description,

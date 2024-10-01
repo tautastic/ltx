@@ -18,7 +18,7 @@ import { useCallback, useMemo } from "react";
 import { ProfilePeople } from "~/components/profile-people";
 
 export const getServerSideProps = async (context: GetServerSidePropsContext<{ username: string }>) => {
-  if (context.params && context.params.username) {
+  if (context.params?.username) {
     const { username } = context.params;
     context.res.setHeader("Cache-Control", "private, no-cache, max-age=0, must-revalidate");
 
@@ -32,7 +32,7 @@ export const getServerSideProps = async (context: GetServerSidePropsContext<{ us
           },
         };
       }
-    } catch (e) {
+    } catch (_e) {
       return { notFound: true };
     }
   }

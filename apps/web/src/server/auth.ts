@@ -1,4 +1,4 @@
-import { type GetServerSidePropsContext } from "next";
+import type { GetServerSidePropsContext } from "next";
 import { getServerSession, type NextAuthOptions } from "next-auth";
 import { PrismaAdapter } from "@auth/prisma-adapter";
 import DiscordProvider, { type DiscordProfile } from "next-auth/providers/discord";
@@ -10,10 +10,10 @@ import { customAlphabet } from "nanoid";
 
 import { env } from "~/env.mjs";
 import { prisma } from "~/server/db";
-import { type Adapter } from "next-auth/adapters";
+import type { Adapter } from "next-auth/adapters";
 
 const formatUserName = (p: string, u: string) => {
-  const h1 = u.replaceAll(/[^a-zA-Z0-9_-]+/g, "") + "@" + p;
+  const h1 = `${u.replaceAll(/[^a-zA-Z0-9_-]+/g, "")}@${p}`;
   const h2 = customAlphabet("1234567890ABCDEFGHIJKLMNOPQRSTUVWXYZ", 5)();
   return h1 + h2;
 };
@@ -61,7 +61,7 @@ export const authOptions: NextAuthOptions = {
       clientSecret: env.DISCORD_SECRET,
       profile(profile: DiscordProfile) {
         if (profile.avatar === null) {
-          const defaultAvatarNumber = parseInt(profile.discriminator) % 5;
+          const defaultAvatarNumber = Number.parseInt(profile.discriminator) % 5;
           profile.image_url = `https://cdn.discordapp.com/embed/avatars/${defaultAvatarNumber}.png`;
         } else {
           const format = profile.avatar.startsWith("a_") ? "gif" : "png";

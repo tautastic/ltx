@@ -70,7 +70,7 @@ const DocumentEditPage: NextPageWithAuthAndLayout<InferGetServerSidePropsType<ty
             description: "Error updating document.",
           });
         }
-      } catch (e) {
+      } catch (_e) {
         toast({
           title: "🚨 Uh oh! Something went wrong.",
           description: "Error updating document.",

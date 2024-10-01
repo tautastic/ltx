@@ -41,7 +41,7 @@ const Create: NextPageWithAuthAndLayout = () => {
             description: "Error creating document.",
           });
         }
-      } catch (e) {
+      } catch (_e) {
         toast({
           title: "🚨 Uh oh! Something went wrong.",
           description: "Error creating document.",

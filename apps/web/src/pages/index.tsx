@@ -13,7 +13,7 @@ import { useState } from "react";
 import { exampleLatex } from "~/lib/types";
 
 const Home: NextPageWithAuthAndLayout = () => {
-  const [value, setValue] = useState<JSONContent>(exampleLatex);
+  const [value, _setValue] = useState<JSONContent>(exampleLatex);
   return (
     <>
       <div className="flex flex-col items-center justify-between gap-y-8 px-4 text-center md:gap-y-16">

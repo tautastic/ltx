@@ -31,7 +31,7 @@ export const getServerSideProps = async (context: GetServerSidePropsContext<{ do
 const DocumentViewPage: NextPageWithAuthAndLayout<InferGetServerSidePropsType<typeof getServerSideProps>> = ({
   document,
 }) => {
-  const [value, setValue] = useState<JSONContent | undefined>(
+  const [value, _setValue] = useState<JSONContent | undefined>(
     document.content ? JSON.parse(document.content) : undefined,
   );
 
