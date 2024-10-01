@@ -15,6 +15,7 @@ import Youtube from "@tiptap/extension-youtube";
 
 import CustomKeymap from "./custom-keymap";
 import ImageResizer from "./image-resizer";
+import MathBlock from "./math-block";
 import MathInline from "./math-inline";
 import Placeholder from "./placeholder";
 import HorizontalRule from "./horizontal-rule";
@@ -40,6 +41,7 @@ export {
   HorizontalRule,
   ImageResizer,
   InputRule,
+  MathBlock,
   MathInline,
   Placeholder,
   SimpleExtensions,

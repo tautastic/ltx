@@ -1,6 +1,7 @@
 import {
   CodeBlockLowlight,
   HorizontalRule,
+  MathBlock,
   MathInline,
   Placeholder,
   StarterKit,
@@ -15,6 +16,7 @@ import { UploadImagesPlugin } from "ltx-editor/plugins";
 import { cn } from "~/utils/cn";
 
 export const defaultExtensions = [
+  MathBlock,
   MathInline,
   StarterKit.configure({
     bulletList: {

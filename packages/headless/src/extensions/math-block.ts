@@ -13,12 +13,11 @@ const adaptor = liteAdaptor();
 RegisterHTMLHandler(adaptor);
 const html = mathjax.document("", { InputJax: new TeX({ packages: ["base", "ams"] }), OutputJax: new SVG() });
 
-const MathInline = Node.create({
-  name: "MathInline",
-  group: "inline",
+const MathBlock = Node.create({
+  name: "MathBlock",
+  group: "block",
   content: "text*",
   atom: true,
-  inline: true,
   selectable: true,
 
   addAttributes() {
@@ -39,35 +38,35 @@ const MathInline = Node.create({
     return {
       markdown: {
         serialize(state, node) {
-          state.write(`$${node.attrs.latex}$`);
+          state.write(`$$${node.attrs.latex}$$`);
         },
       },
     };
   },
 
   parseHTML() {
-    return [{ tag: "span[latex]" }];
+    return [{ tag: "div[latex]" }];
   },
 
   renderHTML({ node, HTMLAttributes }) {
-    return ["span", { ...HTMLAttributes, latex: node.attrs.latex }];
+    return ["div", { ...HTMLAttributes, latex: node.attrs.latex }];
   },
 
   addNodeView() {
     return ({ node, editor }) => {
-      const dom = document.createElement("span");
+      const dom = document.createElement("div");
       dom.className = "Tiptap-mathematics-render Tiptap-mathematics-render--editable";
       dom.setAttribute("data-editor-open", "false");
       dom.contentEditable = "false";
 
-      let input: HTMLSpanElement | undefined;
+      let input: HTMLDivElement | undefined;
 
       if (editor.isEditable) {
-        input = document.createElement("span");
+        input = document.createElement("div");
         input.className = "Tiptap-mathematics-editor";
         input.contentEditable = "true";
         input.addEventListener("keydown", (e) => {
-          if (e.key === "Enter") {
+          if (e.key === "Enter" && e.shiftKey) {
             hideEditor();
             return;
           }
@@ -77,7 +76,7 @@ const MathInline = Node.create({
       const renderMath = () => {
         const latex = node.attrs.latex;
         dom.setAttribute("latex", latex);
-        dom.innerHTML = buildSvgOutput(html, adaptor, latex, false);
+        dom.innerHTML = buildSvgOutput(html, adaptor, latex, true);
         if (input) {
           input.textContent = latex;
           dom.appendChild(input);
@@ -115,7 +114,7 @@ const MathInline = Node.create({
   addInputRules() {
     return [
       {
-        find: /(?:^|\s)((?:\$)([^$]+)(?:\$))(?:$|\s)/,
+        find: /(?:^|\s)((?:\$\$)([^$]+)(?:\$\$))(?:$|\s)/,
         handler: ({ state, range, match }) => {
           const { tr } = state;
           const start = range.from;
@@ -128,4 +127,4 @@ const MathInline = Node.create({
   },
 });
 
-export default MathInline;
+export default MathBlock;

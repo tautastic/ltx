@@ -9,10 +9,12 @@ export const prisma =
   globalForPrisma.prisma ||
   new PrismaClient({
     log: env.NODE_ENV === "development" ? ["query", "error", "warn"] : ["error"],
-    adapter: new PrismaLibSQL(createClient({
-      url: env.DATABASE_URL,
-      authToken: env.TURSO_AUTH_TOKEN,
-    })),
+    adapter: new PrismaLibSQL(
+      createClient({
+        url: env.DATABASE_URL,
+        authToken: env.TURSO_AUTH_TOKEN,
+      }),
+    ),
   });
 
 if (env.NODE_ENV !== "production") {

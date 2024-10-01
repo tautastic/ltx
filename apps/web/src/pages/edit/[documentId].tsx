@@ -36,7 +36,9 @@ export const getServerSideProps = async (context: GetServerSidePropsContext<{ do
 const DocumentEditPage: NextPageWithAuthAndLayout<InferGetServerSidePropsType<typeof getServerSideProps>> = ({
   document,
 }) => {
-  const [value, setValue] = useState<JSONContent | undefined>(document.content ? JSON.parse(document.content) : undefined);
+  const [value, setValue] = useState<JSONContent | undefined>(
+    document.content ? JSON.parse(document.content) : undefined,
+  );
   const router = useRouter();
   const { toast } = useToast();
   const { data: session } = useSession();

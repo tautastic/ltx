@@ -76,7 +76,7 @@ export const exampleLatex = {
           text: ". Zeigen Sie, dass das System",
         },
         {
-          type: "MathInline",
+          type: "MathBlock",
           attrs: {
             latex:
               "\\mathcal{A} = \\left\\{B \\subseteq \\Omega \\vert \\exists T \\subseteq \\mathbb{N} \\,\\text{mit}\\, B = \\sum_{n \\in T} A_{n} \\right\\}",
@@ -385,7 +385,7 @@ export const exampleLatex = {
                   text: "gegeben durch",
                 },
                 {
-                  type: "MathInline",
+                  type: "MathBlock",
                   attrs: {
                     latex:
                       "\\bigcup_{i \\in I} B_i = \\sum_{i \\in I} \\sum_{n \\in T_i} A_n = \\sum_{n \\in \\bigcup_{i \\in I} T_i} A_n,",
