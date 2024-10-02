@@ -64,9 +64,6 @@ const config = {
       },
     ];
   },
-  experimental: {
-    webpackMemoryOptimizations: true,
-  },
   productionBrowserSourceMaps: true,
 };
 
