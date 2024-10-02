@@ -133,20 +133,18 @@ export const DocumentCard = ({ page }: DocumentCardProps) => {
   };
 
   return (
-    <Card className="flex min-w-[325px] max-w-[650px] flex-1 flex-col justify-between">
-      <CardHeader className="flex flex-col gap-y-2">
+    <Card className="flex min-w-[325px] max-w-[650px] flex-1 flex-col">
+      <CardHeader className="flex flex-col gap-y-2 flex-1">
         <Link href={authorUri}>
           <CardDescription className="font-mono text-xs">{authorUri}</CardDescription>
         </Link>
-        <Link href={documentUri} className="flex flex-col gap-y-1">
+        <Link href={documentUri} className="flex flex-col gap-y-1 flex-1">
           <CardTitle className="line-clamp-2 leading-7">{page.title}</CardTitle>
-          <CardDescription className="line-clamp-4 h-[80px]">{page.description}</CardDescription>
+          <CardDescription className="line-clamp-4 h-[60px]">{page.description}</CardDescription>
         </Link>
       </CardHeader>
-      <CardContent className="py-0">
+      <CardFooter className="flex justify-between items-stretch">
         <CardTags tags={page.tags} />
-      </CardContent>
-      <CardFooter className="flex justify-end">
         <AlertDialog>
           <DropdownMenu>
             <DropdownMenuTrigger>
