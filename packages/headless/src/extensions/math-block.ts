@@ -1,134 +1,27 @@
-import "mathjax-full/js/input/tex/base/BaseConfiguration";
-import "mathjax-full/js/input/tex/ams/AmsConfiguration";
 import { Node } from "@tiptap/core";
-import { mathjax } from "mathjax-full/js/mathjax";
-import { TeX } from "mathjax-full/js/input/tex";
-import { SVG } from "mathjax-full/js/output/svg";
-import { liteAdaptor } from "mathjax-full/js/adaptors/liteAdaptor";
-import { RegisterHTMLHandler } from "mathjax-full/js/handlers/html";
-import { buildSvgOutput } from "../utils/math-utils";
-import type { MarkdownNodeSpec } from "tiptap-markdown";
-
-const adaptor = liteAdaptor();
-RegisterHTMLHandler(adaptor);
-const html = mathjax.document("", { InputJax: new TeX({ packages: ["base", "ams"] }), OutputJax: new SVG() });
+import {
+  addMathNodeAttributes,
+  addMathNodeInputRules,
+  addMathNodeStorage,
+  addMathNodeView,
+  parseMathNodeHTML,
+  renderMathNodeHTML,
+} from "../utils/math-node-view";
 
 const MathBlock = Node.create({
   name: "MathBlock",
   group: "block",
   content: "text*",
   atom: true,
+  inline: false,
   selectable: true,
-
-  addAttributes() {
-    return {
-      latex: {
-        default: "",
-        parseHTML: (element) => {
-          return element.getAttribute("latex");
-        },
-        renderHTML: (attributes) => {
-          return { latex: attributes.latex };
-        },
-      },
-    };
-  },
-
-  addStorage(): { markdown: MarkdownNodeSpec } {
-    return {
-      markdown: {
-        serialize(state, node) {
-          state.write(`$$${node.attrs.latex}$$`);
-        },
-      },
-    };
-  },
-
-  parseHTML() {
-    return [{ tag: "div[latex]" }];
-  },
-
-  renderHTML({ node, HTMLAttributes }) {
-    return ["div", { ...HTMLAttributes, latex: node.attrs.latex }];
-  },
-
-  addNodeView() {
-    return ({ node, editor }) => {
-      const dom = document.createElement("div");
-      dom.className = "Tiptap-mathematics-render";
-      dom.setAttribute("data-editor-open", "false");
-      dom.contentEditable = "false";
-
-      let input: HTMLDivElement | undefined;
-
-      if (editor.isEditable) {
-        dom.className = "Tiptap-mathematics-render Tiptap-mathematics-render--editable";
-        input = document.createElement("div");
-        input.className = "Tiptap-mathematics-editor";
-        input.contentEditable = "true";
-        input.addEventListener("keydown", (e) => {
-          if (e.key === "Enter" && e.shiftKey) {
-            hideEditor();
-            return;
-          }
-        });
-      }
-
-      const renderMath = () => {
-        const latex = node.attrs.latex;
-        dom.setAttribute("latex", latex);
-        dom.innerHTML = buildSvgOutput(html, adaptor, latex, true);
-        if (input) {
-          input.textContent = latex;
-          dom.appendChild(input);
-        }
-      };
-
-      const showEditor = () => {
-        if (input) {
-          dom.setAttribute("data-editor-open", "true");
-          input.focus();
-          input.textContent = dom.getAttribute("latex");
-        }
-      };
-
-      const hideEditor = () => {
-        if (input) {
-          dom.setAttribute("data-editor-open", "false");
-          // @ts-expect-error
-          node.attrs.latex = input.textContent ?? "";
-          renderMath();
-        }
-      };
-
-      renderMath();
-
-      return {
-        dom,
-        stopEvent: () => true,
-        selectNode: showEditor,
-        deselectNode: hideEditor,
-      };
-    };
-  },
-
+  addAttributes: addMathNodeAttributes,
+  parseHTML: parseMathNodeHTML,
+  renderHTML: renderMathNodeHTML,
+  addStorage: () => addMathNodeStorage({ isDisplay: true }),
+  addNodeView: () => addMathNodeView({ isDisplay: true }),
   addInputRules() {
-    return [
-      {
-        find: /(?:^|\s)((?:\$\$)([^$]+)(?:\$\$))(?:$|\s)/,
-        handler: ({ state, range, match }) => {
-          const start = range.from;
-          const end = range.to;
-          const content = match[2];
-          const contentLength = content?.length ?? 0;
-          const replacement = this.type.create({ latex: content }, [state.schema.text(content ?? "")]);
-          const paragraph = state.schema.nodes.paragraph;
-          if (paragraph) {
-            state.tr.replaceRangeWith(start, end, replacement).insert(start + contentLength, paragraph.create());
-          }
-        },
-      },
-    ];
+    return addMathNodeInputRules({ nodeType: this.type, isDisplay: true });
   },
 });
 

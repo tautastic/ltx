@@ -76,7 +76,7 @@
     "tailwindcss": "^3.4.13",
     "tailwindcss-animate": "^1.0.7",
     "tsconfig": "workspace:*",
-    "typescript": "^5.6.2"
+    "typescript": "5.4.3"
   },
   "author": "Ahmed Sami",
   "homepage": "https://ltx.ahmedsami.xyz",

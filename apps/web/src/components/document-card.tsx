@@ -1,6 +1,6 @@
 import type { Page } from "~/schemas/BasicPageSchema";
 import type { TagList } from "~/schemas/TagSchema";
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "~/components/ui/card";
+import { Card, CardDescription, CardFooter, CardHeader, CardTitle } from "~/components/ui/card";
 import { Edit, LinkIcon, MoreHorizontal, StarOff, TagIcon, Trash } from "lucide-react";
 import { Badge } from "~/components/ui/badge";
 import {

@@ -103,7 +103,7 @@ div[data-youtube-video] > iframe {
   @apply py-0 px-1 cursor-default;
 }
 
-.tiptap .Tiptap-mathematics-render--editable {
+.tiptap .Tiptap-mathematics-render[data-is-editable="true"] {
   @apply cursor-pointer transition-[background] duration-200;
 }
 
@@ -116,12 +116,12 @@ div[data-youtube-video] > iframe {
   @apply rounded-[0.25rem] inline-block;
 }
 
-.tiptap .Tiptap-mathematics-render--editable[data-editor-open="true"] .Tiptap-mathematics-editor {
+.tiptap .Tiptap-mathematics-render[data-is-editable="true"][data-editor-open="true"] .Tiptap-mathematics-editor {
   @apply inline-block bg-gray-100 dark:bg-gray-850 text-black dark:text-white font-mono p-2 leading-none focus-visible:outline-none;
 }
 
-.tiptap .Tiptap-mathematics-render--editable[data-editor-open="true"] svg,
-.tiptap .Tiptap-mathematics-render--editable[data-editor-open="false"] .Tiptap-mathematics-editor {
+.tiptap .Tiptap-mathematics-render[data-is-editable="true"][data-editor-open="true"] svg,
+.tiptap .Tiptap-mathematics-render[data-is-editable="true"][data-editor-open="false"] .Tiptap-mathematics-editor {
   @apply hidden;
 }
 

@@ -80,7 +80,7 @@
     "@types/react-dom": "^18.3.0",
     "tsconfig": "workspace:*",
     "tsup": "^8.3.0",
-    "typescript": "^5.6.2"
+    "typescript": "5.4.3"
   },
   "author": "Ahmed Sami",
   "homepage": "https://ltx.ahmedsami.xyz",
