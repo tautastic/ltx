@@ -1,8 +1,8 @@
-import { cn } from "~/utils/cn";
 import { EditorBubbleItem, useEditor } from "ltx-editor";
-import { BoldIcon, ItalicIcon, UnderlineIcon, StrikethroughIcon, CodeIcon } from "lucide-react";
-import type { SelectorItem } from "./node-selector";
+import { BoldIcon, CodeIcon, ItalicIcon, StrikethroughIcon, UnderlineIcon } from "lucide-react";
+import { cn } from "~/utils/cn";
 import { Button } from "../ui/button";
+import type { SelectorItem } from "./node-selector";
 
 export const TextButtons = () => {
   const { editor } = useEditor();
@@ -52,7 +52,11 @@ export const TextButtons = () => {
             item.command(editor);
           }}
         >
-          <Button size="sm" className="rounded-none" variant="ghost">
+          <Button
+            size="sm"
+            className="rounded-none focus-visible:ring-0 focus-visible:ring-offset-0 focus:bg-gray-100 dark:focus:bg-gray-900"
+            variant="ghost"
+          >
             <item.icon
               className={cn("h-4 w-4", {
                 "text-blue-500": item.isActive(editor),

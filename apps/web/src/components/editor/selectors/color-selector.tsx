@@ -1,8 +1,8 @@
-import { Check, ChevronDown } from "lucide-react";
 import { EditorBubbleItem, useEditor } from "ltx-editor";
+import { Check, ChevronDown } from "lucide-react";
 
-import { PopoverTrigger, Popover, PopoverContent } from "../ui/popover";
 import { Button } from "../ui/button";
+import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
 
 export interface BubbleColorMenuItem {
   name: string;
@@ -113,7 +113,10 @@ export const ColorSelector = ({ open, onOpenChange }: ColorSelectorProps) => {
 
   return (
     <Popover modal={true} open={open} onOpenChange={onOpenChange}>
-      <PopoverTrigger asChild>
+      <PopoverTrigger
+        asChild
+        className="focus-visible:ring-0 focus-visible:ring-offset-0 focus:bg-gray-100 dark:focus:bg-gray-900"
+      >
         <Button size="sm" className="gap-2 rounded-none" variant="ghost">
           <span
             className="rounded-sm px-1"

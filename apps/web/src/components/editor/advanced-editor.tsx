@@ -101,9 +101,8 @@ const Editor = ({ isHeaderVisible = false, initialValue, onChange, className, re
             placement: "top",
           }}
           pluginKey="node-selector"
-          className="flex w-fit max-w-[90vw] overflow-hidden rounded-md border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-950 shadow-xl"
+          className="flex w-fit max-w-[90vw] overflow-hidden rounded-md border border-gray-200 dark:border-gray-800 bg-white dark:bg-black shadow-xl"
         >
-          <Separator orientation="vertical" />
           <NodeSelector open={openNode} onOpenChange={setOpenNode} />
           <Separator orientation="vertical" />
           <LinkSelector open={openLink} onOpenChange={setOpenLink} />

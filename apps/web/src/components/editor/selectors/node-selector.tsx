@@ -1,22 +1,22 @@
+import type { EditorInstance } from "ltx-editor";
 import {
   Check,
+  CheckSquare,
   ChevronDown,
+  Code,
   Heading1,
   Heading2,
   Heading3,
-  TextQuote,
   ListOrdered,
-  TextIcon,
-  Code,
-  CheckSquare,
   type LucideIcon,
+  TextIcon,
+  TextQuote,
 } from "lucide-react";
-import type { EditorInstance } from "ltx-editor";
 
 import { Popover } from "@radix-ui/react-popover";
-import { PopoverContent, PopoverTrigger } from "../ui/popover";
-import { Button } from "../ui/button";
 import { EditorBubbleItem, useEditor } from "ltx-editor";
+import { Button } from "../ui/button";
+import { PopoverContent, PopoverTrigger } from "../ui/popover";
 
 export type SelectorItem = {
   name: string;
@@ -102,7 +102,7 @@ export const NodeSelector = ({ open, onOpenChange }: NodeSelectorProps) => {
     <Popover modal={true} open={open} onOpenChange={onOpenChange}>
       <PopoverTrigger
         asChild
-        className="gap-2 rounded-none border-none hover:bg-gray-50 dark:hover:bg-gray-950 focus:ring-0"
+        className="rounded-none border-none focus-visible:ring-0 focus-visible:ring-offset-0 focus:bg-gray-100 dark:focus:bg-gray-900"
       >
         <Button size="sm" variant="ghost" className="gap-2">
           <span className="whitespace-nowrap text-sm">{activeItem.name}</span>

@@ -1,9 +1,9 @@
-import { cn } from "~/utils/cn";
 import { useEditor } from "ltx-editor";
 import { Check, Trash } from "lucide-react";
 import { useEffect, useRef } from "react";
+import { cn } from "~/utils/cn";
 import { Button } from "../ui/button";
-import { PopoverContent, Popover, PopoverTrigger } from "../ui/popover";
+import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
 
 export function isValidUrl(url: string) {
   try {
@@ -44,7 +44,10 @@ export const LinkSelector = ({ open, onOpenChange }: LinkSelectorProps) => {
 
   return (
     <Popover modal={true} open={open} onOpenChange={onOpenChange}>
-      <PopoverTrigger asChild>
+      <PopoverTrigger
+        asChild
+        className="focus-visible:ring-0 focus-visible:ring-offset-0 focus:bg-gray-100 dark:focus:bg-gray-900"
+      >
         <Button size="sm" variant="ghost" className="gap-2 rounded-none border-none">
           <p className="text-base">↗</p>
           <p
