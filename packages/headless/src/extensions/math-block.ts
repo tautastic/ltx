@@ -2,6 +2,7 @@ import { Node } from "@tiptap/core";
 import {
   addMathNodeAttributes,
   addMathNodeInputRules,
+  addMathNodePasteRules,
   addMathNodeStorage,
   addMathNodeView,
   parseMathNodeHTML,
@@ -22,6 +23,9 @@ const MathBlock = Node.create({
   addNodeView: () => addMathNodeView({ isDisplay: true }),
   addInputRules() {
     return addMathNodeInputRules({ nodeType: this.type, isDisplay: true });
+  },
+  addPasteRules() {
+    return addMathNodePasteRules({ nodeType: this.type, isDisplay: true });
   },
 });
 

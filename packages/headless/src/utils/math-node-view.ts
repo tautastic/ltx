@@ -1,6 +1,6 @@
 import "mathjax-full/js/input/tex/base/BaseConfiguration";
 import "mathjax-full/js/input/tex/ams/AmsConfiguration";
-import type { InputRule, NodeConfig, NodeViewRenderer, NodeViewRendererProps } from "@tiptap/core";
+import type { InputRule, NodeConfig, NodeViewRenderer, NodeViewRendererProps, PasteRule } from "@tiptap/core";
 import type { NodeType } from "@tiptap/pm/model";
 import { liteAdaptor } from "mathjax-full/js/adaptors/liteAdaptor";
 import { RegisterHTMLHandler } from "mathjax-full/js/handlers/html";
@@ -124,7 +124,7 @@ export const addMathNodeStorage: ({ isDisplay }: { isDisplay: boolean }) => { ma
   return {
     markdown: {
       serialize(state, node) {
-        state.write(` ${d}${node.attrs.latex}${d} `);
+        state.write(`${d}${node.attrs.latex}${d}`);
       },
     },
   };
@@ -146,9 +146,32 @@ export const addMathNodeInputRules: (props: {
   nodeType: NodeType;
   isDisplay: boolean;
 }) => InputRule[] = ({ nodeType, isDisplay }) => {
-  const find = isDisplay ? /(?:^|\s)(\$\$([^$]+)\$\$)(?:$|\s)/ : /(?:^|\s)(\$([^$]+)\$)(?:$|\s)/;
+  const find = isDisplay ? /(?:^|\s)(\$\$(.+?)\$\$)(?:$|\s)/ : /(?:^|\s)(\$(.+?)\$)(?:$|\s)/;
 
   const handler: typeof InputRule.prototype.handler = ({ state, range, match }) => {
+    const { from, to } = range;
+    const content = match[2];
+    const mathNode = nodeType.create({ latex: content });
+    const replacement = isDisplay ? [mathNode, state.schema.node("paragraph")] : mathNode;
+    state.tr.replaceWith(from, to, replacement);
+  };
+
+  return [
+    {
+      find,
+      handler,
+    },
+  ];
+};
+
+export const addMathNodePasteRules: (props: {
+  nodeType: NodeType;
+  isDisplay: boolean;
+}) => PasteRule[] = ({ nodeType, isDisplay }) => {
+  const find = isDisplay ? /(?:^|\s?)(\$\$(.+?)\$\$)(?:$|\s?)/g : /(?:^|\s?)(\$(.+?)\$)(?:$|\s?)/g;
+
+  const handler: typeof PasteRule.prototype.handler = ({ state, range, match, pasteEvent }) => {
+    pasteEvent?.preventDefault();
     const { from, to } = range;
     const content = match[2];
     const mathNode = nodeType.create({ latex: content });

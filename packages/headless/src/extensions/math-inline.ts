@@ -3,6 +3,7 @@ import { NodeSelection } from "@tiptap/pm/state";
 import {
   addMathNodeAttributes,
   addMathNodeInputRules,
+  addMathNodePasteRules,
   addMathNodeStorage,
   addMathNodeView,
   parseMathNodeHTML,
@@ -22,6 +23,7 @@ const MathInline = Node.create({
   group: "inline",
   content: "text*",
   atom: true,
+  code: true,
   inline: true,
   addAttributes: addMathNodeAttributes,
   parseHTML: parseMathNodeHTML,
@@ -30,6 +32,9 @@ const MathInline = Node.create({
   addNodeView: () => addMathNodeView({ isDisplay: false }),
   addInputRules() {
     return addMathNodeInputRules({ nodeType: this.type, isDisplay: false });
+  },
+  addPasteRules() {
+    return addMathNodePasteRules({ nodeType: this.type, isDisplay: false });
   },
 
   addCommands() {
