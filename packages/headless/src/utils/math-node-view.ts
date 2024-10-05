@@ -1,7 +1,8 @@
 import "mathjax-full/js/input/tex/base/BaseConfiguration";
 import "mathjax-full/js/input/tex/ams/AmsConfiguration";
 import { type InputRule, type NodeConfig, type NodeViewRenderer, type PasteRule, mergeAttributes } from "@tiptap/core";
-import type { NodeType } from "@tiptap/pm/model";
+import { type NodeType, Slice } from "@tiptap/pm/model";
+import { replaceStep } from "@tiptap/pm/transform";
 import { liteAdaptor } from "mathjax-full/js/adaptors/liteAdaptor";
 import { RegisterHTMLHandler } from "mathjax-full/js/handlers/html";
 import { TeX } from "mathjax-full/js/input/tex";
@@ -14,23 +15,7 @@ const html = mathjax.document("", { InputJax: new TeX({ packages: ["base", "ams"
 
 const buildSvgOutput = (latex: string, display: boolean) => {
   const node = html.convert(latex, { display });
-
   html.findMath().compile().getMetrics().typeset().updateDocument();
-  // biome-ignore lint/suspicious/noExplicitAny: <explanation>
-  const styleContainer = (html.outputJax as any).svgStyles;
-  const value = styleContainer.children[0].value;
-  const id = styleContainer.attributes.id;
-
-  let styleElement = document.getElementById(id);
-
-  if (!styleElement) {
-    styleElement = document.createElement("style");
-    styleElement.id = id;
-    document.head.appendChild(styleElement);
-  }
-
-  styleElement.textContent = value;
-
   return adaptor.innerHTML(node);
 };
 
@@ -138,11 +123,11 @@ export const addMathNodeInputRules: (props: {
   nodeType: NodeType;
   isDisplay: boolean;
 }) => InputRule[] = ({ nodeType, isDisplay }) => {
-  const find = isDisplay ? /(?:^|\s)(\$\$(.+?)\$\$)(?:$|\s)/ : /(?:^|\s)(\$(.+?)\$)(?:$|\s)/;
+  const find = isDisplay ? /(?:^|\s)\$\$([^$]+)\$\$\s/ : /(?:^|\s)\$([^$]+)\$\s/;
 
   const handler: typeof InputRule.prototype.handler = ({ state, range, match }) => {
     const { from, to } = range;
-    const content = match[2];
+    const content = match[1];
     const mathNode = nodeType.create({ latex: content });
     const replacement = isDisplay ? [mathNode, state.schema.node("paragraph")] : mathNode;
     state.tr.replaceWith(from, to, replacement);
@@ -160,11 +145,11 @@ export const addMathNodePasteRules: (props: {
   nodeType: NodeType;
   isDisplay: boolean;
 }) => PasteRule[] = ({ nodeType, isDisplay }) => {
-  const find = isDisplay ? /(?:^|\s?)(\$\$(.+?)\$\$)(?:$|\s?)/g : /(?:^|\s?)(\$(.+?)\$)(?:$|\s?)/g;
+  const find = isDisplay ? /(?:^|\s)\$\$([^$]+)\$\$(?:$|\s)/g : /(?:^|\s)\$([^$]+)\$(?:$|\s)/g;
 
   const handler: typeof PasteRule.prototype.handler = ({ state, range, match }) => {
     const { from, to } = range;
-    const content = match[2];
+    const content = match[1];
     const mathNode = nodeType.create({ latex: content });
     const replacement = isDisplay ? [mathNode, state.schema.node("paragraph")] : mathNode;
     state.tr.replaceWith(from, to, replacement);

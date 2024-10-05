@@ -1,4 +1,5 @@
 @import "globals.css";
+@import "./partials/math.css";
 @import "./partials/code.css";
 @import "./partials/prosemirror.css";
 @import "./partials/typography.css";
