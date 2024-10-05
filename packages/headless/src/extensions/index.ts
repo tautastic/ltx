@@ -13,7 +13,6 @@ import Youtube from "@tiptap/extension-youtube";
 import StarterKit from "@tiptap/starter-kit";
 import { Markdown } from "tiptap-markdown";
 
-import CustomKeymap from "./custom-keymap";
 import HorizontalRule from "./horizontal-rule";
 import ImageResizer from "./image-resizer";
 import MathBlock from "./math-block";
@@ -22,13 +21,12 @@ import Placeholder from "./placeholder";
 
 const SimpleExtensions = [
   CharacterCount.configure({ limit: 50000 }),
-  CustomKeymap,
   Color,
   Highlight.configure({
     multicolor: true,
   }),
   Markdown.configure({
-    html: false,
+    html: true,
     transformCopiedText: true,
     transformPastedText: true,
   }),

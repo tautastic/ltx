@@ -1,3 +1,4 @@
+import { common, createLowlight } from "lowlight";
 import {
   CodeBlockLowlight,
   HorizontalRule,
@@ -11,7 +12,6 @@ import {
   TiptapLink,
   Youtube,
 } from "ltx-editor/extensions";
-import { common, createLowlight } from "lowlight";
 import { UploadImagesPlugin } from "ltx-editor/plugins";
 import { cn } from "~/utils/cn";
 

@@ -4,7 +4,6 @@ import {
   addMathNodeAttributes,
   addMathNodeInputRules,
   addMathNodePasteRules,
-  addMathNodeStorage,
   addMathNodeView,
   parseMathNodeHTML,
   renderMathNodeHTML,
@@ -26,9 +25,8 @@ const MathInline = Node.create({
   code: true,
   inline: true,
   addAttributes: addMathNodeAttributes,
-  parseHTML: parseMathNodeHTML,
-  renderHTML: renderMathNodeHTML,
-  addStorage: () => addMathNodeStorage({ isDisplay: false }),
+  parseHTML: parseMathNodeHTML({ isDisplay: false }),
+  renderHTML: renderMathNodeHTML({ isDisplay: false }),
   addNodeView: () => addMathNodeView({ isDisplay: false }),
   addInputRules() {
     return addMathNodeInputRules({ nodeType: this.type, isDisplay: false });

@@ -3,7 +3,6 @@ import {
   addMathNodeAttributes,
   addMathNodeInputRules,
   addMathNodePasteRules,
-  addMathNodeStorage,
   addMathNodeView,
   parseMathNodeHTML,
   renderMathNodeHTML,
@@ -17,9 +16,8 @@ const MathBlock = Node.create({
   inline: false,
   selectable: true,
   addAttributes: addMathNodeAttributes,
-  parseHTML: parseMathNodeHTML,
-  renderHTML: renderMathNodeHTML,
-  addStorage: () => addMathNodeStorage({ isDisplay: true }),
+  parseHTML: parseMathNodeHTML({ isDisplay: true }),
+  renderHTML: renderMathNodeHTML({ isDisplay: true }),
   addNodeView: () => addMathNodeView({ isDisplay: true }),
   addInputRules() {
     return addMathNodeInputRules({ nodeType: this.type, isDisplay: true });

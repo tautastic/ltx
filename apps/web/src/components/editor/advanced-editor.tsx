@@ -60,11 +60,12 @@ const Editor = ({ isHeaderVisible = false, initialValue, onChange, className, re
             ),
           },
         }}
-        onUpdate={({ editor }) => {
-          if (onChange) {
+        onUpdate={
+          onChange &&
+          (({ editor }) => {
             onChange(editor.getJSON());
-          }
-        }}
+          })
+        }
         slotBefore={isHeaderVisible && <EditorHeader />}
       >
         <EditorCommand className="z-[1001] select-none h-auto max-h-[330px] overflow-y-auto rounded-md border border-gray-100 bg-white text-black shadow-md animate-in data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2 dark:border-gray-800 dark:bg-black dark:text-white">
