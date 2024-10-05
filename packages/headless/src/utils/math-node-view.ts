@@ -1,8 +1,7 @@
 import "mathjax-full/js/input/tex/base/BaseConfiguration";
 import "mathjax-full/js/input/tex/ams/AmsConfiguration";
 import { type InputRule, type NodeConfig, type NodeViewRenderer, type PasteRule, mergeAttributes } from "@tiptap/core";
-import { type NodeType, Slice } from "@tiptap/pm/model";
-import { replaceStep } from "@tiptap/pm/transform";
+import type { NodeType } from "@tiptap/pm/model";
 import { liteAdaptor } from "mathjax-full/js/adaptors/liteAdaptor";
 import { RegisterHTMLHandler } from "mathjax-full/js/handlers/html";
 import { TeX } from "mathjax-full/js/input/tex";
