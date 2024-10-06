@@ -8,14 +8,19 @@ import { TeX } from "mathjax-full/js/input/tex";
 import { mathjax } from "mathjax-full/js/mathjax";
 import { SVG } from "mathjax-full/js/output/svg";
 
-const adaptor = liteAdaptor();
-RegisterHTMLHandler(adaptor);
-const html = mathjax.document("", { InputJax: new TeX({ packages: ["base", "ams"] }), OutputJax: new SVG() });
+RegisterHTMLHandler(liteAdaptor());
+const html = mathjax.document("", {
+  InputJax: new TeX({ packages: ["base", "ams"] }),
+  OutputJax: new SVG({ fontCache: "local" }),
+});
 
-const buildSvgOutput = (latex: string, display: boolean) => {
+const renderSvg = (dom: HTMLElement, latex: string, display: boolean) => {
   const node = html.convert(latex, { display });
-  html.findMath().compile().getMetrics().typeset().updateDocument();
-  return adaptor.innerHTML(node);
+  const containerStyle = html.adaptor.getAttribute(node, "style");
+  if (containerStyle) {
+    dom.setAttribute("style", containerStyle);
+  }
+  dom.innerHTML = html.adaptor.innerHTML(node);
 };
 
 export const addMathNodeAttributes: NodeConfig["addAttributes"] = () => {
@@ -65,7 +70,6 @@ export const addMathNodeView: ({ isDisplay }: { isDisplay: boolean }) => NodeVie
     dom.setAttribute("display", isDisplay.toString());
     dom.setAttribute("role", "math");
     dom.setAttribute("jax", "SVG");
-    dom.contentEditable = "false";
 
     let input: HTMLElement | undefined;
 
@@ -84,7 +88,7 @@ export const addMathNodeView: ({ isDisplay }: { isDisplay: boolean }) => NodeVie
     const renderMath = () => {
       const latex = node.attrs.latex;
       dom.setAttribute("aria-label", latex);
-      dom.innerHTML = buildSvgOutput(latex, isDisplay);
+      renderSvg(dom, latex, isDisplay);
       if (input) {
         input.textContent = latex;
         dom.appendChild(input);
