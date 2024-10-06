@@ -8,11 +8,6 @@ import { SimpleExtensions } from "../extensions";
 import { ltxStore } from "../utils/store";
 import { EditorCommandTunnelContext } from "./editor-command";
 
-export interface EditorProps {
-  readonly children: ReactNode;
-  readonly className?: string;
-}
-
 interface EditorRootProps {
   readonly children: ReactNode;
 }
