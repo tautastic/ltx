@@ -55,7 +55,7 @@ const Editor = ({ isHeaderVisible = false, initialValue, onChange, className, re
           attributes: {
             id: "tiptap-editor",
             class: cn(
-              "prose prose-lg dark:prose-invert prose-headings:font-title font-default focus:outline-none max-w-full",
+              "prose prose-lg dark:prose-invert font-default focus:outline-none max-w-full print:text-black",
               className,
             ),
           },

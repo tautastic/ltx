@@ -64,8 +64,7 @@
     }
 
     hr {
-      @apply border-0 border-t border-black/20 bg-black/80;
-      @apply dark:border-white/20 dark:bg-white/80;
+      @apply border-0 border-t border-black/20 bg-black/80 dark:border-white/20 dark:bg-white/80;
     }
   }
 }

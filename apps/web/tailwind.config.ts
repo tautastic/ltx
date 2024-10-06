@@ -3,7 +3,10 @@ import defaultTheme from "tailwindcss/defaultTheme";
 
 const config = {
   content: ["./src/pages/**/*.{js,ts,jsx,tsx}", "./src/components/**/*.{js,ts,jsx,tsx}"],
-  darkMode: ["selector"],
+  darkMode: ["variant", [
+    "@media not print { &:where(.dark, .dark *) }"
+  ]],
+
   safelist: ["ProseMirror"],
   prefix: "",
   plugins: [
@@ -25,6 +28,8 @@ const config = {
       "lg": "1024px",
       "xl": "1280px",
       "2xl": "1536px",
+      "print": { "raw": "print" },
+      "not-print": { "raw": "not print" }
     },
     borderRadius: {
       "none": "0",

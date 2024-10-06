@@ -41,6 +41,12 @@
   strong {
     @apply font-semibold;
   }
+
+  @media print {
+    :not(path, #tiptap-editor, #tiptap-editor *, :has(#tiptap-editor)) {
+      display: none !important;
+    }
+  }
 }
 
 @layer components {
