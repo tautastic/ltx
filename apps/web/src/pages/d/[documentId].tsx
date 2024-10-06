@@ -1,10 +1,11 @@
+import type { JSONContent } from "ltx-editor";
 import type { GetServerSidePropsContext, InferGetServerSidePropsType } from "next";
+import { useState } from "react";
+import { EditorHeader } from "~/components/editor/EditorHeader";
+import Editor from "~/components/editor/advanced-editor";
+import { FullscreenEditorWrapper } from "~/components/fullscreen-editor-wrapper";
 import type { NextPageWithAuthAndLayout } from "~/lib/types";
 import ssr from "~/utils/ssr";
-import { FullscreenEditorWrapper } from "~/components/fullscreen-editor-wrapper";
-import { useState } from "react";
-import Editor from "~/components/editor/advanced-editor";
-import type { JSONContent } from "ltx-editor";
 
 export const getServerSideProps = async (context: GetServerSidePropsContext<{ documentId: string }>) => {
   if (context.params?.documentId) {
@@ -37,7 +38,7 @@ const DocumentViewPage: NextPageWithAuthAndLayout<InferGetServerSidePropsType<ty
 
   return (
     <FullscreenEditorWrapper readonly={true}>
-      <Editor readonly={true} isHeaderVisible={true} initialValue={value} />
+      <Editor readonly={true} slotBefore={<EditorHeader title={document.title} />} initialValue={value} />
     </FullscreenEditorWrapper>
   );
 };

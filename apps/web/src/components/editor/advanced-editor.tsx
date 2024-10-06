@@ -11,14 +11,13 @@ import {
 } from "ltx-editor";
 import type { JSONContent } from "ltx-editor";
 import { handleCommandNavigation } from "ltx-editor/extensions";
-import { useState } from "react";
+import { type ReactNode, useState } from "react";
 import { defaultExtensions } from "./extensions";
 import { ColorSelector } from "./selectors/color-selector";
 import { LinkSelector } from "./selectors/link-selector";
 import { NodeSelector } from "./selectors/node-selector";
 
 import { handleImageDrop, handleImagePaste } from "ltx-editor/plugins";
-import { EditorHeader } from "~/components/editor/EditorHeader";
 import { Separator } from "~/components/ui/separator";
 import { cn } from "~/utils/cn";
 import { uploadFn } from "./image-upload";
@@ -28,13 +27,13 @@ import { slashCommand, suggestionItems } from "./slash-command";
 const extensions = [...defaultExtensions, slashCommand];
 
 interface EditorProp {
-  isHeaderVisible?: boolean;
+  slotBefore?: ReactNode;
   initialValue?: JSONContent;
   onChange?: (value: JSONContent) => void;
   className?: string;
   readonly?: boolean;
 }
-const Editor = ({ isHeaderVisible = false, initialValue, onChange, className, readonly = false }: EditorProp) => {
+const Editor = ({ slotBefore, initialValue, onChange, className, readonly = false }: EditorProp) => {
   const [openNode, setOpenNode] = useState(false);
   const [openColor, setOpenColor] = useState(false);
   const [openLink, setOpenLink] = useState(false);
@@ -66,7 +65,7 @@ const Editor = ({ isHeaderVisible = false, initialValue, onChange, className, re
             onChange(editor.getJSON());
           })
         }
-        slotBefore={isHeaderVisible && <EditorHeader />}
+        slotBefore={slotBefore}
       >
         <EditorCommand className="z-[1001] select-none h-auto max-h-[330px] overflow-y-auto rounded-md border border-gray-100 bg-white text-black shadow-md animate-in data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2 dark:border-gray-800 dark:bg-black dark:text-white">
           <EditorCommandEmpty className="px-3 py-2 text-center">

@@ -1,13 +1,14 @@
+import type { JSONContent } from "ltx-editor";
+import { useSession } from "next-auth/react";
+import { useRouter } from "next/router";
+import { useState } from "react";
+import type { SubmitHandler } from "react-hook-form";
+import { EditorHeader } from "~/components/editor/EditorHeader";
+import Editor from "~/components/editor/advanced-editor";
+import { FullscreenEditorWrapper, type editorFormSchemaType } from "~/components/fullscreen-editor-wrapper";
+import { useToast } from "~/components/ui/use-toast";
 import type { NextPageWithAuthAndLayout } from "~/lib/types";
 import api from "~/utils/api";
-import { useSession } from "next-auth/react";
-import type { SubmitHandler } from "react-hook-form";
-import { useToast } from "~/components/ui/use-toast";
-import { useRouter } from "next/router";
-import { type editorFormSchemaType, FullscreenEditorWrapper } from "~/components/fullscreen-editor-wrapper";
-import type { JSONContent } from "ltx-editor";
-import Editor from "~/components/editor/advanced-editor";
-import { useState } from "react";
 
 const Create: NextPageWithAuthAndLayout = () => {
   const router = useRouter();
@@ -55,7 +56,7 @@ const Create: NextPageWithAuthAndLayout = () => {
 
   return (
     <FullscreenEditorWrapper authorId={session.user.id} onSubmit={onSubmit}>
-      <Editor isHeaderVisible={true} initialValue={value} onChange={setValue} />
+      <Editor slotBefore={<EditorHeader />} initialValue={value} onChange={setValue} />
     </FullscreenEditorWrapper>
   );
 };

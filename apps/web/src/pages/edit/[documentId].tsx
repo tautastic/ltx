@@ -1,15 +1,16 @@
-import type { GetServerSidePropsContext, InferGetServerSidePropsType } from "next";
-import type { NextPageWithAuthAndLayout } from "~/lib/types";
-import ssr from "~/utils/ssr";
-import { useRouter } from "next/router";
-import { useToast } from "~/components/ui/use-toast";
-import { useSession } from "next-auth/react";
-import api from "~/utils/api";
-import type { SubmitHandler } from "react-hook-form";
-import { type editorFormSchemaType, FullscreenEditorWrapper } from "~/components/fullscreen-editor-wrapper";
-import Editor from "~/components/editor/advanced-editor";
 import type { JSONContent } from "ltx-editor";
+import type { GetServerSidePropsContext, InferGetServerSidePropsType } from "next";
+import { useSession } from "next-auth/react";
+import { useRouter } from "next/router";
 import { useState } from "react";
+import type { SubmitHandler } from "react-hook-form";
+import { EditorHeader } from "~/components/editor/EditorHeader";
+import Editor from "~/components/editor/advanced-editor";
+import { FullscreenEditorWrapper, type editorFormSchemaType } from "~/components/fullscreen-editor-wrapper";
+import { useToast } from "~/components/ui/use-toast";
+import type { NextPageWithAuthAndLayout } from "~/lib/types";
+import api from "~/utils/api";
+import ssr from "~/utils/ssr";
 
 export const getServerSideProps = async (context: GetServerSidePropsContext<{ documentId: string }>) => {
   if (context.params?.documentId) {
@@ -89,7 +90,7 @@ const DocumentEditPage: NextPageWithAuthAndLayout<InferGetServerSidePropsType<ty
       }}
       onSubmit={onSubmit}
     >
-      <Editor isHeaderVisible={true} initialValue={value} onChange={setValue} />
+      <Editor slotBefore={<EditorHeader title={document.title} />} initialValue={value} onChange={setValue} />
     </FullscreenEditorWrapper>
   );
 };

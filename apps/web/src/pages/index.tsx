@@ -1,15 +1,15 @@
-import type { NextPageWithAuthAndLayout } from "~/lib/types";
-import AuthDropdown from "~/components/auth-dropdown";
-import Background from "~/components/background";
-import { Button } from "~/components/ui/button";
-import Footer from "~/components/footer";
-import Header from "~/components/header";
+import type { JSONContent } from "ltx-editor";
 import { Box, Star } from "lucide-react";
 import Link from "next/link";
-import { Fieldset, FieldsetContent } from "~/components/ui/fieldset";
-import Editor from "~/components/editor/advanced-editor";
-import type { JSONContent } from "ltx-editor";
 import { useState } from "react";
+import AuthDropdown from "~/components/auth-dropdown";
+import Background from "~/components/background";
+import Editor from "~/components/editor/advanced-editor";
+import Footer from "~/components/footer";
+import Header from "~/components/header";
+import { Button } from "~/components/ui/button";
+import { Fieldset, FieldsetContent } from "~/components/ui/fieldset";
+import type { NextPageWithAuthAndLayout } from "~/lib/types";
 import { exampleLatex } from "~/lib/types";
 
 const Home: NextPageWithAuthAndLayout = () => {
@@ -63,7 +63,7 @@ const Home: NextPageWithAuthAndLayout = () => {
       </div>
       <Fieldset className="m-auto w-full max-w-screen-sm md:max-w-[75ch] lg:max-w-[95ch]">
         <FieldsetContent className="min-h-[800px] p-4">
-          <Editor readonly={true} initialValue={value} onChange={() => {}} />
+          <Editor readonly={true} initialValue={value} />
         </FieldsetContent>
       </Fieldset>
     </>

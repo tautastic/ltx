@@ -43,6 +43,10 @@
   }
 
   @media print {
+    @page {
+      size: A4 portrait;
+    }
+
     :is(div, main):has(#tiptap-editor) {
       display: contents !important;
     }
