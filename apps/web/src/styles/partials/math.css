@@ -116,5 +116,5 @@ foreignObject[data-mjx-xml] {
 
 mjx-container[jax="SVG"] path[data-c],
 mjx-container[jax="SVG"] use[data-c] {
-  stroke-width: 3;
+  stroke-width: 0;
 }
