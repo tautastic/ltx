@@ -52,12 +52,6 @@ ul[data-type="taskList"] li[data-checked="true"] > div > p {
   @apply line-through decoration-1;
 }
 
-@media not print {
-  div:has(> #tiptap-editor) {
-    @apply flex-1 overflow-y-auto mx-auto w-full lg:w-10/12 lg:max-w-[105ch] py-6;
-  }
-}
-
 /* Overwrite tippy-box original max-width */
 
 .tippy-box {

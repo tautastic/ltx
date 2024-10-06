@@ -43,8 +43,18 @@
   }
 
   @media print {
-    :not(path, #tiptap-editor, #tiptap-editor *, :has(#tiptap-editor)) {
+    :is(div, main):has(#tiptap-editor) {
+      display: contents !important;
+    }
+    :not(html, body, path, :is(div, main):has(#tiptap-editor), #tiptap-editor, #tiptap-editor *),
+    p:has(br:only-child) {
       display: none !important;
+    }
+  }
+
+  @media not print {
+    div:has(> #tiptap-editor) {
+      @apply flex-1 overflow-y-auto mx-auto w-full lg:w-10/12 lg:max-w-[105ch] py-6;
     }
   }
 }
