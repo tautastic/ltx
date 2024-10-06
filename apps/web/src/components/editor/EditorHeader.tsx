@@ -48,13 +48,13 @@ export const EditorHeader = ({ title }: { title?: string }) => {
             <Tooltip>
               <TooltipTrigger asChild>
                 <FileDown
-                  aria-label="Export to PDF"
+                  aria-label="Export as PDF"
                   className="h-6 w-6 opacity-75 hover:cursor-pointer"
                   onClick={handleExportToPdf}
                 />
               </TooltipTrigger>
               <TooltipContent>
-                <p>Export to PDF</p>
+                <p>Export as PDF</p>
               </TooltipContent>
             </Tooltip>
           )}

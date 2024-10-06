@@ -50,7 +50,7 @@
     :is(div, main):has(#tiptap-editor) {
       display: contents !important;
     }
-    :not(html, body, path, :is(div, main):has(#tiptap-editor), #tiptap-editor, #tiptap-editor *),
+    :not(iframe, html, body, path, :is(div, main):has(#tiptap-editor), #tiptap-editor, #tiptap-editor *),
     p:has(br:only-child) {
       display: none !important;
     }

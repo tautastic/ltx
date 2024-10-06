@@ -1,18 +1,8 @@
-import type { Page } from "~/schemas/BasicPageSchema";
-import type { TagList } from "~/schemas/TagSchema";
-import { Card, CardDescription, CardFooter, CardHeader, CardTitle } from "~/components/ui/card";
-import { Edit, LinkIcon, MoreHorizontal, StarOff, TagIcon, Trash } from "lucide-react";
-import { Badge } from "~/components/ui/badge";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "~/components/ui/dropdown-menu";
-import { SparkyStars } from "~/components/ui/sparky-stars";
-import api from "~/utils/api";
-import { useToast } from "~/components/ui/use-toast";
 import { useQueryClient } from "@tanstack/react-query";
+import { Edit, FileDown, LinkIcon, MoreHorizontal, StarOff, TagIcon, Trash } from "lucide-react";
+import { useSession } from "next-auth/react";
+import Link from "next/link";
+import { useCallback } from "react";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -24,10 +14,22 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "~/components/ui/alert-dialog";
-import { useSession } from "next-auth/react";
-import Link from "next/link";
-import useClipboard from "~/lib/hooks/use-clipboard";
+import { Badge } from "~/components/ui/badge";
+import { Card, CardDescription, CardFooter, CardHeader, CardTitle } from "~/components/ui/card";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "~/components/ui/dropdown-menu";
+import { SparkyStars } from "~/components/ui/sparky-stars";
+import { useToast } from "~/components/ui/use-toast";
 import { env } from "~/env.mjs";
+import useClipboard from "~/lib/hooks/use-clipboard";
+import useWindowSize from "~/lib/hooks/use-window-size";
+import type { Page } from "~/schemas/BasicPageSchema";
+import type { TagList } from "~/schemas/TagSchema";
+import api from "~/utils/api";
 
 export interface DocumentCardProps {
   page: Page;
@@ -55,6 +57,7 @@ const CardTags = ({ tags }: { tags: TagList }) => {
 
 export const DocumentCard = ({ page }: DocumentCardProps) => {
   const queryClient = useQueryClient();
+  const { windowSize } = useWindowSize();
   const { data: session, status } = useSession();
   const { toast } = useToast();
   const deletePageById = api.pages.deletePageById.useMutation();
@@ -132,6 +135,23 @@ export const DocumentCard = ({ page }: DocumentCardProps) => {
     });
   };
 
+  const exportAsPdf = () => {
+    const hideFrame = document.createElement("iframe");
+    hideFrame.width = `${windowSize.width}px`;
+    hideFrame.height = `${windowSize.height}px`;
+    hideFrame.onload = () => {
+      if (!hideFrame.contentWindow) {
+        return;
+      }
+      hideFrame.contentWindow.document.title = page.title;
+      hideFrame.contentWindow.onbeforeunload = () => document.body.removeChild(hideFrame);
+      hideFrame.contentWindow.onafterprint = () => document.body.removeChild(hideFrame);
+      hideFrame.contentWindow.print();
+    };
+    hideFrame.src = env.NEXT_PUBLIC_BASE_URL.concat(documentUri);
+    document.body.appendChild(hideFrame);
+  };
+
   return (
     <Card className="flex min-w-[325px] max-w-[650px] flex-1 flex-col">
       <CardHeader className="flex flex-col gap-y-2 flex-1">
@@ -153,6 +173,9 @@ export const DocumentCard = ({ page }: DocumentCardProps) => {
             <DropdownMenuContent className="w-[190px]">
               <DropdownMenuItem className="group flex justify-between" onClick={copyDocumentUri}>
                 Copy Link <LinkIcon className="h-4 w-4" />
+              </DropdownMenuItem>
+              <DropdownMenuItem className="group flex justify-between" onClick={exportAsPdf}>
+                Export as PDF <FileDown className="h-4 w-4" />
               </DropdownMenuItem>
               {status === "authenticated" && (
                 <>
