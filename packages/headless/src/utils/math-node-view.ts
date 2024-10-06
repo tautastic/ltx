@@ -17,6 +17,7 @@ const html = mathjax.document("", {
 const renderSvg = (dom: HTMLElement, latex: string, display: boolean) => {
   const node = html.convert(latex, { display });
   const containerStyle = html.adaptor.getAttribute(node, "style");
+  html.adaptor.setAttribute(html.adaptor.firstChild(node), "aria-hidden", "true");
   if (containerStyle) {
     dom.setAttribute("style", containerStyle);
   }
