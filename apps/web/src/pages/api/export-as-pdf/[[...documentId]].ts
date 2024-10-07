@@ -45,7 +45,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   } else if (reqBody) {
     reqBody.replaceAll(/"\/_next\/static\/css/g, `${env.NEXT_PUBLIC_BASE_URL}/_next/static/css`);
     reqBody.replaceAll(/"\/fonts/g, `${env.NEXT_PUBLIC_BASE_URL}/fonts`);
-    await page.setContent(req.body, { waitUntil: "networkidle0", timeout: 0 });
+    await page.setContent(reqBody, { waitUntil: "networkidle0", timeout: 0 });
   }
 
   const pdf = await page.pdf({
