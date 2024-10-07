@@ -1,8 +1,10 @@
+import type Chromium from "@sparticuz/chromium";
 import type { NextApiRequest, NextApiResponse } from "next";
+import type { PuppeteerNode } from "puppeteer";
 import { env } from "~/env.mjs";
 
-let chromium: any;
-let puppeteer: any;
+let chromium: typeof Chromium;
+let puppeteer: PuppeteerNode;
 
 if (env.NODE_ENV === "production") {
   chromium = require("@sparticuz/chromium");
@@ -16,10 +18,11 @@ const isStringArray = (slug?: string | string[]): slug is string[] => {
 };
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
+  const reqBody = req.body as string | undefined;
   const documentId = req.query.documentId;
   const hasDocumentIds = isStringArray(documentId);
 
-  if (!req.body && !hasDocumentIds) {
+  if (!reqBody && !hasDocumentIds) {
     return res.status(400);
   }
 
@@ -38,12 +41,15 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   const page = await browser.newPage();
 
   if (hasDocumentIds) {
-    await page.goto(`${env.NEXT_PUBLIC_BASE_URL}/d/${documentId}`, { waitUntil: "networkidle0" });
-  } else {
-    await page.setContent(req.body, { waitUntil: "networkidle0" });
+    await page.goto(`${env.NEXT_PUBLIC_BASE_URL}/d/${documentId}`, { waitUntil: "networkidle0", timeout: 0 });
+  } else if (reqBody) {
+    reqBody.replaceAll(/"\/_next\/static\/css/g, `${env.NEXT_PUBLIC_BASE_URL}/_next/static/css`);
+    reqBody.replaceAll(/"\/fonts/g, `${env.NEXT_PUBLIC_BASE_URL}/fonts`);
+    await page.setContent(req.body, { waitUntil: "networkidle0", timeout: 0 });
   }
 
   const pdf = await page.pdf({
+    timeout: 0,
     format: "A4",
     margin: {
       top: "9.5mm",
