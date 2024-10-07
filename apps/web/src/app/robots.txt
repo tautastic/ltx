@@ -1,0 +1,5 @@
+User-agent: *
+Allow: /
+Disallow: /api/
+Crawl-delay: 10
+Sitemap: https://ltx.st/manifest.webmanifest
