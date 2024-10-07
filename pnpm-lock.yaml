@@ -81,6 +81,9 @@ importers:
       '@radix-ui/react-tooltip':
         specifier: ^1.1.2
         version: 1.1.2(@types/react-dom@18.3.0)(@types/react@18.3.10)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+      '@sparticuz/chromium':
+        specifier: ^129.0.0
+        version: 129.0.0
       '@tanstack/react-query':
         specifier: ^4.36.1
         version: 4.36.1(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
@@ -105,9 +108,6 @@ importers:
       '@vercel/speed-insights':
         specifier: ^1.0.12
         version: 1.0.12(next@14.2.13(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(react@18.3.1)
-      chrome-aws-lambda:
-        specifier: ^10.1.0
-        version: 10.1.0(puppeteer-core@23.5.1)
       clsx:
         specifier: ^2.1.1
         version: 2.1.1
@@ -1660,6 +1660,10 @@ packages:
   '@scena/matrix@1.1.1':
     resolution: {integrity: sha512-JVKBhN0tm2Srl+Yt+Ywqu0oLgLcdemDQlD1OxmN9jaCTwaFPZ7tY8n6dhVgMEaR9qcR7r+kAlMXnSfNyYdE+Vg==}
 
+  '@sparticuz/chromium@129.0.0':
+    resolution: {integrity: sha512-39B1OTmq0VG7QvBWDeLG+LqBclmeYLPOpjsmzb1gcC0wJwPHvbccNKcUAUH3D07cop2VCwrqmyl3zUB138ho2w==}
+    engines: {node: '>= 16'}
+
   '@swc/counter@0.1.3':
     resolution: {integrity: sha512-e2BR4lsJkkRlKZ/qCHPw9ZaSxc0MVUd7gtbtaB7aMvHeJVYe8sOB8DBZkP2DtISHGSku9sCK6T6cnY0CtXrOCQ==}
 
@@ -2198,12 +2202,6 @@ packages:
     resolution: {integrity: sha512-7VT13fmjotKpGipCW9JEQAusEPE+Ei8nl6/g4FBAmIm0GOOLMua9NDDo/DWp0ZAxCr3cPq5ZpBqmPAQgDda2Pw==}
     engines: {node: '>= 8.10.0'}
 
-  chrome-aws-lambda@10.1.0:
-    resolution: {integrity: sha512-NZQVf+J4kqG4sVhRm3WNmOfzY0OtTSm+S8rg77pwePa9RCYHzhnzRs8YvNI6L9tALIW6RpmefWiPURt3vURXcw==}
-    engines: {node: '>= 10.16'}
-    peerDependencies:
-      puppeteer-core: ^10.1.0
-
   chromium-bidi@0.8.0:
     resolution: {integrity: sha512-uJydbGdTw0DEUjhoogGveneJVWX/9YuqkWePzMmkBYwtdAqo5d3J/ovNKFr+/2hWXYmYCr6it8mSSTIj6SS6Ug==}
     peerDependencies:
@@ -2476,6 +2474,15 @@ packages:
     resolution: {integrity: sha512-YsGpe3WHLK8ZYi4tWDg2Jy3ebRz2rXowDxnld4bkQB00cc/1Zw9AWnC0i9ztDJitivtQvaI9KaLyKrc+hBW0yg==}
     engines: {node: '>=8'}
 
+  follow-redirects@1.15.9:
+    resolution: {integrity: sha512-gew4GsXizNgdoRyqmyfMHyAmXsZDk6mHkSxZFCzW9gwlbtOW44CDtYavM+y+72qD/Vq2l550kMF52DT8fOLJqQ==}
+    engines: {node: '>=4.0'}
+    peerDependencies:
+      debug: '*'
+    peerDependenciesMeta:
+      debug:
+        optional: true
+
   foreground-child@3.2.1:
     resolution: {integrity: sha512-PXUUyLqrR2XCWICfv6ukppP96sdFwWbNEnfEMt7jNsISjMsvaLNinAHNDYyvkyU+SZG2BTSbT5NjG+vZslfGTA==}
     engines: {node: '>=14'}
@@ -2707,15 +2714,9 @@ packages:
   keycon@1.4.0:
     resolution: {integrity: sha512-p1NAIxiRMH3jYfTeXRs2uWbVJ1WpEjpi8ktzUyBJsX7/wn2qu2VRXktneBLNtKNxJmlUYxRi9gOJt1DuthXR7A==}
 
-  lambdafs@2.1.1:
-    resolution: {integrity: sha512-x5k8JcoJWkWLvCVBzrl4pzvkEHSgSBqFjg3Dpsc4AcTMq7oUMym4cL/gRTZ6VM4mUMY+M0dIbQ+V1c1tsqqanQ==}
-    engines: {node: '>= 10.16'}
-    hasBin: true
-    bundledDependencies:
-      - tar-fs
-
   libsql@0.3.19:
     resolution: {integrity: sha512-Aj5cQ5uk/6fHdmeW0TiXK42FqUlwx7ytmMLPSaUQPin5HKKKuUPD62MAbN4OEweGBBI7q1BekoEN4gPUEL6MZA==}
+    cpu: [x64, arm64, wasm32]
     os: [darwin, linux, win32]
 
   lilconfig@2.1.0:
@@ -5035,6 +5036,13 @@ snapshots:
     dependencies:
       '@daybrush/utils': 1.13.0
 
+  '@sparticuz/chromium@129.0.0':
+    dependencies:
+      follow-redirects: 1.15.9
+      tar-fs: 3.0.6
+    transitivePeerDependencies:
+      - debug
+
   '@swc/counter@0.1.3': {}
 
   '@swc/helpers@0.5.5':
@@ -5557,11 +5565,6 @@ snapshots:
     optionalDependencies:
       fsevents: 2.3.3
 
-  chrome-aws-lambda@10.1.0(puppeteer-core@23.5.1):
-    dependencies:
-      lambdafs: 2.1.1
-      puppeteer-core: 23.5.1
-
   chromium-bidi@0.8.0(devtools-protocol@0.0.1342118):
     dependencies:
       devtools-protocol: 0.0.1342118
@@ -5831,6 +5834,8 @@ snapshots:
     dependencies:
       to-regex-range: 5.0.1
 
+  follow-redirects@1.15.9: {}
+
   foreground-child@3.2.1:
     dependencies:
       cross-spawn: 7.0.3
@@ -6054,8 +6059,6 @@ snapshots:
       '@daybrush/utils': 1.13.0
       '@scena/event-emitter': 1.0.5
       keycode: 2.2.1
-
-  lambdafs@2.1.1: {}
 
   libsql@0.3.19:
     dependencies:
