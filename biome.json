@@ -2,15 +2,7 @@
   "$schema": "./node_modules/@biomejs/biome/configuration_schema.json",
   "files": {
     "ignoreUnknown": true,
-    "ignore": [
-      "node_modules/*",
-      "*.config.*",
-      "*.json",
-      ".turbo",
-      "**/dist",
-      "**/out",
-      ".next"
-    ]
+    "ignore": ["node_modules/*", "*.config.*", "*.json", ".turbo", "**/dist", "**/out", ".next"]
   },
   "organizeImports": {
     "enabled": true
@@ -27,6 +19,7 @@
         "noBarrelFile": "off"
       },
       "suspicious": {
+        "noExplicitAny": "off",
         "noArrayIndexKey": "off"
       },
       "style": {

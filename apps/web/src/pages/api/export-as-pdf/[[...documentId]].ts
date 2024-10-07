@@ -1,6 +1,15 @@
 import type { NextApiRequest, NextApiResponse } from "next";
-import puppeteer from "puppeteer";
 import { env } from "~/env.mjs";
+
+let chrome: any;
+let puppeteer: any;
+
+if (env.NODE_ENV === "production") {
+  chrome = require("chrome-aws-lambda");
+  puppeteer = require("puppeteer-core");
+} else {
+  puppeteer = require("puppeteer");
+}
 
 const isStringArray = (slug?: string | string[]): slug is string[] => {
   return !!slug;
@@ -14,7 +23,19 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     return res.status(400);
   }
 
-  const browser = await puppeteer.launch();
+  let options = {};
+
+  if (chrome) {
+    options = {
+      args: [...chrome.args, "--hide-scrollbars", "--disable-web-security"],
+      defaultViewport: chrome.defaultViewport,
+      executablePath: await chrome.executablePath,
+      headless: true,
+      ignoreHTTPSErrors: true,
+    };
+  }
+
+  const browser = await puppeteer.launch(options);
   const page = await browser.newPage();
 
   if (hasDocumentIds) {
