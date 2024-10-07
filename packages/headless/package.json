@@ -1,6 +1,6 @@
 {
   "name": "ltx-editor",
-  "version": "0.8.0",
+  "version": "0.8.1",
   "description": "Notion-style WYSIWYG editor",
   "license": "MIT",
   "type": "module",
@@ -83,7 +83,7 @@
     "typescript": "5.4.3"
   },
   "author": "Ahmed Sami",
-  "homepage": "https://ltx.ahmedsami.xyz",
+  "homepage": "https://ltx.st",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/tautastic/ltx.git"

@@ -1,7 +1,7 @@
 {
   "description": "Notion-style WYSIWYG editor",
   "name": "ltx-webapp",
-  "version": "0.8.0",
+  "version": "0.8.1",
   "private": true,
   "license": "MIT",
   "scripts": {
@@ -79,7 +79,7 @@
     "typescript": "5.4.3"
   },
   "author": "Ahmed Sami",
-  "homepage": "https://ltx.ahmedsami.xyz",
+  "homepage": "https://ltx.st",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/tautastic/ltx.git"

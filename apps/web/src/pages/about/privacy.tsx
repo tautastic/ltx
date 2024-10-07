@@ -9,9 +9,8 @@ const Privacy: NextPageWithAuthAndLayout = () => {
       <div className="prose prose-sm mx-auto max-w-[90ch] rounded-md bg-gray-50 p-6 text-black dark:prose-invert md:prose-base prose-headings:mb-2 dark:bg-gray-950 dark:text-gray-100 sm:my-14 sm:max-w-[70ch] sm:p-14 md:max-w-[75ch] lg:max-w-[95ch]">
         <h1>Privacy Policy for LTX</h1>
         <p>
-          At LTX, accessible from https://ltx.ahmedsami.xyz, one of our main priorities is the privacy of our visitors.
-          This Privacy Policy document contains types of information that is collected and recorded by LTX and how we
-          use it.
+          At LTX, accessible from https://ltx.st, one of our main priorities is the privacy of our visitors. This
+          Privacy Policy document contains types of information that is collected and recorded by LTX and how we use it.
         </p>
         <p>
           If you have additional questions or require more information about our Privacy Policy, do not hesitate to

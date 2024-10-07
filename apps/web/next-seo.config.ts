@@ -22,7 +22,7 @@ export default {
   ],
   openGraph: {
     site_name: "LTX",
-    url: "https://ltx.ahmedsami.xyz/",
+    url: "https://ltx.st/",
     type: "website",
     locale: "en_IE",
     images: [
