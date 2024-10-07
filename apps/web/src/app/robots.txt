@@ -4,4 +4,4 @@ Disallow: /api/
 Disallow: /_next/
 Disallow: /_vercel/
 Crawl-delay: 10
-Sitemap: https://ltx.st/manifest.webmanifest
+Sitemap: https://ltx.st/sitemap.xml
