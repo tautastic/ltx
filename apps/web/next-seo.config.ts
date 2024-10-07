@@ -19,10 +19,18 @@ export default {
       rel: "manifest",
       href: "/manifest.webmanifest",
     },
+    {
+      rel: "robots",
+      href: "/robots.txt",
+    },
+    {
+      rel: "sitemap",
+      href: "/sitemap.xml",
+    },
   ],
   openGraph: {
     site_name: "LTX",
-    url: "https://ltx.st/",
+    url: "https://ltx.st",
     type: "website",
     locale: "en_IE",
     images: [
