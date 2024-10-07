@@ -64,7 +64,7 @@ const config = {
       },
     ];
   },
-  productionBrowserSourceMaps: true,
+  assetPrefix: `${process.env.NEXT_PUBLIC_BASE_URL}/`
 };
 
 export default config;
