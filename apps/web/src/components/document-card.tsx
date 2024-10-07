@@ -2,7 +2,6 @@ import { useQueryClient } from "@tanstack/react-query";
 import { Edit, FileDown, LinkIcon, MoreHorizontal, StarOff, TagIcon, Trash } from "lucide-react";
 import { useSession } from "next-auth/react";
 import Link from "next/link";
-import { useCallback } from "react";
 import {
   AlertDialog,
   AlertDialogAction,
