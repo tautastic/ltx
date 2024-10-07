@@ -1,11 +1,11 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import { env } from "~/env.mjs";
 
-let chrome: any;
+let chromium: any;
 let puppeteer: any;
 
 if (env.NODE_ENV === "production") {
-  chrome = require("@sparticuz/chromium");
+  chromium = require("@sparticuz/chromium");
   puppeteer = require("puppeteer-core");
 } else {
   puppeteer = require("puppeteer");
@@ -25,13 +25,12 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
   let options = {};
 
-  if (chrome) {
+  if (chromium) {
     options = {
-      args: [...chrome.args, "--hide-scrollbars", "--disable-web-security"],
-      defaultViewport: chrome.defaultViewport,
-      executablePath: await chrome.executablePath,
+      args: [...chromium.args, "--hide-scrollbars", "--disable-web-security"],
+      defaultViewport: chromium.defaultViewport,
+      executablePath: await chromium.executablePath(),
       headless: true,
-      ignoreHTTPSErrors: true,
     };
   }
 
