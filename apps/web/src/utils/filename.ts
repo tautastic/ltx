@@ -1,4 +1,4 @@
-export const buildValidFileName = (title?: string) => {
+const buildValidFileName = (title?: string) => {
   try {
     if (title) {
       const sanitizedTitle = title
@@ -12,4 +12,29 @@ export const buildValidFileName = (title?: string) => {
     }
   } catch (_e) {}
   return "export.pdf";
+};
+
+export const downloadDocumentPdf = async (docUrl: string, docTitle?: string) => {
+  const formData = new FormData();
+  formData.append("url", docUrl);
+  formData.append("paperWidth", "8.27");
+  formData.append("paperHeight", "11.7");
+
+  const res = await fetch("https://gotenberg-r8sv.onrender.com/forms/chromium/convert/url", {
+    method: "POST",
+    body: formData,
+  });
+  const blob = await res.blob();
+
+  const href = URL.createObjectURL(blob);
+  const a = Object.assign(document.createElement("a"), {
+    target: "_blank",
+    href,
+    style: "display:none",
+    download: buildValidFileName(docTitle),
+  });
+  document.body.appendChild(a);
+  a.click();
+  URL.revokeObjectURL(href);
+  a.remove();
 };

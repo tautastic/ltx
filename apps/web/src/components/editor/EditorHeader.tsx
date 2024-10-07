@@ -3,10 +3,11 @@ import { useRouter } from "next/router";
 import { useCallback, useEffect, useState } from "react";
 import AuthDropdown from "~/components/auth-dropdown";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "~/components/ui/tooltip";
-import { buildValidFileName } from "~/utils/filename";
+import { env } from "~/env.mjs";
+import { downloadDocumentPdf } from "~/utils/filename";
 
 export const EditorHeader = ({ title }: { title?: string }) => {
-  const router = useRouter();
+  const { asPath: routerPath, back: routerBack } = useRouter();
   const [canExport, setCanExport] = useState(false);
 
   useEffect(() => {
@@ -22,26 +23,9 @@ export const EditorHeader = ({ title }: { title?: string }) => {
 
   const handleExportToPdf = useCallback(async () => {
     if (canExport) {
-      const res = await fetch("/api/export-as-pdf", {
-        method: "POST",
-        headers: { "Content-Type": "text/html" },
-        body: window.document.documentElement.outerHTML,
-      });
-      const blob = await res.blob();
-
-      const href = URL.createObjectURL(blob);
-      const a = Object.assign(document.createElement("a"), {
-        target: "_blank",
-        href,
-        style: "display:none",
-        download: buildValidFileName(title),
-      });
-      document.body.appendChild(a);
-      a.click();
-      URL.revokeObjectURL(href);
-      a.remove();
+      await downloadDocumentPdf(`${env.NEXT_PUBLIC_BASE_URL}/${routerPath}`, title);
     }
-  }, [title, canExport]);
+  }, [title, canExport, routerPath]);
 
   return (
     <div className="flex flex-none flex-row items-center justify-between border-b border-gray-200 bg-white p-3 py-2 text-black gap-x-4 dark:border-gray-800 dark:bg-black dark:text-white">
@@ -52,7 +36,7 @@ export const EditorHeader = ({ title }: { title?: string }) => {
               <ArrowBigLeftDash
                 aria-label="Go back"
                 className="h-6 w-6 opacity-75 hover:cursor-pointer"
-                onClick={router.back}
+                onClick={routerBack}
               />
             </TooltipTrigger>
             <TooltipContent>

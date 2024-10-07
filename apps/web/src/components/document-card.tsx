@@ -2,7 +2,7 @@ import { useQueryClient } from "@tanstack/react-query";
 import { Edit, FileDown, LinkIcon, MoreHorizontal, StarOff, TagIcon, Trash } from "lucide-react";
 import { useSession } from "next-auth/react";
 import Link from "next/link";
-import { useMemo } from "react";
+import { useCallback } from "react";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -29,7 +29,7 @@ import useClipboard from "~/lib/hooks/use-clipboard";
 import type { Page } from "~/schemas/BasicPageSchema";
 import type { TagList } from "~/schemas/TagSchema";
 import api from "~/utils/api";
-import { buildValidFileName } from "~/utils/filename";
+import { downloadDocumentPdf } from "~/utils/filename";
 
 export interface DocumentCardProps {
   page: Page;
@@ -65,8 +65,9 @@ export const DocumentCard = ({ page }: DocumentCardProps) => {
   const pageIsStarred = session ? page.starredBy.map((u) => u.id).includes(session.user.id) : false;
   const userIsAuthor = session?.user.id === page.authorId;
   const documentUri = `/d/${page.id}`;
+  const documentUrl = `${env.NEXT_PUBLIC_BASE_URL}${documentUri}`;
   const authorUri = `/u/${page.author.username}`;
-  const { copyToClipboard: copyDocumentUri } = useClipboard({
+  const { copyToClipboard: copyDocumentUrl } = useClipboard({
     onError: () =>
       toast({
         title: "🚨 Uh oh! Something went wrong.",
@@ -77,7 +78,7 @@ export const DocumentCard = ({ page }: DocumentCardProps) => {
         title: "🎉 Wuhuu",
         description: "Link copied successfully.",
       }),
-    value: env.NEXT_PUBLIC_BASE_URL.concat(documentUri),
+    value: documentUrl,
   });
 
   const handleToggleStarPage = async (id: string) => {
@@ -134,7 +135,9 @@ export const DocumentCard = ({ page }: DocumentCardProps) => {
     });
   };
 
-  const validFileName = useMemo(() => buildValidFileName(page.title), [page.title]);
+  const handleExportToPdf = useCallback(async () => {
+    await downloadDocumentPdf(documentUrl, page.title);
+  }, [documentUrl, page.title]);
 
   return (
     <Card className="flex min-w-[325px] max-w-[650px] flex-1 flex-col">
@@ -155,14 +158,12 @@ export const DocumentCard = ({ page }: DocumentCardProps) => {
               <MoreHorizontal className="h-4 w-4" />
             </DropdownMenuTrigger>
             <DropdownMenuContent className="w-[190px]">
-              <DropdownMenuItem className="group flex justify-between" onClick={copyDocumentUri}>
+              <DropdownMenuItem className="group flex justify-between" onClick={copyDocumentUrl}>
                 Copy Link <LinkIcon className="h-4 w-4" />
               </DropdownMenuItem>
-              <Link href={`/api/export-as-pdf/${page.id}`} target="_blank" download={validFileName}>
-                <DropdownMenuItem className="group flex justify-between">
-                  Export as PDF <FileDown className="h-4 w-4" />
-                </DropdownMenuItem>
-              </Link>
+              <DropdownMenuItem className="group flex justify-between" onClick={handleExportToPdf}>
+                Export as PDF <FileDown className="h-4 w-4" />
+              </DropdownMenuItem>
               {status === "authenticated" && (
                 <>
                   <DropdownMenuItem
