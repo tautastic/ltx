@@ -2,6 +2,7 @@ import { useQueryClient } from "@tanstack/react-query";
 import { Edit, FileDown, LinkIcon, MoreHorizontal, StarOff, TagIcon, Trash } from "lucide-react";
 import { useSession } from "next-auth/react";
 import Link from "next/link";
+import { useMemo } from "react";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -25,10 +26,10 @@ import { SparkyStars } from "~/components/ui/sparky-stars";
 import { useToast } from "~/components/ui/use-toast";
 import { env } from "~/env.mjs";
 import useClipboard from "~/lib/hooks/use-clipboard";
-import useWindowSize from "~/lib/hooks/use-window-size";
 import type { Page } from "~/schemas/BasicPageSchema";
 import type { TagList } from "~/schemas/TagSchema";
 import api from "~/utils/api";
+import { buildValidFileName } from "~/utils/filename";
 
 export interface DocumentCardProps {
   page: Page;
@@ -56,7 +57,6 @@ const CardTags = ({ tags }: { tags: TagList }) => {
 
 export const DocumentCard = ({ page }: DocumentCardProps) => {
   const queryClient = useQueryClient();
-  const { windowSize } = useWindowSize();
   const { data: session, status } = useSession();
   const { toast } = useToast();
   const deletePageById = api.pages.deletePageById.useMutation();
@@ -134,22 +134,7 @@ export const DocumentCard = ({ page }: DocumentCardProps) => {
     });
   };
 
-  const exportAsPdf = () => {
-    const hideFrame = document.createElement("iframe");
-    hideFrame.width = `${windowSize.width}px`;
-    hideFrame.height = `${windowSize.height}px`;
-    hideFrame.onload = () => {
-      if (!hideFrame.contentWindow) {
-        return;
-      }
-      hideFrame.contentWindow.document.title = page.title;
-      hideFrame.contentWindow.onbeforeunload = () => document.body.removeChild(hideFrame);
-      hideFrame.contentWindow.onafterprint = () => document.body.removeChild(hideFrame);
-      hideFrame.contentWindow.print();
-    };
-    hideFrame.src = env.NEXT_PUBLIC_BASE_URL.concat(documentUri);
-    document.body.appendChild(hideFrame);
-  };
+  const validFileName = useMemo(() => buildValidFileName(page.title), [page.title]);
 
   return (
     <Card className="flex min-w-[325px] max-w-[650px] flex-1 flex-col">
@@ -173,9 +158,11 @@ export const DocumentCard = ({ page }: DocumentCardProps) => {
               <DropdownMenuItem className="group flex justify-between" onClick={copyDocumentUri}>
                 Copy Link <LinkIcon className="h-4 w-4" />
               </DropdownMenuItem>
-              <DropdownMenuItem className="group flex justify-between" onClick={exportAsPdf}>
-                Export as PDF <FileDown className="h-4 w-4" />
-              </DropdownMenuItem>
+              <Link href={`/api/export-as-pdf/${page.id}`} target="_blank" download={validFileName}>
+                <DropdownMenuItem className="group flex justify-between">
+                  Export as PDF <FileDown className="h-4 w-4" />
+                </DropdownMenuItem>
+              </Link>
               {status === "authenticated" && (
                 <>
                   <DropdownMenuItem

@@ -3,6 +3,7 @@ import { useRouter } from "next/router";
 import { useCallback, useEffect, useState } from "react";
 import AuthDropdown from "~/components/auth-dropdown";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "~/components/ui/tooltip";
+import { buildValidFileName } from "~/utils/filename";
 
 export const EditorHeader = ({ title }: { title?: string }) => {
   const router = useRouter();
@@ -19,12 +20,26 @@ export const EditorHeader = ({ title }: { title?: string }) => {
     };
   }, [title]);
 
-  const handleExportToPdf = useCallback(() => {
+  const handleExportToPdf = useCallback(async () => {
     if (canExport) {
-      const originalTitle = window.document.title;
-      window.document.title = title as string;
-      window.print();
-      window.document.title = originalTitle;
+      const res = await fetch("/api/export-as-pdf", {
+        method: "POST",
+        headers: { "Content-Type": "text/html" },
+        body: window.document.documentElement.outerHTML,
+      });
+      const blob = await res.blob();
+
+      const href = URL.createObjectURL(blob);
+      const a = Object.assign(document.createElement("a"), {
+        target: "_blank",
+        href,
+        style: "display:none",
+        download: buildValidFileName(title),
+      });
+      document.body.appendChild(a);
+      a.click();
+      URL.revokeObjectURL(href);
+      a.remove();
     }
   }, [title, canExport]);
 
