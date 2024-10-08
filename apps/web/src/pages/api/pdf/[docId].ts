@@ -22,6 +22,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   formData.append("marginBottom", pdfMargin);
   formData.append("marginLeft", pdfMargin);
   formData.append("printBackground", "true");
+  formData.append("omitBackground", "true");
 
   const pdfRes = await fetch(`${env.GOTENBERG_API_BASE_URL}/forms/chromium/convert/url`, {
     method: "POST",
