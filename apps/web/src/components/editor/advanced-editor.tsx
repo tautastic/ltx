@@ -7,6 +7,7 @@ import {
   EditorCommandItem,
   EditorCommandList,
   EditorContent,
+  type EditorContentProps,
   EditorRoot,
 } from "ltx-editor";
 import type { JSONContent } from "ltx-editor";
@@ -26,14 +27,22 @@ import { slashCommand, suggestionItems } from "./slash-command";
 
 const extensions = [...defaultExtensions, slashCommand];
 
-interface EditorProp {
+export interface AdvancedEditorProps {
   slotBefore?: ReactNode;
   initialValue?: JSONContent;
   onChange?: (value: JSONContent) => void;
+  onCreate?: EditorContentProps["onCreate"];
   className?: string;
   readonly?: boolean;
 }
-const Editor = ({ slotBefore, initialValue, onChange, className, readonly = false }: EditorProp) => {
+const AdvancedEditor = ({
+  slotBefore,
+  initialValue,
+  onChange,
+  onCreate,
+  className,
+  readonly = false,
+}: AdvancedEditorProps) => {
   const [openNode, setOpenNode] = useState(false);
   const [openColor, setOpenColor] = useState(false);
   const [openLink, setOpenLink] = useState(false);
@@ -65,6 +74,7 @@ const Editor = ({ slotBefore, initialValue, onChange, className, readonly = fals
             onChange(editor.getJSON());
           })
         }
+        onCreate={onCreate}
         slotBefore={slotBefore}
       >
         <EditorCommand className="z-[1001] select-none h-auto max-h-[330px] overflow-y-auto rounded-md border border-gray-100 bg-white text-black shadow-md animate-in data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2 dark:border-gray-800 dark:bg-black dark:text-white">
@@ -116,4 +126,4 @@ const Editor = ({ slotBefore, initialValue, onChange, className, readonly = fals
   );
 };
 
-export default Editor;
+export default AdvancedEditor;

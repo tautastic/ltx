@@ -29,7 +29,6 @@ import useClipboard from "~/lib/hooks/use-clipboard";
 import type { Page } from "~/schemas/BasicPageSchema";
 import type { TagList } from "~/schemas/TagSchema";
 import api from "~/utils/api";
-import { downloadDocumentPdf } from "~/utils/pdf";
 
 export interface DocumentCardProps {
   page: Page;
@@ -81,9 +80,9 @@ export const DocumentCard = ({ page }: DocumentCardProps) => {
     value: documentUrl,
   });
 
-  const handleToggleStarPage = async (id: string) => {
+  const handleToggleStarPage = useCallback(async () => {
     if (pageIsStarred) {
-      await unstarPageById.mutateAsync(id, {
+      await unstarPageById.mutateAsync(page.id, {
         onSuccess: () => {
           queryClient.invalidateQueries({ stale: true });
           toast({
@@ -99,7 +98,7 @@ export const DocumentCard = ({ page }: DocumentCardProps) => {
         },
       });
     } else {
-      await starPageById.mutateAsync(id, {
+      await starPageById.mutateAsync(page.id, {
         onSuccess: () => {
           queryClient.invalidateQueries({ stale: true });
           toast({
@@ -115,10 +114,17 @@ export const DocumentCard = ({ page }: DocumentCardProps) => {
         },
       });
     }
-  };
+  }, [
+    page.id,
+    pageIsStarred,
+    queryClient.invalidateQueries,
+    toast,
+    starPageById.mutateAsync,
+    unstarPageById.mutateAsync,
+  ]);
 
-  const handleDeletePage = async (id: string) => {
-    await deletePageById.mutateAsync(id, {
+  const handleDeletePage = useCallback(async () => {
+    await deletePageById.mutateAsync(page.id, {
       onSuccess: () => {
         queryClient.invalidateQueries({ stale: true });
         toast({
@@ -133,11 +139,7 @@ export const DocumentCard = ({ page }: DocumentCardProps) => {
         });
       },
     });
-  };
-
-  const handleExportToPdf = useCallback(async () => {
-    await downloadDocumentPdf(page.id, page.title);
-  }, [page.id, page.title]);
+  }, [page.id, deletePageById.mutateAsync, queryClient.invalidateQueries, toast]);
 
   return (
     <Card className="flex min-w-[325px] max-w-[650px] flex-1 flex-col">
@@ -161,15 +163,22 @@ export const DocumentCard = ({ page }: DocumentCardProps) => {
               <DropdownMenuItem className="group flex justify-between" onClick={copyDocumentUrl}>
                 Copy Link <LinkIcon className="h-4 w-4" />
               </DropdownMenuItem>
-              <DropdownMenuItem className="group flex justify-between" onClick={handleExportToPdf}>
-                Export as PDF <FileDown className="h-4 w-4" />
-              </DropdownMenuItem>
+              <Link
+                target="_blank"
+                href={{
+                  pathname: documentUri,
+                  query: {
+                    print: "pdf",
+                  },
+                }}
+              >
+                <DropdownMenuItem className="group flex justify-between">
+                  Export as PDF <FileDown className="h-4 w-4" />
+                </DropdownMenuItem>
+              </Link>
               {status === "authenticated" && (
                 <>
-                  <DropdownMenuItem
-                    className="group flex justify-between"
-                    onClick={() => handleToggleStarPage(page.id)}
-                  >
+                  <DropdownMenuItem className="group flex justify-between" onClick={handleToggleStarPage}>
                     {pageIsStarred ? (
                       <>
                         Remove Favorite
@@ -213,7 +222,7 @@ export const DocumentCard = ({ page }: DocumentCardProps) => {
               </AlertDialogHeader>
               <AlertDialogFooter>
                 <AlertDialogCancel Size="sm">Cancel</AlertDialogCancel>
-                <AlertDialogAction Size="sm" onClick={() => handleDeletePage(page.id)}>
+                <AlertDialogAction Size="sm" onClick={handleDeletePage}>
                   Continue
                 </AlertDialogAction>
               </AlertDialogFooter>

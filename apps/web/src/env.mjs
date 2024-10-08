@@ -21,9 +21,6 @@ const server = z.object({
   SPOTIFY_SECRET: z.string(),
   TWITCH_ID: z.string(),
   TWITCH_SECRET: z.string(),
-  GOTENBERG_API_BASE_URL: z.string().optional(),
-  GOTENBERG_API_BASIC_AUTH_USERNAME: z.string().optional(),
-  GOTENBERG_API_BASIC_AUTH_PASSWORD: z.string().optional(),
 });
 
 /**
@@ -58,9 +55,6 @@ const processEnv = {
   SPOTIFY_SECRET: process.env.SPOTIFY_SECRET,
   TWITCH_ID: process.env.TWITCH_ID,
   TWITCH_SECRET: process.env.TWITCH_SECRET,
-  GOTENBERG_API_BASE_URL: process.env.GOTENBERG_API_BASE_URL,
-  GOTENBERG_API_BASIC_AUTH_USERNAME: process.env.GOTENBERG_API_BASIC_AUTH_USERNAME,
-  GOTENBERG_API_BASIC_AUTH_PASSWORD: process.env.GOTENBERG_API_BASIC_AUTH_PASSWORD,
 };
 
 // Don't touch the part below
