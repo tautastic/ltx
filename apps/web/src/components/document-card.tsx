@@ -136,8 +136,8 @@ export const DocumentCard = ({ page }: DocumentCardProps) => {
   };
 
   const handleExportToPdf = useCallback(async () => {
-    await downloadDocumentPdf(documentUrl, page.title);
-  }, [documentUrl, page.title]);
+    await downloadDocumentPdf(page.id, page.title);
+  }, [page.id, page.title]);
 
   return (
     <Card className="flex min-w-[325px] max-w-[650px] flex-1 flex-col">
