@@ -4,7 +4,7 @@ import { useCallback, useEffect, useState } from "react";
 import AuthDropdown from "~/components/auth-dropdown";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "~/components/ui/tooltip";
 import { env } from "~/env.mjs";
-import { downloadDocumentPdf } from "~/utils/filename";
+import { downloadDocumentPdf } from "~/utils/pdf";
 
 export const EditorHeader = ({ title }: { title?: string }) => {
   const { asPath: routerPath, back: routerBack } = useRouter();

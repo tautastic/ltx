@@ -29,7 +29,7 @@ import useClipboard from "~/lib/hooks/use-clipboard";
 import type { Page } from "~/schemas/BasicPageSchema";
 import type { TagList } from "~/schemas/TagSchema";
 import api from "~/utils/api";
-import { downloadDocumentPdf } from "~/utils/filename";
+import { downloadDocumentPdf } from "~/utils/pdf";
 
 export interface DocumentCardProps {
   page: Page;

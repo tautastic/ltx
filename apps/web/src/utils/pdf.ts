@@ -1,3 +1,5 @@
+import { env } from "~/env.mjs";
+
 const buildValidFileName = (title?: string) => {
   try {
     if (title) {
@@ -16,12 +18,16 @@ const buildValidFileName = (title?: string) => {
 
 export const downloadDocumentPdf = async (docUrl: string, docTitle?: string) => {
   const formData = new FormData();
+  const credentials = btoa(`${env.GOTENBERG_API_BASIC_AUTH_USERNAME}:${env.GOTENBERG_API_BASIC_AUTH_PASSWORD}`);
   formData.append("url", docUrl);
   formData.append("paperWidth", "8.27");
   formData.append("paperHeight", "11.7");
 
-  const res = await fetch("https://gotenberg-r8sv.onrender.com/forms/chromium/convert/url", {
+  const res = await fetch(`${env.GOTENBERG_API_BASE_URL}/forms/chromium/convert/url`, {
     method: "POST",
+    headers: {
+      Authorization: `Basic ${credentials}`,
+    },
     body: formData,
   });
   const blob = await res.blob();
