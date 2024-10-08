@@ -41,3 +41,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   res.write(pdfBuffer, "binary");
   res.end();
 }
+
+export const config = {
+  maxDuration: 60,
+};
