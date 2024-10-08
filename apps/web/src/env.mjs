@@ -21,9 +21,9 @@ const server = z.object({
   SPOTIFY_SECRET: z.string(),
   TWITCH_ID: z.string(),
   TWITCH_SECRET: z.string(),
-  GOTENBERG_API_BASE_URL: z.string(),
-  GOTENBERG_API_BASIC_AUTH_USERNAME: z.string(),
-  GOTENBERG_API_BASIC_AUTH_PASSWORD: z.string(),
+  GOTENBERG_API_BASE_URL: z.string().optional(),
+  GOTENBERG_API_BASIC_AUTH_USERNAME: z.string().optional(),
+  GOTENBERG_API_BASIC_AUTH_PASSWORD: z.string().optional(),
 });
 
 /**
