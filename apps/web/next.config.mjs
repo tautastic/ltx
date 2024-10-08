@@ -64,7 +64,7 @@ const config = {
       },
     ];
   },
-  assetPrefix: `${process.env.NEXT_PUBLIC_BASE_URL}/`
+  assetPrefix: `${process.env.NEXTAUTH_URL}/`
 };
 
 export default config;
