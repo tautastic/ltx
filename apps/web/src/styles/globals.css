@@ -45,12 +45,13 @@
   @media print {
     @page {
       size: A4 portrait;
+      margin: 10mm;
     }
 
     :is(div, main):has(#tiptap-editor) {
       display: contents !important;
     }
-    :not(iframe, html, body, path, :is(div, main):has(#tiptap-editor), #tiptap-editor, #tiptap-editor *),
+    :not(html, body, path, :is(div, main):has(#tiptap-editor), #tiptap-editor, #tiptap-editor *),
     p:has(br:only-child) {
       display: none !important;
     }

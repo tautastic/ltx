@@ -63,7 +63,7 @@ const AdvancedEditor = ({
           attributes: {
             id: "tiptap-editor",
             class: cn(
-              "prose prose-lg dark:prose-invert font-default focus:outline-none max-w-full print:text-black",
+              "prose prose-lg dark:prose-invert font-default focus:outline-none max-w-full print:prose-print",
               className,
             ),
           },
