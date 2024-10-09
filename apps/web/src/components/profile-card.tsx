@@ -54,7 +54,7 @@ export const ProfileCard = ({
         <CardHeader className="flex flex-col items-center justify-center">
           <Avatar className="mb-2 h-20 w-20">
             {profileCardUser.image && (
-              <Image src={profileCardUser.image} alt={"Profile picture"} width={128} height={128} priority={true} />
+              <Image src={profileCardUser.image} alt={"Profile picture"} width={80} height={80} priority={true} />
             )}
           </Avatar>
           <CardTitle className="line-clamp-1 leading-7">{profileCardUser.name}</CardTitle>

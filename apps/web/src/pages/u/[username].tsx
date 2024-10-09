@@ -138,8 +138,8 @@ const ProfilePage: NextPageWithAuthAndLayout<InferGetServerSidePropsType<typeof 
               <Image
                 src={userWithFollowers.image}
                 alt={"Profile picture"}
-                width={256}
-                height={256}
+                width={128}
+                height={128}
                 quality={100}
                 priority={true}
               />
