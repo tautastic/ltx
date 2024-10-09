@@ -1,8 +1,9 @@
-import type { User, UserWithFollowers } from "~/schemas/UserSchema";
-import { useMemo } from "react";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "~/components/ui/card";
+import Image from "next/image";
 import Link from "next/link";
-import { Avatar, AvatarImage } from "~/components/ui/avatar";
+import { useMemo } from "react";
+import { Avatar } from "~/components/ui/avatar";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "~/components/ui/card";
+import type { User, UserWithFollowers } from "~/schemas/UserSchema";
 
 export interface ProfileCardProps {
   isFollowed?: boolean;
@@ -52,7 +53,9 @@ export const ProfileCard = ({
       <Link href={profileUri}>
         <CardHeader className="flex flex-col items-center justify-center">
           <Avatar className="mb-2 h-20 w-20">
-            <AvatarImage alt="Profile picture" src={profileCardUser.image} />
+            {profileCardUser.image && (
+              <Image src={profileCardUser.image} alt={"Profile picture"} width={128} height={128} priority={true} />
+            )}
           </Avatar>
           <CardTitle className="line-clamp-1 leading-7">{profileCardUser.name}</CardTitle>
           <CardDescription className="mt-0 font-mono text-xs">{profileCardUser.username}</CardDescription>

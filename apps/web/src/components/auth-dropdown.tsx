@@ -1,8 +1,10 @@
-import Link from "next/link";
-import { signOut, useSession } from "next-auth/react";
 import { ChevronDown, Edit, ExternalLink, Info, LogOut, User } from "lucide-react";
+import { signOut, useSession } from "next-auth/react";
+import Image from "next/image";
+import Link from "next/link";
+import { memo, useCallback } from "react";
 import { ThemeSelect } from "~/components/theme-select";
-import { Avatar, AvatarFallback, AvatarImage } from "~/components/ui/avatar";
+import { Avatar, AvatarFallback } from "~/components/ui/avatar";
 import { Button } from "~/components/ui/button";
 import {
   DropdownMenu,
@@ -14,18 +16,31 @@ import {
   DropdownMenuTrigger,
 } from "~/components/ui/dropdown-menu";
 
+const AuthAvatar = memo(() => {
+  const userImageSrc = useSession().data?.user?.image;
+  const userHasImage = userImageSrc != null;
+
+  return (
+    <Avatar className="h-6 w-6">
+      {userHasImage && <Image src={userImageSrc} alt={"User Image"} width={32} height={32} priority={true} />}
+      <AvatarFallback>
+        <User className="h-4 w-4" />
+      </AvatarFallback>
+    </Avatar>
+  );
+});
+
 const AuthDropdown = () => {
   const { data: session, status } = useSession();
+  const user = session?.user;
 
-  const handleLogout = () => {
+  const handleLogout = useCallback(async () => {
     if (status === "authenticated") {
-      signOut({
+      await signOut({
         callbackUrl: "/",
-      }).catch((error) => {
-        console.log(error);
       });
     }
-  };
+  }, [status]);
 
   return (
     <DropdownMenu>
@@ -34,50 +49,43 @@ const AuthDropdown = () => {
           Loading={status === "loading"}
           Type="secondary"
           aria-label="Open Menu"
-          Prefix={
-            <Avatar className="h-6 w-6">
-              <AvatarImage src={session?.user?.image || undefined} alt={"User Image"} />
-              <AvatarFallback>
-                <User className="h-4 w-4" />
-              </AvatarFallback>
-            </Avatar>
-          }
+          Prefix={<AuthAvatar />}
           Suffix={<ChevronDown className="h-4 w-4" />}
         />
       </DropdownMenuTrigger>
       {status !== "loading" && (
         <DropdownMenuContent className="w-56 select-none">
-          {session?.user?.name && (
-            <DropdownMenuGroup>
-              <Link href={`/u/${session?.user?.username}`}>
-                <DropdownMenuLabel className="bg-gray-50 text-center dark:bg-gray-950">
-                  <span>
-                    Signed in as <b>{session.user.name}</b>
-                  </span>
-                </DropdownMenuLabel>
-              </Link>
-              <DropdownMenuSeparator />
-            </DropdownMenuGroup>
-          )}
-          {session?.user?.username ? (
-            <DropdownMenuGroup>
-              <Link href={`/u/${session?.user?.username}`}>
-                <DropdownMenuItem>
-                  <User className="mr-2 h-4 w-4" />
-                  <span>Profile</span>
+          {user ? (
+            <>
+              <DropdownMenuGroup>
+                <Link href={`/u/${user.username}`}>
+                  <DropdownMenuLabel className="bg-gray-50 text-center dark:bg-gray-950">
+                    <span>
+                      Signed in as <b>{user.name}</b>
+                    </span>
+                  </DropdownMenuLabel>
+                </Link>
+                <DropdownMenuSeparator />
+              </DropdownMenuGroup>
+              <DropdownMenuGroup>
+                <Link href={`/u/${user.username}`}>
+                  <DropdownMenuItem>
+                    <User className="mr-2 h-4 w-4" />
+                    <span>Profile</span>
+                  </DropdownMenuItem>
+                </Link>
+                <Link href="/create">
+                  <DropdownMenuItem>
+                    <Edit className="mr-2 h-4 w-4" />
+                    <span>New Document</span>
+                  </DropdownMenuItem>
+                </Link>
+                <DropdownMenuItem onClick={handleLogout}>
+                  <LogOut className="mr-2 h-4 w-4" />
+                  <span>Sign out</span>
                 </DropdownMenuItem>
-              </Link>
-              <Link href="/create">
-                <DropdownMenuItem>
-                  <Edit className="mr-2 h-4 w-4" />
-                  <span>New Document</span>
-                </DropdownMenuItem>
-              </Link>
-              <DropdownMenuItem onClick={handleLogout}>
-                <LogOut className="mr-2 h-4 w-4" />
-                <span>Sign out</span>
-              </DropdownMenuItem>
-            </DropdownMenuGroup>
+              </DropdownMenuGroup>
+            </>
           ) : (
             <DropdownMenuGroup>
               <Link href="/auth/signin">

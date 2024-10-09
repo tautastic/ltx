@@ -1,21 +1,22 @@
-import type { GetServerSidePropsContext, InferGetServerSidePropsType } from "next";
-import type { NextPageWithAuthAndLayout } from "~/lib/types";
-import AuthDropdown from "~/components/auth-dropdown";
-import Header from "~/components/header";
-import Footer from "~/components/footer";
-import ssr from "~/utils/ssr";
-import { Avatar, AvatarImage } from "~/components/ui/avatar";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "~/components/ui/tabs";
-import { ProfileOverview } from "~/components/profile-overview";
-import { Book, Star, UserRoundMinus, UserRoundPlus, Users } from "lucide-react";
-import { ProfileStars } from "~/components/profile-stars";
-import { useSession } from "next-auth/react";
-import { Button } from "~/components/ui/button";
-import api from "~/utils/api";
 import { useQueryClient } from "@tanstack/react-query";
-import { useToast } from "~/components/ui/use-toast";
+import { Book, Star, UserRoundMinus, UserRoundPlus, Users } from "lucide-react";
+import type { GetServerSidePropsContext, InferGetServerSidePropsType } from "next";
+import { useSession } from "next-auth/react";
+import Image from "next/image";
 import { useCallback, useMemo } from "react";
+import AuthDropdown from "~/components/auth-dropdown";
+import Footer from "~/components/footer";
+import Header from "~/components/header";
+import { ProfileOverview } from "~/components/profile-overview";
 import { ProfilePeople } from "~/components/profile-people";
+import { ProfileStars } from "~/components/profile-stars";
+import { Avatar } from "~/components/ui/avatar";
+import { Button } from "~/components/ui/button";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "~/components/ui/tabs";
+import { useToast } from "~/components/ui/use-toast";
+import type { NextPageWithAuthAndLayout } from "~/lib/types";
+import api from "~/utils/api";
+import ssr from "~/utils/ssr";
 
 export const getServerSideProps = async (context: GetServerSidePropsContext<{ username: string }>) => {
   if (context.params?.username) {
@@ -133,7 +134,16 @@ const ProfilePage: NextPageWithAuthAndLayout<InferGetServerSidePropsType<typeof 
       <div className="flex w-full flex-col items-center space-y-12 border-b border-gray-100 bg-gray-50 pt-12 dark:border-gray-800 dark:bg-gray-950">
         <div className="flex w-full max-w-lg flex-col items-center justify-center gap-y-1">
           <Avatar className="mb-2 h-32 w-32">
-            <AvatarImage alt="Profile picture" src={userWithFollowers.image} />
+            {userWithFollowers.image && (
+              <Image
+                src={userWithFollowers.image}
+                alt={"Profile picture"}
+                width={256}
+                height={256}
+                quality={100}
+                priority={true}
+              />
+            )}
           </Avatar>
           <h1 className="text-2xl font-semibold">{userWithFollowers.name}</h1>
           <p className="text-xs font-light text-gray-400">{userWithFollowers.username}</p>
