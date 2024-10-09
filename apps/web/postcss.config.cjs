@@ -3,6 +3,9 @@ const config = {
     "tailwindcss/nesting": {},
     "tailwindcss": {},
     "autoprefixer": {},
+    "cssnano": {
+      preset: "advanced"
+    }
   },
 };
 

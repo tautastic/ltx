@@ -6,12 +6,6 @@
  */
 !process.env.SKIP_ENV_VALIDATION && (await import("./src/env.mjs"));
 
-import bundleAnalyzer from "@next/bundle-analyzer"
-
-const withBundleAnalyzer = bundleAnalyzer({
-  enabled: process.env.ANALYZE === "true",
-})
-
 /** @type {import("next").NextConfig} */
 const config = {
   reactStrictMode: true,
@@ -73,4 +67,4 @@ const config = {
   assetPrefix: `${process.env.NEXT_PUBLIC_BASE_URL}/`
 };
 
-export default withBundleAnalyzer(config);
+export default config;
