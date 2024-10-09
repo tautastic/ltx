@@ -1,18 +1,27 @@
 import { TRPCError } from "@trpc/server";
-import { UserSchema, UserWithFollowersSchema } from "~/schemas/UserSchema";
+import { type BasicUser, BasicUserSchema, UserSchema, UserWithFollowersSchema } from "~/schemas/UserSchema";
 import type { User, UserWithFollowers } from "~/schemas/UserSchema";
 import { createTRPCRouter, protectedProcedure, publicProcedure } from "~/server/api/trpc";
 
 export const userRouter = createTRPCRouter({
   getBasicFieldsByUsername: publicProcedure
     .input(UserSchema.shape.username)
-    .query<User>(async ({ ctx, input: username }) => {
-      const user = await ctx.prisma.user.findUnique({
+    .query<BasicUser>(async ({ ctx, input: username }) => {
+      const sessionUserId = ctx.session?.user?.id ?? "";
+      const dbUser = await ctx.prisma.user.findUnique({
         where: { username },
+        include: {
+          followedBy: {
+            where: { id: sessionUserId },
+            select: { id: true },
+          },
+        },
       });
 
-      if (user != null) {
-        return UserSchema.parse(user);
+      if (dbUser != null) {
+        const isFollowed = dbUser.followedBy.length > 0;
+
+        return BasicUserSchema.parse({ ...dbUser, isFollowed });
       }
 
       throw new TRPCError({

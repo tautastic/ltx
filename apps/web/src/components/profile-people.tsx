@@ -1,24 +1,26 @@
-import type { User, UserList, UserWithFollowers } from "~/schemas/UserSchema";
-import { useFuzzy } from "~/lib/hooks/use-fuzzy";
-import { useEffect, useMemo, useState } from "react";
-import { Input } from "~/components/ui/input";
 import { Search } from "lucide-react";
+import { useEffect, useMemo, useState } from "react";
 import { ProfileCard } from "~/components/profile-card";
+import { Input } from "~/components/ui/input";
+import { useFuzzy } from "~/lib/hooks/use-fuzzy";
+import type { User, UserList, UserWithFollowers } from "~/schemas/UserSchema";
+import api from "~/utils/api";
 
-interface ProfilePeopleProps {
+const ProfilePeople = ({
+  userWithFollowers,
+}: {
   userWithFollowers: UserWithFollowers;
-}
-
-export const ProfilePeople = ({ userWithFollowers }: ProfilePeopleProps) => {
+}) => {
   const [filteredFollowers, setFilteredFollowers] = useState<UserList>([]);
+  const following = userWithFollowers.following;
+  const followedBy = userWithFollowers.followedBy;
 
   const allFollowers = useMemo(() => {
-    const { following, followedBy } = userWithFollowers;
     if (following && followedBy) {
       return following.concat(followedBy.filter((u1) => following.findIndex((u2) => u1.id === u2.id) === -1));
     }
     return [];
-  }, [userWithFollowers]);
+  }, [following, followedBy]);
 
   const { result, searchTerm, setSearchTerm } = useFuzzy<User>(allFollowers, {
     keys: ["username"],
@@ -53,8 +55,8 @@ export const ProfilePeople = ({ userWithFollowers }: ProfilePeopleProps) => {
               return (
                 <ProfileCard
                   key={follower.id}
-                  isFollowed={userWithFollowers.following.includes(follower)}
-                  isFollowing={userWithFollowers.followedBy.includes(follower)}
+                  isFollowed={following.includes(follower)}
+                  isFollowing={followedBy.includes(follower)}
                   profileCardUser={follower}
                   profileOverviewUser={userWithFollowers}
                 />
@@ -77,4 +79,14 @@ export const ProfilePeople = ({ userWithFollowers }: ProfilePeopleProps) => {
       </>
     </div>
   );
+};
+
+export const ProfilePeopleWrapper = ({ username }: { username?: string }) => {
+  const { data: userWithFollowers } = api.users.getUserAndFollowersByUsername.useQuery(username);
+
+  if (userWithFollowers == null) {
+    return null;
+  }
+
+  return <ProfilePeople userWithFollowers={userWithFollowers} />;
 };

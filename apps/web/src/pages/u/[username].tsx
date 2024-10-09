@@ -1,131 +1,73 @@
 import { useQueryClient } from "@tanstack/react-query";
 import { Book, Star, UserRoundMinus, UserRoundPlus, Users } from "lucide-react";
-import type { GetServerSidePropsContext, InferGetServerSidePropsType } from "next";
 import { useSession } from "next-auth/react";
 import Image from "next/image";
-import { useCallback, useMemo } from "react";
+import { useRouter } from "next/router";
+import { memo, useCallback } from "react";
 import AuthDropdown from "~/components/auth-dropdown";
 import Footer from "~/components/footer";
 import Header from "~/components/header";
 import { ProfileOverview } from "~/components/profile-overview";
-import { ProfilePeople } from "~/components/profile-people";
+import { ProfilePeopleWrapper } from "~/components/profile-people";
 import { ProfileStars } from "~/components/profile-stars";
 import { Avatar } from "~/components/ui/avatar";
 import { Button } from "~/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "~/components/ui/tabs";
-import { useToast } from "~/components/ui/use-toast";
 import type { NextPageWithAuthAndLayout } from "~/lib/types";
 import api from "~/utils/api";
-import ssr from "~/utils/ssr";
 
-export const getServerSideProps = async (context: GetServerSidePropsContext<{ username: string }>) => {
-  if (context.params?.username) {
-    const { username } = context.params;
-    context.res.setHeader("Cache-Control", "private, no-cache, max-age=0, must-revalidate");
+const FollowButton = memo<{ profileUserId: string; isFollowed: boolean }>(({ profileUserId, isFollowed }) => {
+  const queryClient = useQueryClient();
+  const { data, status } = useSession();
+  const sessionUserId = data?.user?.id;
+  const canFollow = status === "authenticated" && sessionUserId !== profileUserId;
+  const followUserById = api.users.followUserById.useMutation();
+  const unfollowUserById = api.users.unfollowUserById.useMutation();
 
-    try {
-      const basicUser = await ssr.users.getBasicFieldsByUsername.fetch(username);
-      if (basicUser) {
-        return {
-          props: {
-            trpcState: ssr.dehydrate(),
-            basicUser,
-          },
-        };
-      }
-    } catch (_e) {
-      return { notFound: true };
+  const handleToggleFollowUser = useCallback(async () => {
+    if (isFollowed) {
+      await unfollowUserById.mutateAsync(profileUserId, {
+        onSuccess: () => {
+          queryClient.invalidateQueries({ stale: true });
+        },
+      });
+    } else {
+      await followUserById.mutateAsync(profileUserId, {
+        onSuccess: () => {
+          queryClient.invalidateQueries({ stale: true });
+        },
+      });
     }
+  }, [followUserById, unfollowUserById, isFollowed, profileUserId, queryClient.invalidateQueries]);
+
+  if (!canFollow) {
+    return null;
   }
 
-  return { notFound: true };
-};
-
-const ProfilePage: NextPageWithAuthAndLayout<InferGetServerSidePropsType<typeof getServerSideProps>> = ({
-  basicUser,
-}) => {
-  const queryClient = useQueryClient();
-  const { data: session, status } = useSession();
-  const { toast } = useToast();
-
-  const { data: userWithFollowers } = api.users.getUserAndFollowersByUsername.useQuery(basicUser.username);
-
-  const canFollowOrUnfollow = status === "authenticated" && session?.user.id !== basicUser.id;
-  const userIsFollowed =
-    session && userWithFollowers ? userWithFollowers.followedBy.map((u) => u.id).includes(session.user.id) : false;
-
-  const followUserByIdMutation = api.users.followUserById.useMutation();
-  const unfollowUserByIdMutation = api.users.unfollowUserById.useMutation();
-
-  const handleToggleFollowUser = useCallback(
-    async (id: string) => {
-      if (userIsFollowed) {
-        await unfollowUserByIdMutation.mutateAsync(id, {
-          onSuccess: () => {
-            queryClient.invalidateQueries();
-            toast({
-              title: "🎉 Wuhuu",
-              description: "Unfollowed user successfully.",
-            });
-          },
-          onError: () => {
-            toast({
-              title: "🚨 Uh oh! Something went wrong.",
-              description: "Error unfollowing user.",
-            });
-          },
-        });
-      } else {
-        await followUserByIdMutation.mutateAsync(id, {
-          onSuccess: () => {
-            queryClient.invalidateQueries();
-            toast({
-              title: "🎉 Wuhuu",
-              description: "User followed successfully.",
-            });
-          },
-          onError: () => {
-            toast({
-              title: "🚨 Uh oh! Something went wrong.",
-              description: "Error following user.",
-            });
-          },
-        });
-      }
-    },
-    [followUserByIdMutation, queryClient, toast, unfollowUserByIdMutation, userIsFollowed],
-  );
-
-  const FollowAndUnfollowButton = useMemo(() => {
-    if (!canFollowOrUnfollow || !userWithFollowers) {
-      return null;
-    }
-
-    if (userIsFollowed) {
-      return (
-        <Button
-          className="mt-4 px-6"
-          Type="secondary"
-          Prefix={<UserRoundMinus className="h-4 w-4" />}
-          onClick={() => handleToggleFollowUser(userWithFollowers.id)}
-        >
-          Unfollow
-        </Button>
-      );
-    }
-
+  if (isFollowed) {
     return (
       <Button
         className="mt-4 px-6"
-        Prefix={<UserRoundPlus className="h-4 w-4" />}
-        onClick={() => handleToggleFollowUser(userWithFollowers.id)}
+        Type="secondary"
+        Prefix={<UserRoundMinus className="h-4 w-4" />}
+        onClick={handleToggleFollowUser}
       >
-        Follow
+        Unfollow
       </Button>
     );
-  }, [canFollowOrUnfollow, handleToggleFollowUser, userIsFollowed, userWithFollowers]);
+  }
 
-  if (!userWithFollowers) {
+  return (
+    <Button className="mt-4 px-6" Prefix={<UserRoundPlus className="h-4 w-4" />} onClick={handleToggleFollowUser}>
+      Follow
+    </Button>
+  );
+});
+
+const ProfilePageWrapper = memo<{ username: string }>(({ username }) => {
+  const { data: basicUser } = api.users.getBasicFieldsByUsername.useQuery(username);
+
+  if (!basicUser) {
     return null;
   }
 
@@ -134,9 +76,9 @@ const ProfilePage: NextPageWithAuthAndLayout<InferGetServerSidePropsType<typeof 
       <div className="flex w-full flex-col items-center space-y-12 border-b border-gray-100 bg-gray-50 pt-12 dark:border-gray-800 dark:bg-gray-950">
         <div className="flex w-full max-w-lg flex-col items-center justify-center gap-y-1">
           <Avatar className="mb-2 h-32 w-32">
-            {userWithFollowers.image && (
+            {basicUser.image && (
               <Image
-                src={userWithFollowers.image}
+                src={basicUser.image}
                 alt={"Profile picture"}
                 width={128}
                 height={128}
@@ -145,9 +87,9 @@ const ProfilePage: NextPageWithAuthAndLayout<InferGetServerSidePropsType<typeof 
               />
             )}
           </Avatar>
-          <h1 className="text-2xl font-semibold">{userWithFollowers.name}</h1>
-          <p className="text-xs font-light text-gray-400">{userWithFollowers.username}</p>
-          {FollowAndUnfollowButton}
+          <h1 className="text-2xl font-semibold">{basicUser.name}</h1>
+          <p className="text-xs font-light text-gray-400">{basicUser.username}</p>
+          <FollowButton profileUserId={basicUser.id} isFollowed={basicUser.isFollowed} />
         </div>
         <TabsList>
           <TabsTrigger value="overview">
@@ -165,16 +107,26 @@ const ProfilePage: NextPageWithAuthAndLayout<InferGetServerSidePropsType<typeof 
         </TabsList>
       </div>
       <TabsContent value="overview">
-        <ProfileOverview userWithFollowers={userWithFollowers} />
+        <ProfileOverview profileUserId={basicUser.id} />
       </TabsContent>
       <TabsContent value="people">
-        <ProfilePeople userWithFollowers={userWithFollowers} />
+        <ProfilePeopleWrapper username={basicUser.username} />
       </TabsContent>
       <TabsContent value="stars">
-        <ProfileStars userWithFollowers={userWithFollowers} />
+        <ProfileStars userId={basicUser.id} />
       </TabsContent>
     </Tabs>
   );
+});
+
+const ProfilePage: NextPageWithAuthAndLayout = () => {
+  const username = useRouter().query.username;
+
+  if (typeof username !== "string") {
+    return null;
+  }
+
+  return <ProfilePageWrapper username={username} />;
 };
 
 ProfilePage.auth = false;

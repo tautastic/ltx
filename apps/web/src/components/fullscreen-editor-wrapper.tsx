@@ -1,21 +1,21 @@
-import { z } from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useQueryClient } from "@tanstack/react-query";
+import { PlusIcon } from "lucide-react";
+import { type ReactNode, memo, useCallback, useState } from "react";
 import { type SubmitHandler, useForm } from "react-hook-form";
-import { memo, type ReactNode, useCallback, useState } from "react";
+import { z } from "zod";
+import CreateTagDialog from "~/components/create-tag-dialog";
+import { Tag } from "~/components/tag";
+import { Button } from "~/components/ui/button";
+import { DialogTrigger } from "~/components/ui/dialog";
 import { Fieldset, FieldsetContent } from "~/components/ui/fieldset";
 import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "~/components/ui/form";
 import { Input } from "~/components/ui/input";
-import { Textarea } from "~/components/ui/textarea";
 import { Label } from "~/components/ui/label";
-import CreateTagDialog from "~/components/create-tag-dialog";
-import { DialogTrigger } from "~/components/ui/dialog";
-import { PlusIcon } from "lucide-react";
 import { Switch } from "~/components/ui/switch";
-import { Button } from "~/components/ui/button";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useQueryClient } from "@tanstack/react-query";
-import api from "~/utils/api";
-import { Tag } from "~/components/tag";
+import { Textarea } from "~/components/ui/textarea";
 import { useToast } from "~/components/ui/use-toast";
+import api from "~/utils/api";
 
 export const editorFormSchema = z.object({
   description: z.string().max(500, {

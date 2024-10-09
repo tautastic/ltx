@@ -15,6 +15,12 @@ export const UserListSchema = UserSchema.array();
 
 export type UserList = z.infer<typeof UserListSchema>;
 
+export const BasicUserSchema = UserSchema.extend({
+  isFollowed: z.boolean().optional().default(false),
+});
+
+export type BasicUser = z.infer<typeof BasicUserSchema>;
+
 export const UserWithFollowersSchema = UserSchema.extend({
   following: z.lazy(() => UserSchema.array()),
   followedBy: z.lazy(() => UserSchema.array()),

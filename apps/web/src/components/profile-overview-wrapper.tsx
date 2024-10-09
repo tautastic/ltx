@@ -1,10 +1,10 @@
-import { Skeleton } from "~/components/ui/skeleton";
-import type { Page, PageList } from "~/schemas/BasicPageSchema";
-import { useCallback, useEffect, useMemo, useState } from "react";
-import { useFuzzy } from "~/lib/hooks/use-fuzzy";
-import { TagSelectDropdown } from "~/components/tag-select-dropdown";
-import { Input } from "~/components/ui/input";
 import { ChevronDown, MoreVertical, PlusIcon, Search } from "lucide-react";
+import { useSession } from "next-auth/react";
+import Link from "next/link";
+import { useCallback, useEffect, useMemo, useState } from "react";
+import { DocumentCard } from "~/components/document-card";
+import { TagSelectDropdown } from "~/components/tag-select-dropdown";
+import { Button } from "~/components/ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -16,25 +16,25 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "~/components/ui/dropdown-menu";
+import { Input } from "~/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "~/components/ui/select";
-import { Button } from "~/components/ui/button";
-import Link from "next/link";
-import { DocumentCard } from "~/components/document-card";
+import { Skeleton } from "~/components/ui/skeleton";
+import { useFuzzy } from "~/lib/hooks/use-fuzzy";
+import useWindowSize from "~/lib/hooks/use-window-size";
+import type { Page, PageList } from "~/schemas/BasicPageSchema";
 
 export const ProfileOverviewWrapper = ({
   allPages,
   pagesStatus,
-  ...props
 }: {
   allPages?: PageList;
-  isAuthor?: boolean;
-  isMobile: boolean;
   pagesStatus: "error" | "success" | "loading";
 }) => {
+  const { isMobile } = useWindowSize();
   if (allPages && pagesStatus === "success") {
     return (
       <div className="mx-auto flex max-w-screen-xl flex-col space-y-6 p-1 sm:p-3">
-        <StatefulProfileOverview allPages={allPages} {...props} />
+        <StatefulProfileOverview allPages={allPages} isMobile={isMobile} />
       </div>
     );
   }
@@ -43,7 +43,7 @@ export const ProfileOverviewWrapper = ({
     <div className="mx-auto flex max-w-screen-xl flex-col space-y-6 p-1 sm:p-3">
       <div className="flex w-full flex-row justify-center space-x-3">
         <Skeleton className="h-9 flex-1" />
-        {props.isMobile ? (
+        {isMobile ? (
           <Skeleton className="w-[170px]" />
         ) : (
           <>
@@ -64,16 +64,19 @@ export const ProfileOverviewWrapper = ({
 
 const StatefulProfileOverview = ({
   allPages,
-  isAuthor = false,
   isMobile,
 }: {
   allPages: PageList;
-  isAuthor?: boolean;
   isMobile: boolean;
 }) => {
+  const sessionUserId = useSession().data?.user?.id;
   const [sortBy, setSortBy] = useState("activity");
   const [selectedTagsId, setSelectedTagsId] = useState<string[]>([]);
   const [filteredPages, setFilteredPages] = useState<PageList>([]);
+
+  const isAuthor = useMemo(() => {
+    return allPages.some((p) => p.authorId === sessionUserId);
+  }, [allPages, sessionUserId]);
 
   const allTags = useMemo(() => {
     if (allPages) {

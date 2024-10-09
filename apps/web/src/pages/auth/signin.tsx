@@ -21,15 +21,11 @@ const Signin: NextPageWithAuthAndLayout = () => {
     setLoading((prev) => ({ ...prev, [provider]: true }));
     signIn(provider, {
       callbackUrl: "/",
-    })
-      .then((res) => {
-        if (res?.ok) {
-          setLoading((prev) => ({ ...prev, [provider]: false }));
-        }
-      })
-      .catch((error) => {
-        console.log(error);
-      });
+    }).then((res) => {
+      if (res?.ok) {
+        setLoading((prev) => ({ ...prev, [provider]: false }));
+      }
+    });
   };
 
   return (
