@@ -1,6 +1,4 @@
-import { common, createLowlight } from "lowlight";
 import {
-  CodeBlockLowlight,
   HorizontalRule,
   MathBlock,
   MathInline,
@@ -88,10 +86,6 @@ export const defaultExtensions = [
     HTMLAttributes: {
       class: cn("mt-4 mb-6 border-t border-gray-200 dark:border-gray-800"),
     },
-  }),
-  CodeBlockLowlight.configure({
-    lowlight: createLowlight(common),
-    defaultLanguage: "javascript",
   }),
   Youtube,
 ];

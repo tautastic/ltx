@@ -43,7 +43,6 @@
     "@radix-ui/react-slot": "^1.1.0",
     "@tiptap/core": "^2.8.0",
     "@tiptap/extension-character-count": "^2.8.0",
-    "@tiptap/extension-code-block-lowlight": "^2.8.0",
     "@tiptap/extension-color": "^2.8.0",
     "@tiptap/extension-highlight": "^2.8.0",
     "@tiptap/extension-horizontal-rule": "^2.8.0",

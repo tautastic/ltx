@@ -1,6 +1,5 @@
 import { InputRule } from "@tiptap/core";
 import CharacterCount from "@tiptap/extension-character-count";
-import CodeBlockLowlight from "@tiptap/extension-code-block-lowlight";
 import { Color } from "@tiptap/extension-color";
 import Highlight from "@tiptap/extension-highlight";
 import TiptapImage from "@tiptap/extension-image";
@@ -36,7 +35,6 @@ const SimpleExtensions = [
 
 export * from "./slash-command";
 export {
-  CodeBlockLowlight,
   HorizontalRule,
   ImageResizer,
   InputRule,
