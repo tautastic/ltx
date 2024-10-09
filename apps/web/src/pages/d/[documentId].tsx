@@ -1,6 +1,6 @@
 import type { JSONContent } from "ltx-editor";
 import type { GetServerSidePropsContext, InferGetServerSidePropsType } from "next";
-import { useCallback, useState } from "react";
+import { memo, useCallback, useState } from "react";
 import { EditorHeader } from "~/components/editor/EditorHeader";
 import Editor from "~/components/editor/advanced-editor";
 import { FullscreenEditorWrapper } from "~/components/fullscreen-editor-wrapper";
@@ -13,13 +13,13 @@ export const getServerSideProps = async (context: GetServerSidePropsContext<{ do
     const { documentId } = context.params;
 
     try {
-      const document = await ssr.pages.getPageById.fetch(documentId);
-      if (document) {
+      const page = await ssr.pages.getPageById.fetch(documentId);
+      if (page) {
         const onLoadExportAsPdf = context.query.print === "pdf";
         return {
           props: {
             trpcState: ssr.dehydrate(),
-            document,
+            page,
             onLoadExportAsPdf,
           },
         };
@@ -32,25 +32,37 @@ export const getServerSideProps = async (context: GetServerSidePropsContext<{ do
   return { notFound: true };
 };
 
+const EditorHeaderMemo = memo<{
+  title: string;
+}>(({ title }) => {
+  return <EditorHeader title={title} />;
+});
+
+const EditorMemo = memo<{
+  title: string;
+  print: boolean;
+  value?: JSONContent;
+}>(({ title, print, value }) => {
+  const onCreateHandler = useCallback(() => {
+    exportAsPdf(title);
+  }, [title]);
+
+  const onCreate = print ? onCreateHandler : undefined;
+
+  return (
+    <Editor readonly={true} slotBefore={<EditorHeaderMemo title={title} />} initialValue={value} onCreate={onCreate} />
+  );
+});
+
 const DocumentViewPage: NextPageWithAuthAndLayout<InferGetServerSidePropsType<typeof getServerSideProps>> = ({
-  document,
+  page,
   onLoadExportAsPdf,
 }) => {
-  const [value, _setValue] = useState<JSONContent | undefined>(
-    document.content ? JSON.parse(document.content) : undefined,
-  );
-
-  const editorOnCreateHandler = useCallback(() => {
-    exportAsPdf(document.title);
-  }, [document.title]);
-
-  if (onLoadExportAsPdf) {
-    return <Editor readonly={true} initialValue={value} onCreate={editorOnCreateHandler} />;
-  }
+  const [value, _setValue] = useState<JSONContent | undefined>(page.content ? JSON.parse(page.content) : undefined);
 
   return (
     <FullscreenEditorWrapper readonly={true}>
-      <Editor readonly={true} slotBefore={<EditorHeader title={document.title} />} initialValue={value} />
+      <EditorMemo title={page.title} print={onLoadExportAsPdf} value={value} />
     </FullscreenEditorWrapper>
   );
 };
