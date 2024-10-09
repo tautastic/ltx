@@ -4,7 +4,7 @@ CREATE TABLE "Tag" (
     "name" TEXT NOT NULL,
     "color" TEXT NOT NULL DEFAULT '#000000',
     "authorId" TEXT NOT NULL,
-    CONSTRAINT "Tag_authorId_fkey" FOREIGN KEY ("authorId") REFERENCES "User" ("id") ON DELETE RESTRICT ON UPDATE CASCADE
+    CONSTRAINT "Tag_authorId_fkey" FOREIGN KEY ("authorId") REFERENCES "User" ("id") ON DELETE CASCADE ON UPDATE CASCADE
 );
 
 -- CreateTable
@@ -17,7 +17,7 @@ CREATE TABLE "Page" (
     "content" TEXT NOT NULL,
     "authorId" TEXT NOT NULL,
     "isPrivate" BOOLEAN NOT NULL DEFAULT false,
-    CONSTRAINT "Page_authorId_fkey" FOREIGN KEY ("authorId") REFERENCES "User" ("id") ON DELETE RESTRICT ON UPDATE CASCADE
+    CONSTRAINT "Page_authorId_fkey" FOREIGN KEY ("authorId") REFERENCES "User" ("id") ON DELETE CASCADE ON UPDATE CASCADE
 );
 
 -- CreateTable
@@ -28,7 +28,6 @@ CREATE TABLE "User" (
     "email" TEXT NOT NULL,
     "emailVerified" DATETIME,
     "image" TEXT,
-    "isPrivate" BOOLEAN NOT NULL DEFAULT false,
     "isVerified" BOOLEAN NOT NULL DEFAULT false
 );
 
@@ -99,9 +98,6 @@ CREATE UNIQUE INDEX "Tag_authorId_name_key" ON "Tag"("authorId", "name");
 CREATE INDEX "Page_authorId_idx" ON "Page"("authorId");
 
 -- CreateIndex
-CREATE INDEX "Page_authorId_isPrivate_idx" ON "Page"("authorId", "isPrivate");
-
--- CreateIndex
 CREATE UNIQUE INDEX "User_username_key" ON "User"("username");
 
 -- CreateIndex
@@ -118,9 +114,6 @@ CREATE UNIQUE INDEX "Session_sessionToken_key" ON "Session"("sessionToken");
 
 -- CreateIndex
 CREATE INDEX "Session_userId_idx" ON "Session"("userId");
-
--- CreateIndex
-CREATE UNIQUE INDEX "VerificationToken_token_key" ON "VerificationToken"("token");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "VerificationToken_identifier_token_key" ON "VerificationToken"("identifier", "token");

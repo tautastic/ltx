@@ -12,7 +12,7 @@ model Tag {
   id       String @id @default(cuid())
   name     String
   color    String @default("#000000")
-  author   User   @relation(name: "AuthoredTags", fields: [authorId], references: [id])
+  author   User   @relation(name: "AuthoredTags", fields: [authorId], references: [id], onDelete: Cascade)
   authorId String
   pages    Page[]
 
@@ -25,16 +25,15 @@ model Page {
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
   title       String
-  description String? // @db.Text
-  content     String // @db.Text
-  author      User     @relation(name: "AuthoredPages", fields: [authorId], references: [id])
+  description String?
+  content     String
+  author      User     @relation(name: "AuthoredPages", fields: [authorId], references: [id], onDelete: Cascade)
   authorId    String
   starredBy   User[]   @relation("StarredPages")
   isPrivate   Boolean  @default(false)
   tags        Tag[]
 
   @@index([authorId])
-  @@index([authorId, isPrivate])
 }
 
 model User {
@@ -44,7 +43,6 @@ model User {
   email         String    @unique
   emailVerified DateTime?
   image         String?
-  isPrivate     Boolean   @default(false)
   isVerified    Boolean   @default(false)
   accounts      Account[]
   sessions      Session[]
@@ -61,12 +59,12 @@ model Account {
   type              String
   provider          String
   providerAccountId String
-  refresh_token     String? // @db.Text
-  access_token      String? // @db.Text
+  refresh_token     String?
+  access_token      String?
   expires_at        Int?
   token_type        String?
   scope             String?
-  id_token          String? // @db.Text
+  id_token          String?
   session_state     String?
   user              User    @relation(fields: [userId], references: [id], onDelete: Cascade)
 
@@ -86,7 +84,7 @@ model Session {
 
 model VerificationToken {
   identifier String
-  token      String   @unique
+  token      String
   expires    DateTime
 
   @@unique([identifier, token])

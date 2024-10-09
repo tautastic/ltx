@@ -1,14 +1,14 @@
-import { createTRPCRouter, protectedProcedure, publicProcedure } from "~/server/api/trpc";
+import { Prisma } from "@prisma/client";
+import { TRPCError } from "@trpc/server";
 import type { Tag, TagList } from "~/schemas/TagSchema";
 import { CreateNewTagSchema, TagListSchema, TagSchema } from "~/schemas/TagSchema";
-import { TRPCError } from "@trpc/server";
-import { Prisma } from "@prisma/client";
+import { createTRPCRouter, protectedProcedure, publicProcedure } from "~/server/api/trpc";
 
 export const tagRouter = createTRPCRouter({
   getTagListByAuthorId: publicProcedure
     .input(TagSchema.shape.authorId)
     .query<TagList>(async ({ ctx, input: authorId }) => {
-      const tagList = await ctx.prisma.tag.findMany({ where: { authorId } });
+      const tagList = await ctx.prisma.tag.findMany({ take: 10, where: { authorId } });
 
       return TagListSchema.parse(tagList);
     }),
@@ -43,6 +43,7 @@ export const tagRouter = createTRPCRouter({
     await ctx.prisma.tag.delete({
       where: {
         id: input,
+        authorId: ctx.session.user.id,
       },
     });
   }),

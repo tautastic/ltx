@@ -1,7 +1,7 @@
+import { TRPCError } from "@trpc/server";
 import { UserSchema, UserWithFollowersSchema } from "~/schemas/UserSchema";
 import type { User, UserWithFollowers } from "~/schemas/UserSchema";
 import { createTRPCRouter, protectedProcedure, publicProcedure } from "~/server/api/trpc";
-import { TRPCError } from "@trpc/server";
 
 export const userRouter = createTRPCRouter({
   getBasicFieldsByUsername: publicProcedure
@@ -11,12 +11,8 @@ export const userRouter = createTRPCRouter({
         where: { username },
       });
 
-      if (user) {
-        const sessionUserIsProfileOwner = ctx.session && ctx.session.user.id === user.id;
-
-        if (!user.isPrivate || sessionUserIsProfileOwner) {
-          return UserSchema.parse(user);
-        }
+      if (user != null) {
+        return UserSchema.parse(user);
       }
 
       throw new TRPCError({
@@ -35,12 +31,8 @@ export const userRouter = createTRPCRouter({
         },
       });
 
-      if (user) {
-        const sessionUserIsProfileOwner = ctx.session && ctx.session.user.id === user.id;
-
-        if (!user.isPrivate || sessionUserIsProfileOwner) {
-          return UserWithFollowersSchema.parse(user);
-        }
+      if (user != null) {
+        return UserWithFollowersSchema.parse(user);
       }
 
       throw new TRPCError({
@@ -52,7 +44,6 @@ export const userRouter = createTRPCRouter({
     const user = await ctx.prisma.user.update({
       where: {
         id: ctx.session.user.id,
-        isPrivate: false,
       },
       data: {
         following: {
@@ -63,7 +54,7 @@ export const userRouter = createTRPCRouter({
       },
     });
 
-    if (user) {
+    if (user != null) {
       return UserSchema.parse(user);
     }
 
@@ -76,7 +67,6 @@ export const userRouter = createTRPCRouter({
     const user = await ctx.prisma.user.update({
       where: {
         id: ctx.session.user.id,
-        isPrivate: false,
       },
       data: {
         following: {

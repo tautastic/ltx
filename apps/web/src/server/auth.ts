@@ -1,16 +1,16 @@
-import type { GetServerSidePropsContext } from "next";
-import { getServerSession, type NextAuthOptions } from "next-auth";
 import { PrismaAdapter } from "@auth/prisma-adapter";
+import { customAlphabet } from "nanoid";
+import type { GetServerSidePropsContext } from "next";
+import { type NextAuthOptions, getServerSession } from "next-auth";
 import DiscordProvider, { type DiscordProfile } from "next-auth/providers/discord";
 import GithubProvider, { type GithubProfile } from "next-auth/providers/github";
 import GoogleProvider, { type GoogleProfile } from "next-auth/providers/google";
 import SpotifyProvider, { type SpotifyProfile } from "next-auth/providers/spotify";
 import TwitchProvider, { type TwitchProfile } from "next-auth/providers/twitch";
-import { customAlphabet } from "nanoid";
 
+import type { Adapter } from "next-auth/adapters";
 import { env } from "~/env.mjs";
 import { prisma } from "~/server/db";
-import type { Adapter } from "next-auth/adapters";
 
 const formatUserName = (p: string, u: string) => {
   const h1 = `${u.replaceAll(/[^a-zA-Z0-9_-]+/g, "")}@${p}`;
