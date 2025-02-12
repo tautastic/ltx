@@ -1,36 +1,12 @@
 import type { JSONContent } from "ltx-editor";
-import type { GetServerSidePropsContext, InferGetServerSidePropsType } from "next";
-import { memo, useCallback, useState } from "react";
+import { memo, useCallback, useEffect, useState } from "react";
+import { useRouter } from "next/router";
 import { EditorHeader } from "~/components/editor/EditorHeader";
 import Editor from "~/components/editor/advanced-editor";
 import { FullscreenEditorWrapper } from "~/components/fullscreen-editor-wrapper";
 import type { NextPageWithAuthAndLayout } from "~/lib/types";
 import { exportAsPdf } from "~/utils/print";
-import ssr from "~/utils/ssr";
-
-export const getServerSideProps = async (context: GetServerSidePropsContext<{ documentId: string }>) => {
-  if (context.params?.documentId) {
-    const { documentId } = context.params;
-
-    try {
-      const page = await ssr.pages.getPageById.fetch(documentId);
-      if (page) {
-        const onLoadExportAsPdf = context.query.print === "pdf";
-        return {
-          props: {
-            trpcState: ssr.dehydrate(),
-            page,
-            onLoadExportAsPdf,
-          },
-        };
-      }
-    } catch (_e) {
-      return { notFound: true };
-    }
-  }
-
-  return { notFound: true };
-};
+import api from "~/utils/api";
 
 const EditorHeaderMemo = memo<{
   title: string;
@@ -54,11 +30,46 @@ const EditorMemo = memo<{
   );
 });
 
-const DocumentViewPage: NextPageWithAuthAndLayout<InferGetServerSidePropsType<typeof getServerSideProps>> = ({
-  page,
-  onLoadExportAsPdf,
-}) => {
-  const [value, _setValue] = useState<JSONContent | undefined>(page.content ? JSON.parse(page.content) : undefined);
+const DocumentViewPage: NextPageWithAuthAndLayout = () => {
+  const router = useRouter();
+  const [documentId, setDocumentId] = useState<string | undefined>(undefined);
+  const [onLoadExportAsPdf, setOnLoadExportAsPdf] = useState<boolean>(false);
+
+  useEffect(() => {
+    const documentId = router.query.documentId;
+    if (typeof documentId === "string") {
+      setDocumentId(documentId);
+    }
+
+    if (router.query.print === "pdf") {
+      setOnLoadExportAsPdf(true);
+    }
+
+    return () => {
+      setDocumentId(undefined);
+      setOnLoadExportAsPdf(false);
+    };
+  }, [router.query.documentId, router.query.print]);
+
+  const {
+    data: page,
+    isLoading,
+    isError,
+  } = api.pages.getPageById.useQuery(documentId ?? "", {
+    enabled: !!documentId,
+    retry: false,
+  });
+
+  if (isLoading) {
+    return null;
+  }
+
+  if (isError || !page) {
+    router.replace("/404").then((_) => null);
+    return null;
+  }
+
+  const value = page.content ? JSON.parse(page.content) : undefined;
 
   return (
     <FullscreenEditorWrapper readonly={true}>

@@ -1,8 +1,7 @@
 import type { JSONContent } from "ltx-editor";
-import type { GetServerSidePropsContext, InferGetServerSidePropsType } from "next";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/router";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import type { SubmitHandler } from "react-hook-form";
 import { EditorHeader } from "~/components/editor/EditorHeader";
 import Editor from "~/components/editor/advanced-editor";
@@ -10,36 +9,46 @@ import { FullscreenEditorWrapper, type editorFormSchemaType } from "~/components
 import { useToast } from "~/components/ui/use-toast";
 import type { NextPageWithAuthAndLayout } from "~/lib/types";
 import api from "~/utils/api";
-import ssr from "~/utils/ssr";
+import type { Page } from "~/schemas/BasicPageSchema";
 
-export const getServerSideProps = async (context: GetServerSidePropsContext<{ documentId: string }>) => {
-  if (context.params?.documentId) {
-    const { documentId } = context.params;
+const DocumentEditPage: NextPageWithAuthAndLayout = () => {
+  const router = useRouter();
+  const [documentId, setDocumentId] = useState<string | undefined>(undefined);
 
-    try {
-      const document = await ssr.pages.getPageById.fetch(documentId);
-      if (document) {
-        return {
-          props: {
-            trpcState: ssr.dehydrate(),
-            document,
-          },
-        };
-      }
-    } catch (_e) {
-      return { notFound: true };
+  useEffect(() => {
+    const documentId = router.query.documentId;
+    if (typeof documentId === "string") {
+      setDocumentId(documentId);
     }
+
+    return () => {
+      setDocumentId(undefined);
+    };
+  }, [router.query.documentId]);
+
+  const {
+    data: page,
+    isLoading,
+    isError,
+  } = api.pages.getPageById.useQuery(documentId ?? "", {
+    enabled: !!documentId,
+    retry: false,
+  });
+
+  if (isLoading) {
+    return null;
   }
 
-  return { notFound: true };
+  if (isError || !page) {
+    router.replace("/404").then((_) => null);
+    return null;
+  }
+
+  return <DocumentEditPageContent page={page} />;
 };
 
-const DocumentEditPage: NextPageWithAuthAndLayout<InferGetServerSidePropsType<typeof getServerSideProps>> = ({
-  document,
-}) => {
-  const [value, setValue] = useState<JSONContent | undefined>(
-    document.content ? JSON.parse(document.content) : undefined,
-  );
+const DocumentEditPageContent = ({ page }: { page: Page }) => {
+  const [value, setValue] = useState<JSONContent | undefined>(page.content ? JSON.parse(page.content) : undefined);
   const router = useRouter();
   const { toast } = useToast();
   const { data: session } = useSession();
@@ -49,7 +58,7 @@ const DocumentEditPage: NextPageWithAuthAndLayout<InferGetServerSidePropsType<ty
     (selectedTagIds: string[]) => async (data) => {
       try {
         const res = await updatePageMutation.mutateAsync({
-          pageId: document.id,
+          pageId: page.id,
           selectedTagIds,
           pageArgs: {
             title: data.title,
@@ -81,21 +90,21 @@ const DocumentEditPage: NextPageWithAuthAndLayout<InferGetServerSidePropsType<ty
 
   return (
     <FullscreenEditorWrapper
-      authorId={document.authorId}
-      defaultCheckedTagsId={document.tags.map((tag) => tag.id)}
+      authorId={session?.user?.id}
+      defaultCheckedTagsId={page.tags.map((tag) => tag.id)}
       defaultValues={{
-        description: document.description,
-        title: document.title,
-        isPrivate: document.isPrivate,
+        description: page.description,
+        title: page.title,
+        isPrivate: page.isPrivate,
       }}
       onSubmit={onSubmit}
     >
-      <Editor slotBefore={<EditorHeader title={document.title} />} initialValue={value} onChange={setValue} />
+      <Editor slotBefore={<EditorHeader title={page.title} />} initialValue={value} onChange={setValue} />
     </FullscreenEditorWrapper>
   );
 };
 
-DocumentEditPage.auth = false;
+DocumentEditPage.auth = true;
 DocumentEditPage.getLayout = (page) => {
   return <main className="flex min-h-svh flex-col items-stretch justify-start overflow-hidden">{page}</main>;
 };
