@@ -138,7 +138,7 @@ export const authOptions: NextAuthOptions = {
           isVerified: true,
           image: profile.picture,
           name: profile.preferred_username,
-          username: formatUserName("4", profile.preferred_username),
+          username: formatUserName("5", profile.preferred_username),
         };
       },
     }),
