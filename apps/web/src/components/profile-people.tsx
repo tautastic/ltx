@@ -55,8 +55,8 @@ const ProfilePeople = ({
               return (
                 <ProfileCard
                   key={follower.id}
-                  isFollowed={following.includes(follower)}
-                  isFollowing={followedBy.includes(follower)}
+                  isFollowed={following.map((val) => val.id).includes(follower.id)}
+                  isFollowing={followedBy.map((val) => val.id).includes(follower.id)}
                   profileCardUser={follower}
                   profileOverviewUser={userWithFollowers}
                 />
