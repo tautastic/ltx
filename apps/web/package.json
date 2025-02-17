@@ -16,6 +16,7 @@
     "@auth/prisma-adapter": "^2.5.3",
     "@hookform/resolvers": "^3.9.0",
     "@libsql/client": "^0.6.2",
+    "@ngneat/falso": "^7.3.0",
     "@prisma/adapter-libsql": "^5.20.0",
     "@prisma/client": "^5.20.0",
     "@radix-ui/react-alert-dialog": "^1.1.1",

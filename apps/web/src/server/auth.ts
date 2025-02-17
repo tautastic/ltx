@@ -7,15 +7,20 @@ import GithubProvider, { type GithubProfile } from "next-auth/providers/github";
 import GoogleProvider, { type GoogleProfile } from "next-auth/providers/google";
 import SpotifyProvider, { type SpotifyProfile } from "next-auth/providers/spotify";
 import TwitchProvider, { type TwitchProfile } from "next-auth/providers/twitch";
+import { randAnimalType, randVerb } from "@ngneat/falso";
 
 import type { Adapter } from "next-auth/adapters";
 import { env } from "~/env.mjs";
 import { prisma } from "~/server/db";
 
 const formatUserName = (p: string, u: string) => {
-  const h1 = `${u.replaceAll(/[^a-zA-Z0-9_-]+/g, "")}@${p}`;
+  let h1 = u.replaceAll(/[^a-zA-Z0-9_-]+/g, "");
+  if (h1.length < 4) {
+    const options = { maxCharCount: 6 };
+    h1 = `${randVerb(options)}-${randAnimalType(options)}`;
+  }
   const h2 = customAlphabet("1234567890ABCDEFGHIJKLMNOPQRSTUVWXYZ", 5)();
-  return h1 + h2;
+  return `${h1}@${p}${h2}`;
 };
 
 /**
