@@ -52,7 +52,7 @@ const AdvancedEditor = ({
       <EditorContent
         {...(initialValue && { initialContent: initialValue })}
         editable={!readonly}
-        className="relative flex flex-1 flex-col"
+        className="relative flex flex-1 flex-col overflow-auto"
         extensions={extensions}
         editorProps={{
           handleDOMEvents: {
