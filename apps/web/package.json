@@ -15,9 +15,8 @@
   "dependencies": {
     "@auth/prisma-adapter": "^2.9.0",
     "@hookform/resolvers": "^3.9.0",
-    "@libsql/client": "^0.15.4",
     "@ngneat/falso": "^7.3.0",
-    "@prisma/adapter-libsql": "^6.6.0",
+    "@prisma/adapter-neon": "^6.6.0",
     "@prisma/client": "^6.6.0",
     "@radix-ui/react-alert-dialog": "^1.1.1",
     "@radix-ui/react-avatar": "^1.1.0",

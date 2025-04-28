@@ -12,7 +12,7 @@
       ],
       "env": [
         "DATABASE_URL",
-        "TURSO_AUTH_TOKEN",
+        "DATABASE_URL_UNPOOLED",
         "NEXT_PUBLIC_BASE_URL",
         "NEXTAUTH_SECRET",
         "NEXTAUTH_URL",

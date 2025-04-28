@@ -6,7 +6,7 @@ import { z } from "zod";
  */
 const server = z.object({
   DATABASE_URL: z.string(),
-  TURSO_AUTH_TOKEN: z.string(),
+  DATABASE_URL_UNPOOLED: z.string(),
   NODE_ENV: z.enum(["development", "test", "production"]),
   NEXTAUTH_SECRET: process.env.NODE_ENV === "production" ? z.string().min(1) : z.string().min(1).optional(),
   NEXTAUTH_URL: z.preprocess((str) => process.env.VERCEL_URL ?? str, z.string().min(1)),
@@ -40,7 +40,7 @@ const client = z.object({
  */
 const processEnv = {
   DATABASE_URL: process.env.DATABASE_URL,
-  TURSO_AUTH_TOKEN: process.env.TURSO_AUTH_TOKEN,
+  DATABASE_URL_UNPOOLED: process.env.DATABASE_URL_UNPOOLED,
   NODE_ENV: process.env.NODE_ENV,
   NEXT_PUBLIC_BASE_URL: process.env.NEXT_PUBLIC_BASE_URL,
   NEXTAUTH_SECRET: process.env.NEXTAUTH_SECRET,
