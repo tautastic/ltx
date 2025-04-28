@@ -50,18 +50,14 @@ const Create: NextPageWithAuthAndLayout = () => {
       }
     };
 
-  if (!session || !session.user) {
-    return null;
-  }
-
   return (
-    <FullscreenEditorWrapper authorId={session.user.id} onSubmit={onSubmit}>
+    <FullscreenEditorWrapper authorId={session?.user.id} onSubmit={onSubmit}>
       <Editor slotBefore={<EditorHeader />} initialValue={value} onChange={setValue} />
     </FullscreenEditorWrapper>
   );
 };
 
-Create.auth = true;
+Create.auth = false;
 Create.getLayout = (page) => {
   return <main className="flex min-h-svh flex-col items-stretch justify-start overflow-hidden">{page}</main>;
 };

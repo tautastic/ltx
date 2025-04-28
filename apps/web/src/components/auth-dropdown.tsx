@@ -94,6 +94,12 @@ const AuthDropdown = () => {
                   <span>Sign in</span>
                 </DropdownMenuItem>
               </Link>
+              <Link href="/create">
+                <DropdownMenuItem>
+                  <Edit className="mr-2 h-4 w-4" />
+                  <span>New Document</span>
+                </DropdownMenuItem>
+              </Link>
             </DropdownMenuGroup>
           )}
           <DropdownMenuSeparator />

@@ -1,7 +1,7 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useQueryClient } from "@tanstack/react-query";
 import { PlusIcon } from "lucide-react";
-import { type ReactNode, memo, useCallback, useState } from "react";
+import { type ReactNode, memo, useCallback, useState, type FC, type Dispatch, type SetStateAction } from "react";
 import { type SubmitHandler, useForm } from "react-hook-form";
 import { z } from "zod";
 import CreateTagDialog from "~/components/create-tag-dialog";
@@ -16,6 +16,7 @@ import { Switch } from "~/components/ui/switch";
 import { Textarea } from "~/components/ui/textarea";
 import { useToast } from "~/components/ui/use-toast";
 import api from "~/utils/api";
+import Link from "next/link";
 
 export const editorFormSchema = z.object({
   description: z.string().max(500, {
@@ -35,13 +36,83 @@ export const editorFormSchema = z.object({
 export type editorFormSchemaType = z.infer<typeof editorFormSchema>;
 
 export interface FullscreenEditorProps {
-  authorId: string;
+  authorId?: string;
   children?: ReactNode;
   defaultCheckedTagsId?: string[];
   defaultValues?: Partial<editorFormSchemaType>;
   onSubmit: (selectedTagIds: string[]) => SubmitHandler<editorFormSchemaType>;
   readonly?: boolean;
 }
+
+interface TagsProps {
+  authorId: string;
+  selectedTagIds: string[];
+  setSelectedTagIds: Dispatch<SetStateAction<string[]>>;
+}
+
+const Tags: FC<TagsProps> = ({ authorId, selectedTagIds, setSelectedTagIds }) => {
+  const queryClient = useQueryClient();
+  const { toast } = useToast();
+  const deleteTagByIdMutation = api.tags.deleteTagById.useMutation();
+
+  const isTagSelected = useCallback((tagId: string) => selectedTagIds.includes(tagId), [selectedTagIds]);
+
+  const handleDeleteTag = useCallback(
+    async (id: string) => {
+      await deleteTagByIdMutation.mutateAsync(id, {
+        onSuccess: () => {
+          setSelectedTagIds(selectedTagIds.filter((tagId) => tagId !== id));
+          queryClient.invalidateQueries({ stale: true });
+          toast({
+            title: "Deleted tag successfully.",
+          });
+        },
+        onError: () => {
+          toast({
+            title: "🚨 Uh oh! Something went wrong.",
+            description: "Error deleting tag.",
+          });
+        },
+      });
+    },
+    [deleteTagByIdMutation, queryClient, selectedTagIds, toast],
+  );
+
+  const { data: tags } = api.tags.getTagListByAuthorId.useQuery(authorId);
+  return (
+    <div className="space-y-2">
+      <Label>Tags</Label>
+      <ul className="flex select-none flex-wrap items-center gap-4">
+        {tags?.map((tag) => (
+          <Tag
+            onChange={() => {
+              if (selectedTagIds.includes(tag.id)) {
+                setSelectedTagIds(selectedTagIds.filter((id) => id !== tag.id));
+              } else {
+                setSelectedTagIds([...selectedTagIds, tag.id]);
+              }
+            }}
+            onDelete={() => handleDeleteTag(tag.id)}
+            defaultChecked={isTagSelected(tag.id)}
+            key={tag.id}
+            {...tag}
+          />
+        ))}
+        <li className="inline-flex h-10 rounded-md border border-gray-200 dark:border-gray-800">
+          <CreateTagDialog>
+            <DialogTrigger
+              type="button"
+              title="Create tag"
+              className="inline-flex w-full items-center justify-center px-2"
+            >
+              <PlusIcon textRendering={"geometricPrecision"} className="text-gray-700 dark:text-gray-400" />
+            </DialogTrigger>
+          </CreateTagDialog>
+        </li>
+      </ul>
+    </div>
+  );
+};
 
 const EditableFullscreenEditor = memo(
   ({
@@ -54,40 +125,13 @@ const EditableFullscreenEditor = memo(
     },
     onSubmit,
   }: Omit<Omit<FullscreenEditorProps, "children">, "readonly">) => {
-    const queryClient = useQueryClient();
-    const { toast } = useToast();
-    const deleteTagByIdMutation = api.tags.deleteTagById.useMutation();
     const [selectedTagIds, setSelectedTagIds] = useState<string[]>(defaultCheckedTagsId);
 
-    const isTagSelected = useCallback((tagId: string) => selectedTagIds.includes(tagId), [selectedTagIds]);
-
     const form = useForm<editorFormSchemaType>({
+      disabled: !authorId,
       resolver: zodResolver(editorFormSchema),
       defaultValues,
     });
-
-    const handleDeleteTag = useCallback(
-      async (id: string) => {
-        await deleteTagByIdMutation.mutateAsync(id, {
-          onSuccess: () => {
-            setSelectedTagIds(selectedTagIds.filter((tagId) => tagId !== id));
-            queryClient.invalidateQueries({ stale: true });
-            toast({
-              title: "Deleted tag successfully.",
-            });
-          },
-          onError: () => {
-            toast({
-              title: "🚨 Uh oh! Something went wrong.",
-              description: "Error deleting tag.",
-            });
-          },
-        });
-      },
-      [deleteTagByIdMutation, queryClient, selectedTagIds, toast],
-    );
-
-    const { data: tags } = api.tags.getTagListByAuthorId.useQuery(authorId);
 
     return (
       <Form {...form}>
@@ -129,37 +173,9 @@ const EditableFullscreenEditor = memo(
                     </FormItem>
                   )}
                 />
-                <div className="space-y-2">
-                  <Label>Tags</Label>
-                  <ul className="flex select-none flex-wrap items-center gap-4">
-                    {tags?.map((tag) => (
-                      <Tag
-                        onChange={() => {
-                          if (selectedTagIds.includes(tag.id)) {
-                            setSelectedTagIds(selectedTagIds.filter((id) => id !== tag.id));
-                          } else {
-                            setSelectedTagIds([...selectedTagIds, tag.id]);
-                          }
-                        }}
-                        onDelete={() => handleDeleteTag(tag.id)}
-                        defaultChecked={isTagSelected(tag.id)}
-                        key={tag.id}
-                        {...tag}
-                      />
-                    ))}
-                    <li className="inline-flex h-10 rounded-md border border-gray-200 dark:border-gray-800">
-                      <CreateTagDialog>
-                        <DialogTrigger
-                          type="button"
-                          title="Create tag"
-                          className="inline-flex w-full items-center justify-center px-2"
-                        >
-                          <PlusIcon textRendering={"geometricPrecision"} className="text-gray-700 dark:text-gray-400" />
-                        </DialogTrigger>
-                      </CreateTagDialog>
-                    </li>
-                  </ul>
-                </div>
+                {authorId && (
+                  <Tags authorId={authorId} selectedTagIds={selectedTagIds} setSelectedTagIds={setSelectedTagIds} />
+                )}
                 <FormField
                   control={form.control}
                   name="isPrivate"
@@ -175,9 +191,15 @@ const EditableFullscreenEditor = memo(
                     </FormItem>
                   )}
                 />
-                <Button type="submit" className="w-full self-end sm:max-w-32">
-                  Save
-                </Button>
+                {authorId ? (
+                  <Button type="submit" className="w-full self-end sm:max-w-32">
+                    Save
+                  </Button>
+                ) : (
+                  <Button type="button" className="w-full self-end sm:max-w-32">
+                    <Link href="/auth/signin">Sign in</Link>
+                  </Button>
+                )}
               </div>
             </FieldsetContent>
           </Fieldset>
@@ -196,7 +218,7 @@ export const FullscreenEditorWrapper = memo(
         <FieldsetContent className="flex min-h-[30ch] w-full flex-1 items-stretch bg-gray-50 p-0 dark:bg-gray-950 sm:min-h-[40ch]">
           {children}
         </FieldsetContent>
-        {authorId && onSubmit && !readonly && (
+        {onSubmit && !readonly && (
           <EditableFullscreenEditor
             authorId={authorId}
             defaultCheckedTagsId={defaultCheckedTagsId}
